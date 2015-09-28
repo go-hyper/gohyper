@@ -1,0 +1,14 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jenny Gebske <jennifer@gebske.de>",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "gulp": "^3.9.0"
+  }
+}

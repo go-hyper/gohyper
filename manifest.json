@@ -1,0 +1,32 @@
+{
+  "manifest_version": 2,
+  "icons": {
+    "16": "test.png",
+    "32": "test.png",
+    "48": "test.png",
+    "128": "test.png"
+  },
+  "name": "Test",
+  "version": "1.0",
+  "description": "This is a test version.",
+  "applications": {
+    "gecko": {
+      "id": "test@test.org"
+    }
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "permissions": [
+    "tabs"
+  ],
+  "browser_action": {
+    "default_icon": {
+      "19": "test.png",
+      "38": "test.png"
+    },
+    "default_title": "Test!",
+    "default_popup": "popup.html"
+  }
+}
