@@ -2,18 +2,38 @@
 <html>
   <head>
     <title>Getting Started with the Test Version</title>
-    <!--style></style>
-    <script></script-->
+    <!--style></style-->
+    <script src="popup.js"></script>
   </head>
   <body>
-    <div id="status"></div>
-    <div id="body">
-      <div id="title">
-        <h2>Test</h2>
-      </div>
+    <div>
+      <h2>Test</h2>
     </div>
     <div>
       Wouldn't it be nice to see some links here?
     </div>
+
+    <form>
+      <p>
+        <label for="title">Title</label><br>
+        <input type="text" id="title" name="title" size="50" />
+      </p>
+      <p>
+        <label for="url">URL</label><br>
+        <input type="text" id="url" name="url" size="50" />
+      </p>
+      <p>
+        <label for="summary">Summary</label><br>
+        <textarea id="summary" name="summary" rows="6" cols="30"></textarea>
+      </p>
+      <p>
+        <label for="tags">Tags</label><br>
+        <input type="text" id="tags" name="tags" size="50" />
+      </p>
+      <p>
+        <input id="button" type="submit" value="Test Button" />
+      </p>
+    </form>
+
   </body>
 </html>

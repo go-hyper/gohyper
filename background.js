@@ -16,3 +16,13 @@ chrome.browserAction.setBadgeBackgroundColor({color: '#0091EA'});
   });
 });
 */
+
+// is called onload in the popup code
+function getPageDetails(callback) {
+    // injects content script into current page
+    chrome.tabs.executeScript(null, { file: 'content.js' });
+    // perform the callback when a message is received from the content script
+    chrome.runtime.onMessage.addListener(function(message) {
+      callback(message);
+    });
+};
