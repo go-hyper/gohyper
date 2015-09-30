@@ -9,6 +9,7 @@
   "author": "Jenny Gebske <jennifer@gebske.de>",
   "license": "GPL-3.0",
   "devDependencies": {
-    "gulp": "^3.9.0"
+    "gulp": "^3.9.0",
+    "gulp-zip": "^3.0.2"
   }
 }
