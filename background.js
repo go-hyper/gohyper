@@ -1,7 +1,5 @@
 'use strict';
 
-// global chrome:false
-
 chrome.browserAction.setBadgeText({text: 'Test'});
 chrome.browserAction.setBadgeBackgroundColor({color: '#0091EA'});
 
