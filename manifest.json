@@ -1,32 +1,39 @@
 {
   "manifest_version": 2,
-  "icons": {
-    "16": "test.png",
-    "32": "test.png",
-    "48": "test.png",
-    "128": "test.png"
-  },
   "name": "Test",
-  "version": "1.0",
   "description": "This is a test version.",
+  "version": "1.0",
+
+  "icons": {
+    "16": "images/test.png",
+    "32": "images/test.png",
+    "48": "images/test.png",
+    "64": "images/test.png",
+    "128": "images/test.png"
+  },
+
+  "permissions": ["tabs", "http://*/*", "https://*/*", "storage"],
+
   "applications": {
     "gecko": {
-      "id": "test@test.org"
+      "id": ""
     }
   },
+
   "background": {
-    "scripts": ["background.js"],
+    "scripts": ["js/background.js"],
     "persistent": false
   },
-  "permissions": [
-    "tabs",
-    "http://*/*",
-    "https://*/*"
-  ],
+
+  "options_ui": {
+    "page": "popup.html",
+    "chrome_style": true
+  },
+
   "browser_action": {
     "default_icon": {
-      "19": "test.png",
-      "38": "test.png"
+      "19": "images/test.png",
+      "38": "images/test.png"
     },
     "default_title": "Test!",
     "default_popup": "popup.html"

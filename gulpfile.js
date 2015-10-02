@@ -3,7 +3,7 @@
 var gulp = require('gulp');
 var zip = require('gulp-zip');
 
-var files = ['manifest.json', 'background.js', 'test.png', 'popup.html'];
+var files = ['manifest.json', 'js/background.js', 'images/test.png', 'popup.html'];
 
 var xpiName = 'test.xpi';
 
