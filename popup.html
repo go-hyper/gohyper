@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app lang="en">
+<html ng-app="gohyper" lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,9 +12,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
   </head>
   <body>
-    <div class="container">
+    <div class="container" ng-controller="ExtensionController">
 
-      <h3>Test</h3>
+      <h3>GoHyper</h3>
 
       <form class="form-inline">
         <div class="form-group">
@@ -31,6 +31,9 @@
         </div>
         <div class="form-group">
           <label for="tags">Tags</label><br>
+
+          <span ng-repeat="tag in tags" class="label label-default">{{tag}}</span>
+
           <input type="text" id="tags" name="tags" size="25" placeholder="Tags" />
           <button class="btn btn-default btn-sm">
             <i class="fa fa-plus-circle"></i> Add
