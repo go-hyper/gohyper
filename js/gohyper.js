@@ -7,6 +7,5 @@ gohyper.controller('ExtensionController', function ($scope) {
       $scope.tags.push(input);
       $scope.input= "";
     };
-    console.log($scope.tags);
 
   });
