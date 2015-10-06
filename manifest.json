@@ -12,16 +12,16 @@
     "128": "images/test.png"
   },
 
-  "permissions": ["tabs", "http://*/*", "https://*/*", "storage"],
+  "permissions": ["tabs", "http://*/*", "https://*/*", "storage", "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"],
 
   "applications": {
     "gecko": {
-      "id": ""
+      "id": "test@test.de"
     }
   },
 
   "background": {
-    "scripts": ["js/background.js"],
+    "scripts": ["js/background.js", "js/gohyper.js"],
     "persistent": false
   },
 

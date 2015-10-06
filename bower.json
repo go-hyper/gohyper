@@ -1,0 +1,15 @@
+{
+  "name": "gohyper",
+  "version": "0.0.0",
+  "homepage": "https://github.com/jengeb/gohyper",
+  "authors": [
+    "Jenny Gebske <jennifer@gebske.de>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "GPL-3.0",
+  "dependencies": {
+    "angular": "~1.4.7"
+  }
+}

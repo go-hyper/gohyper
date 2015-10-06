@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="gohyper" lang="en">
+<html ng-app="gohyper">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,11 +8,12 @@
     <!--style></style-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <script src="js/popup.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular.min.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="js/gohyper.js"></script>
+    <script type="text/javascript" src="js/popup.js"></script>
   </head>
-  <body>
-    <div class="container" ng-controller="ExtensionController">
+  <body ng-controller="ExtensionController">
+    <div class="container">
 
       <h3>GoHyper</h3>
 
@@ -32,10 +33,11 @@
         <div class="form-group">
           <label for="tags">Tags</label><br>
 
-          <span ng-repeat="tag in tags" class="label label-default">{{tag}}</span>
+          <span ng-repeat="tag in tags">{{tag}}</span><br>
 
-          <input type="text" id="tags" name="tags" size="25" placeholder="Tags" />
-          <button class="btn btn-default btn-sm">
+          <input type="text" id="input" name="tags" ng-model="input" size="25" placeholder="Tags" />
+
+          <button class="btn btn-default btn-sm" ng-click="push(input)">
             <i class="fa fa-plus-circle"></i> Add
           </button>
         </div>
