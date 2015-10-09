@@ -4,7 +4,9 @@ gohyper.controller('ExtensionController', function ($scope) {
 
     $scope.tags = [];
     $scope.push = function (input) {
-      $scope.tags.push(input);
+      if ($scope.tags.indexOf(input) == -1) {
+        $scope.tags.push(input);
+      }
       $scope.input= "";
     };
 
