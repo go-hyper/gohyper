@@ -32,7 +32,7 @@
         </div>
         <div class="form-group">
           <label for="tags">Tags</label><br>
-          <div class="gh-label-group">
+          <div class="gh-label-group" ng-if="tags.length">
             <span ng-repeat="tag in tags" class="label label-info gh-label">{{tag}}
               <a href="" ng-click="tags.splice($index, 1)">
                 <i class="remove glyphicon glyphicon-remove-sign gh-remove"></i>
