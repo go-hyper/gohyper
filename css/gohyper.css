@@ -1,7 +1,15 @@
 .gh-label {
-  margin-right: 0.3em;
+  margin-right: 0.3em;  
 }
 
 .gh-label-group {
   margin-bottom: 0.8em;
+}
+
+.gh-button {
+  margin-left: 0.8em;
+}
+
+.gh-remove {
+  color: #fff;
 }

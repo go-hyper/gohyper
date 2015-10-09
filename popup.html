@@ -33,10 +33,14 @@
         <div class="form-group">
           <label for="tags">Tags</label><br>
           <div class="gh-label-group">
-            <span ng-repeat="tag in tags" class="label label-info gh-label">{{tag}}</span><br>
+            <span ng-repeat="tag in tags" class="label label-info gh-label">{{tag}}
+              <a href="" ng-click="tags.splice($index, 1)">
+                <i class="remove glyphicon glyphicon-remove-sign gh-remove"></i>
+              </a>
+            </span><br>
           </div>
           <input type="text" id="input" name="tags" ng-model="input" size="25" placeholder="Tags" />
-          <button class="btn btn-default btn-sm" ng-click="push(input)">
+          <button class="btn btn-default btn-sm gh-button" ng-click="push(input)">
             <i class="fa fa-plus-circle"></i> Add
           </button>
         </div>
