@@ -1,18 +1,24 @@
 {
   "manifest_version": 2,
+
   "name": "Test",
   "description": "This is a test version.",
   "version": "1.0",
+  "version_name": "1.0 beta",
 
   "icons": {
     "16": "images/test.png",
     "32": "images/test.png",
     "48": "images/test.png",
-    "64": "images/test.png",
     "128": "images/test.png"
   },
 
-  "permissions": ["tabs", "http://*/*", "https://*/*", "storage"],
+  "permissions": [
+    "tabs",
+    "http://*/*",
+    "https://*/*",
+    "storage"
+  ],
 
   "background": {
     "scripts": ["js/background.js"],
@@ -35,7 +41,7 @@
       "19": "images/test.png",
       "38": "images/test.png"
     },
-    "default_title": "Test!",
+    "default_title": "Test Tooltip!",
     "default_popup": "popup.html"
   }
 }
