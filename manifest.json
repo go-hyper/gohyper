@@ -25,12 +25,6 @@
     "persistent": false
   },
 
-  "applications": {
-    "gecko": {
-      "id": "test@test.de"
-    }
-  },
-
   "options_ui": {
     "page": "popup.html",
     "chrome_style": true
