@@ -1,7 +1,18 @@
 'use strict';
 
-chrome.browserAction.setBadgeText({text: 'Test'});
-chrome.browserAction.setBadgeBackgroundColor({color: '#0091EA'});
+chrome.browserAction.setBadgeText({
+  text: 'Test'
+});
+
+chrome.browserAction.setBadgeBackgroundColor({
+  color: '#0091EA'
+});
+
+chrome.contextMenus.create({
+    title: 'Add "%s" to your notepad.',
+    contexts:["selection"],
+    onclick: getQuote,
+});
 
 /*chrome.browserAction.onClicked.addListener(function(tab) {
   chrome.tabs.query({'url': ''}, (tabs) => {
@@ -24,3 +35,10 @@ function getPageDetails(callback) {
       callback(message);
     });
 };
+
+
+function getQuote(info) {
+  var quote = info.selectionText;
+  // TODO
+  // function goes here
+}

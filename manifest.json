@@ -17,12 +17,12 @@
     "tabs",
     "http://*/*",
     "https://*/*",
-    "storage"
+    "storage",
+    "contextMenus"
   ],
 
   "background": {
-    "scripts": ["js/background.js"],
-    "persistent": false
+    "scripts": ["js/background.js"]
   },
 
   "options_ui": {
