@@ -8,10 +8,21 @@ chrome.browserAction.setBadgeBackgroundColor({
   color: '#0091EA'
 });
 
-chrome.contextMenus.create({
-    title: 'Add "%s" to your notepad.',
-    contexts:["selection"],
-    onclick: getQuote,
+// set up context menu at install time
+chrome.runtime.onInstalled.addListener(function() {
+  chrome.contextMenus.create({
+    "title": 'Add "%s" to your notepad',
+    "contexts": ["selection"],
+    "id": "1"
+  });
+});
+
+// chrome.contextMenus.onClicked.addListener(onClickHandler);
+chrome.contextMenus.onClicked.addListener(function(info) {
+  if (info.menuItemId === "1") {
+    var quote = info.selectionText;
+    // TODO
+  }
 });
 
 /*chrome.browserAction.onClicked.addListener(function(tab) {
@@ -35,10 +46,3 @@ function getPageDetails(callback) {
       callback(message);
     });
 };
-
-
-function getQuote(info) {
-  var quote = info.selectionText;
-  // TODO
-  // function goes here
-}
