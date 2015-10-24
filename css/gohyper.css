@@ -26,3 +26,8 @@
 html, body {
   min-width: 350px;
 }
+
+.gh-margin {
+  margin-top: 2.5em;
+  margin-bottom: 2em;
+}
