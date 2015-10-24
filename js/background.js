@@ -1,11 +1,12 @@
 'use strict';
 
 chrome.browserAction.setBadgeText({
-  text: 'Test'
+  // TODO: e.g. show how many quotes are on the current site
+  text: '1'
 });
 
 chrome.browserAction.setBadgeBackgroundColor({
-  color: '#0091EA'
+  color: '#0D47A1'
 });
 
 // set up context menu at install time
