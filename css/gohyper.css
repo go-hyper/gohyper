@@ -22,3 +22,7 @@
 .gh-form {
   margin-top: 1em;
 }
+
+html, body {
+  min-width: 350px;
+}
