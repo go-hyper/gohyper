@@ -11,31 +11,19 @@ chrome.browserAction.setBadgeBackgroundColor({
 // set up context menu at install time
 chrome.runtime.onInstalled.addListener(function() {
   chrome.contextMenus.create({
-    "title": 'Add "%s" to your notepad',
+    "title": 'Add "%s" to your Notepad',
     "contexts": ["selection"],
-    "id": "1"
+    "id": "GoHyper1"
   });
 });
 
 // chrome.contextMenus.onClicked.addListener(onClickHandler);
 chrome.contextMenus.onClicked.addListener(function(info) {
-  if (info.menuItemId === "1") {
+  if (info.menuItemId === "GoHyper1") {
     var quote = info.selectionText;
     // TODO
   }
 });
-
-/*chrome.browserAction.onClicked.addListener(function(tab) {
-  chrome.tabs.query({'url': ''}, (tabs) => {
-    if (tabs.length === 0) {
-      // There is no tab
-      chrome.tabs.create({'url': '', 'active': true});
-    } else {
-      // Do something here...
-    }
-  });
-});
-*/
 
 // is called onload in the popup code
 function getPageDetails(callback) {
