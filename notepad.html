@@ -24,6 +24,22 @@
       </ul>
 
       <div class="gh-margin">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Quote</th>
+              <th>URL</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="datum in data">
+              <td>{{datum[0]}}</td>
+              <td>
+                <a target="_blank" href="{{datum[1]}}">{{datum[1]}}</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
     </div>

@@ -22,6 +22,7 @@ chrome.runtime.onInstalled.addListener(function() {
 chrome.contextMenus.onClicked.addListener(function(info) {
   if (info.menuItemId === "GoHyper1") {
     var quote = info.selectionText;
+    var url = info.url;
     // TODO
   }
 });
