@@ -27,15 +27,14 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>Quote</th>
-              <th>URL</th>
+              <th>Quote and URL</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             <tr ng-repeat="datum in data">
-              <td>{{datum[0]}}</td>
               <td>
+                <p>"{{datum[0]}}"</p>
                 <a target="_blank" href="{{datum[1]}}">{{datum[1]}}</a>
               </td>
               <td>
