@@ -11,8 +11,8 @@ gohyper.controller('ExtensionController', function ($scope) {
     };
 
     // dummy data
-    $scope.data = [["Lorem ipsum dolor sit amet [...].", "http://www.tagesschau.de"],
-      ["Lorem ipsum dolor sit amet [...].", "http://www.mi.fu-berlin.de/inf/"]
+    $scope.data = [["Lorem ipsum dolor sit amet, consectetur adipisici elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.", "http://www.tagesschau.de"],
+      ["Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquid ex ea commodi consequat.", "http://www.mi.fu-berlin.de/inf/"]
     ];
 
   });
