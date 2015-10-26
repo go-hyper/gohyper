@@ -39,3 +39,11 @@ html, body {
 .gh-input {
   width: 100%;
 }
+
+.gh-icon-color {
+  color: #fff;
+}
+
+.gh-circle-color {
+  color: #283593;
+}
