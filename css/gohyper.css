@@ -6,9 +6,13 @@
   margin-bottom: 0.8em;
 }
 
-.gh-button {
+.gh-add-button {
   margin-left: 0.8em;
   margin-bottom: 0.5em;
+}
+
+.gh-save-button {
+  margin-top: 1em;
 }
 
 .gh-remove {
@@ -35,4 +39,12 @@ html, body {
 
 .gh-small-button {
   margin: 0.2em;
+}
+
+.gh-input {
+  width: 100%;
+}
+
+.gh-small-input {
+  width: 65%;
 }
