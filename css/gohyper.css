@@ -8,6 +8,7 @@
 
 .gh-button {
   margin-left: 0.8em;
+  margin-bottom: 0.5em;
 }
 
 .gh-remove {
@@ -30,4 +31,8 @@ html, body {
 .gh-margin {
   margin-top: 2.5em;
   margin-bottom: 2em;
+}
+
+.gh-small-button {
+  margin: 0.2em;
 }

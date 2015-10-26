@@ -27,8 +27,7 @@
   },
 
   "options_ui": {
-    "page": "popup.html",
-    "chrome_style": true
+    "page": "popup.html"
   },
 
   "browser_action": {
