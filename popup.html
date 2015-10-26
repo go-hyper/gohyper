@@ -27,17 +27,17 @@
         <form class="form-inline gh-form" role="form" name="form">
           <div class="form-group">
             <label for="title">Title</label><br>
-            <input type="text" class="gh-input" id="title" name="title" ng-model="title" placeholder="Title">
+            <input readonly type="text" class="form-control gh-input" id="title" name="title" ng-model="title" placeholder="Title">
           </div>
 
           <div class="form-group">
             <label for="url">Current URL</label><br>
-            <input type="url" class="gh-input" id="url" name="url" ng-model="url" placeholder="URL">
+            <input readonly type="url" class="form-control gh-input" id="url" name="url" ng-model="url" placeholder="URL">
           </div>
 
           <div class="form-group">
             <label for="quote">Quote</label><br>
-            <textarea class="gh-input" id="quote" name="quote" rows="4" ng-model="quote" placeholder="Quote"></textarea>
+            <textarea readonly class="form-control gh-input" id="quote" name="quote" rows="4" ng-model="quote" placeholder="Quote"></textarea>
           </div>
 
           <div class="form-group">
@@ -52,27 +52,35 @@
                 </span>
               </span>
             </div>
-            <input class="gh-small-input" type="text" id="input" name="tags" ng-model="input" placeholder="Tags">
-            <button class="btn btn-primary btn-sm gh-add-button" ng-click="push(input)">
-              <i class="fa fa-plus-circle"></i> Add
-            </button>
+
+            <div class="input-group gh-input">
+              <input class="form-control" type="text" id="input" name="tags" ng-model="input" placeholder="Tags">
+              <span class="input-group-btn">
+                <button class="btn btn-primary" ng-click="push(input)">
+                  <i class="fa fa-plus-circle"></i> Add
+                </button>
+              </span>
+            </div>
           </div>
 
           <div class="form-group">
             <label for="comment">Comment</label><br>
-            <textarea class="gh-input" id="comment" name="comment" rows="2" placeholder="Comment"></textarea>
+            <textarea class="form-control gh-input" id="comment" name="comment" rows="2" placeholder="Comment"></textarea>
           </div>
 
           <div class="form-group">
             <label for="url">Hyperlink</label><br>
-            <input type="url" class="gh-input" placeholder="Hyperlink">
+            <input type="url" class="form-control gh-input" placeholder="Hyperlink">
           </div>
 
           <div class="form-group">
-            <button class="btn btn-primary btn-sm gh-save-button">
+            <div class=text-right>
+            <button class="btn btn-primary gh-save-button">
               <i class="fa fa-check-circle"></i> Save
             </button>
           </div>
+          </div>
+
         </form>
       </div>
 
