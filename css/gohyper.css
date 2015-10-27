@@ -47,3 +47,8 @@ html, body {
 .gh-circle-color {
   color: #283593;
 }
+
+/* TODO use LESS instead of: */
+* {
+  border-radius: 0 !important;
+}
