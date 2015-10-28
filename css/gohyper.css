@@ -11,12 +11,12 @@
 }
 
 .gh-remove {
-  color: #0D47A1;
+  color: #000;
   margin-left: 0.3em;
 }
 
 .gh-remove:hover {
-  color: #BBDEFB;
+  color: #BDBDBD;
 }
 
 .gh-form {
