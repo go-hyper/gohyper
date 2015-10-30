@@ -12,7 +12,7 @@ chrome.browserAction.setBadgeBackgroundColor({
 // set up context menu at install time
 chrome.runtime.onInstalled.addListener(function() {
   chrome.contextMenus.create({
-    "title": 'Add "%s" to your Notepad',
+    "title": 'Add "%s" to GoHyper',
     "contexts": ["selection"],
     "id": "GoHyper1"
   });
