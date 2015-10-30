@@ -31,22 +31,22 @@
 
       <form class="form-inline gh-form" role="form" name="form">
         <div class="form-group">
-          <label for="title">Title</label><br>
+          <label for="title">Title</label>
           <input readonly type="text" class="form-control gh-input" id="title" name="title" ng-model="title" placeholder="Title">
         </div>
 
         <div class="form-group">
-          <label for="url">Current URL</label><br>
-          <input readonly type="url" class="form-control gh-input" id="url" name="url" ng-model="url" placeholder="URL">
+          <label for="currentUrl">Current URL</label>
+          <input readonly type="url" class="form-control gh-input" id="currentUrl" name="currentUrl" ng-model="currentUrl" placeholder="URL">
         </div>
 
         <div class="form-group">
-          <label for="quote">Quote</label><br>
+          <label for="quote">Quote</label>
           <textarea readonly class="form-control gh-input" id="quote" name="quote" rows="4" ng-model="quote" placeholder="Quote"></textarea>
         </div>
 
         <div class="form-group">
-          <label for="tags">Tags</label><br>
+          <label for="tags">Tags</label>
           <div class="gh-label-group" ng-if="tags.length">
             <span ng-repeat="tag in tags">
               <span class="label label-default gh-label">
@@ -57,11 +57,10 @@
               </span>
             </span>
           </div>
-
-          <div class="input-group gh-input">
+          <div class="input-group">
             <input class="form-control" type="text" id="input" name="tags" ng-model="input" placeholder="Tags">
             <span class="input-group-btn">
-              <button class="btn btn-primary" ng-click="push(input)">
+              <button class="btn btn-default" ng-click="push(input)">
                 <i class="fa fa-plus-circle"></i> Add
               </button>
             </span>
@@ -69,22 +68,40 @@
         </div>
 
         <div class="form-group">
-          <label for="comment">Comment</label><br>
+          <label for="comment">Comment</label>
           <textarea class="form-control gh-input" id="comment" name="comment" rows="2" placeholder="Comment"></textarea>
         </div>
 
-        <div class="form-group">
-          <label for="url">Hyperlink</label><br>
-          <input type="url" class="form-control gh-input" placeholder="Hyperlink">
-        </div>
+        <!--div class="form-group">
+          <label for="url">Link to</label>
+          <div class="gh-label-group" ng-if="urls.length">
+            <span ng-repeat="url in urls">
+              <span class="label label-default gh-label">
+                {{url}}
+                <a href="" ng-click="urls.splice($index, 1)">
+                  <i class="remove glyphicon glyphicon-remove-circle gh-remove"></i>
+                </a>
+              </span>
+            </span>
+          </div>
+          <div class="input-group">
+            <input class="form-control" type="url" name="urls" ng-model="url" placeholder="URL">
+            <span class="input-group-btn">
+              <button class="btn btn-default" ng-click="">
+                <i class="fa fa-plus-circle"></i> Add
+              </button>
+            </span>
+          </div>
+        </div-->
 
         <div class="form-group">
           <div class="text-right">
-            <button class="btn btn-primary gh-save-button">
+            <button type="button" class="btn btn-primary gh-save-button">
               <i class="fa fa-check-circle"></i> Save
             </button>
           </div>
         </div>
+
       </form>
 
     </div>

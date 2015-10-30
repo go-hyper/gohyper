@@ -1,7 +1,7 @@
 // called when the content script has been injected and returned results
 function onPageDetailsReceived(pageDetails) {
   document.getElementById('title').value = pageDetails.title;
-  document.getElementById('url').value = pageDetails.url;
+  document.getElementById('currentUrl').value = pageDetails.currentUrl;
   document.getElementById('quote').innerText = pageDetails.quote;
 }
 

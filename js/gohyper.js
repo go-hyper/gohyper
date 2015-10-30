@@ -7,7 +7,7 @@ gohyper.controller('ExtensionController', function ($scope) {
       if ($scope.tags.indexOf(input) == -1) {
         $scope.tags.push(input);
       }
-      $scope.input= "";
+      $scope.input = "";
     };
 
     // dummy data
