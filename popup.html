@@ -23,15 +23,15 @@
         GoHyper
       </h3>
 
-      <ul class="nav nav-tabs">
-        <li role="presentation" class="active"><a href="#">Quote</a></li>
-        <li role="presentation"><a href="notepad.html">Notepad</a></li>
-        <li role="presentation"><a href="info.html">Info</a></li>
+      <ul class="nav nav-tabs" ng-controller="NavigationController">
+        <li role="presentation" ng-class="{ active: isActive('/quote') }"><a href="#/quote">Quote</a></li>
+        <li role="presentation" ng-class="{ active: isActive('/notepad') }"><a href="#/notepad">Notepad</a></li>
+        <li role="presentation" ng-class="{ active: isActive('/info') }"><a href="#/info">Info</a></li>
       </ul>
 
       <div ng-controller="NavigationController">
         <div ng-if="isActive('/')">
-          <div class="container" ng-view ></div>
+          <div class="container" ng-view></div>
         </div>
       </div>
 
