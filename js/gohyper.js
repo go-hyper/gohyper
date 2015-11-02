@@ -2,7 +2,7 @@ var gohyper = angular.module('gohyper', ['ngRoute']);
 
 
 gohyper
-  .config(function ($routeProvider) {
+  .config(function($routeProvider, $httpProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'popup.html'
@@ -15,7 +15,9 @@ gohyper
       })
       .when('/info', {
         templateUrl: 'info.html'
-      });
+      })
+      ;
+    $httpProvider.interceptors.push('errorInterceptor');
   });
 
 

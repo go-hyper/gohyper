@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/gohyper.css">
-    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/angular-route/angular-route.min.js"></script>
     <script type="text/javascript" src="js/gohyper.js"></script>
     <script type="text/javascript" src="js/popup.js"></script>
   </head>
   <body>
-    <div class="container">
+    <div class="container" ng-controller="NavigationController">
 
       <h3>
         <span class="fa-stack">
@@ -24,13 +24,13 @@
         GoHyper
       </h3>
 
-      <ul class="nav nav-tabs" ng-controller="NavigationController">
+      <ul class="nav nav-tabs">
         <li role="presentation" ng-class="{ active: isActive('/quote') }"><a href="#/quote">Quote</a></li>
         <li role="presentation" ng-class="{ active: isActive('/notepad') }"><a href="#/notepad">Notepad</a></li>
         <li role="presentation" ng-class="{ active: isActive('/info') }"><a href="#/info">Info</a></li>
       </ul>
 
-      <div ng-controller="NavigationController">
+      <div>
         <div ng-if="isActive('/')">
           <div class="container" ng-view></div>
         </div>
