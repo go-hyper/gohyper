@@ -1,4 +1,4 @@
-var gohyper = angular.module('gohyper', []);
+var gohyper = angular.module('gohyper', ['ngRoute']);
 
 
 gohyper
