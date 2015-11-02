@@ -1,5 +1,24 @@
 var gohyper = angular.module('gohyper', []);
 
+
+gohyper
+  .config(function ($routeProvider) {
+    $routeProvider
+      .when('/', {
+        templateUrl: 'popup.html'
+      })
+      .when('/quote', {
+        templateUrl: 'quote.html'
+      })
+      .when('/notepad', {
+        templateUrl: 'notepad.html'
+      })
+      .when('/info', {
+        templateUrl: 'info.html'
+      });
+  });
+
+
 gohyper
   .controller('NavigationController', function($scope, $location){
     $scope.isActive = function(str) {
