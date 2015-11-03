@@ -5,9 +5,6 @@ gohyper
   .config(function($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'popup.html'
-      })
-      .when('/quote', {
         templateUrl: 'quote.html'
       })
       .when('/notepad', {
