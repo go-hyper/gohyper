@@ -30,11 +30,8 @@
         <li role="presentation" ng-class="{ active: isActive('/info') }"><a href="#/info">Info</a></li>
       </ul>
 
-      <div>
-        <div ng-if="isActive('/')">
-          <div class="container" ng-view></div>
-        </div>
-      </div>
+
+      <div ng-view></div>
 
     </div>
   </body>
