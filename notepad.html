@@ -1,58 +1,23 @@
-<!doctype html>
-<html ng-app="gohyper" ng-csp>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Getting Started with the Test Version</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/gohyper.css">
-    <script src="bower_components/angular/angular.js"></script>
-    <script type="text/javascript" src="js/gohyper.js"></script>
-    <script type="text/javascript" src="js/popup.js"></script>
-  </head>
-  <body ng-controller="ExtensionController">
-    <div class="container">
+<div class="gh-margin" ng-controller="NotepadController">
 
-      <h3>
-        <span class="fa-stack">
-          <i class="fa fa-circle fa-stack-2x gh-circle-color"></i>
-          <i class="fa fa-link fa-stack-1x gh-icon-color"></i>
-        </span>
-        GoHyper
-      </h3>
+  <h4>Quote and URL</h4>
 
-      <ul class="nav nav-tabs">
-        <li role="presentation"><a href="popup.html">Quote</a></li>
-        <li role="presentation" class="active"><a href="#">Notepad</a></li>
-        <li role="presentation"><a href="info.html">Info</a></li>
-      </ul>
-
-      <div class="gh-margin">
-
-        <h4>Quote and URL</h4>
-
-        <table class="table table-striped">
-          <tbody>
-            <tr ng-repeat="datum in data">
-              <td>
-                <p>"{{datum[0]}}"</p>
-                <a target="_blank" href="{{datum[1]}}">{{datum[1]}}</a>
-              </td>
-              <td>
-                <button type="button" class="btn btn-primary btn-xs gh-small-button">
-                  <i class="fa fa-pencil-square-o"></i> Edit
-                </button>
-                <button type="button" class="btn btn-danger btn-xs gh-small-button">
-                  <i class="fa fa-times"></i> Remove
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-    </div>
-  </body>
-</html>
+  <table class="table table-striped">
+    <tbody>
+      <tr ng-repeat="datum in data">
+        <td>
+          <p>"{{datum[0]}}"</p>
+          <a target="_blank" href="{{datum[1]}}">{{datum[1]}}</a>
+        </td>
+        <td>
+          <button type="button" class="btn btn-primary btn-xs gh-small-button">
+            <i class="fa fa-pencil-square-o"></i> Edit
+          </button>
+          <button type="button" class="btn btn-danger btn-xs gh-small-button">
+            <i class="fa fa-times"></i> Remove
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
