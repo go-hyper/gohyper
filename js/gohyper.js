@@ -2,7 +2,7 @@ var gohyper = angular.module('gohyper', ['ngRoute']);
 
 
 gohyper
-  .config(function($routeProvider, $httpProvider) {
+  .config(function($routeProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'popup.html'
@@ -15,9 +15,7 @@ gohyper
       })
       .when('/info', {
         templateUrl: 'info.html'
-      })
-      ;
-    $httpProvider.interceptors.push('errorInterceptor');
+      });
   });
 
 
@@ -32,7 +30,7 @@ gohyper
 gohyper
   .controller('QuoteController', function($scope) {
     $scope.tags = [];
-    $scope.push = function (input) {
+    $scope.push = function(input) {
       if ($scope.tags.indexOf(input) == -1) {
         $scope.tags.push(input);
       }
