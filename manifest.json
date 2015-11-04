@@ -6,6 +6,12 @@
   "version": "1.0",
   "version_name": "1.0 beta",
 
+   "applications": {
+     "gecko": {
+       "id": "gohyper@mozilla.org"
+     }
+   },
+
   "icons": {
     "16": "images/test.png",
     "32": "images/test.png",
