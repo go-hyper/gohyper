@@ -36,3 +36,11 @@ function getPageDetails(callback) {
       callback(message);
     });
 };
+
+// create and open database
+var request = window.indexedDB.open("GoHyper");
+
+
+
+
+
