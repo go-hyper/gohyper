@@ -6,7 +6,7 @@ function onPageDetailsReceived(pageDetails) {
 }
 
 // when popup HTML has loaded
-window.addEventListener('load', function(evt) {
+window.addEventListener('load', function() {
   // get event page
   chrome.runtime.getBackgroundPage(function(eventPage) {
     // injects content.js into current tab's HTML
