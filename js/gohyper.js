@@ -61,4 +61,20 @@ request.onupgradeneeded = function() {
   });
   var titleIndex = store.createIndex("by_title", "title", {unique: false});
   var currentUrlIndex = store.createIndex("by_current_url", "currentUrl", {unique: false});
+
+  // store initial dummy data
+  store.put({
+    title: "Title of current web page",
+    currentUrl: "http://www.xyz.com",
+    quote: "This is a quote",
+    quoteLocation: "TODO",
+    tags: ["tag1", "tag2"],
+    comment: "Test comment",
+    links: ["http://link.de", "http://link2.de"],
+    timestamp: (new Date()).toISOString()
+  });
+};
+
+request.onsuccess = function() {
+  var db = request.result;
 };
