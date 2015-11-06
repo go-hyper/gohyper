@@ -67,11 +67,11 @@ request.onupgradeneeded = function() {
     title: "Title of current web page",
     currentUrl: "http://www.xyz.com",
     quote: "This is a quote",
-    quoteLocation: "TODO",
+    quoteLocation: "TODO",                        // quote location in DOM
     tags: ["tag1", "tag2"],
     comment: "Test comment",
     links: ["http://link.de", "http://link2.de"],
-    timestamp: (new Date()).toISOString()
+    timestamp: (new Date()).toISOString()         // ISO 8601
   });
 };
 
