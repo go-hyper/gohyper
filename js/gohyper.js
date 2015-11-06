@@ -75,8 +75,6 @@ request.onupgradeneeded = function() {
     links: ["http://link.de", "http://link2.de"],
     timestamp: new Date().toISOString()           // ISO 8601
   });
-
-
 };
 
 request.onsuccess = function(event) {
@@ -86,3 +84,11 @@ request.onsuccess = function(event) {
 request.onerror = function(event) {
   // TODO: handle error (event.target.errorCode)
 };
+
+
+// add data
+function addData(data) {
+  var transaction = db.transaction("quotes", "readwrite");
+  var store = transaction.objectStore("quotes");
+  store.put(data);
+}
