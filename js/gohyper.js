@@ -75,6 +75,10 @@ request.onupgradeneeded = function() {
   });
 };
 
-request.onsuccess = function() {
+request.onsuccess = function(event) {
   var db = request.result;
+};
+
+request.onerror = function(event) {
+  // TODO: handle error
 };
