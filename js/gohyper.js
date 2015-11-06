@@ -44,3 +44,9 @@ gohyper
       ["Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.", "http://www.fu-berlin.de"]
     ];
   });
+
+
+// database
+
+// create and open database
+var request = window.indexedDB.open("GoHyper", 1);
