@@ -46,7 +46,19 @@ gohyper
   });
 
 
+
 // database
 
 // create and open database
 var request = window.indexedDB.open("GoHyper", 1);
+
+// database didn't exist before: create object store and indices
+request.onupgradeneeded = function() {
+  var db = request.result;
+  var store = db.createObjectStore("quotes", {
+    keyPath: "id",
+    autoIncrement: true
+  });
+  var titleIndex = store.createIndex("by_title", "title", {unique: false});
+  var currentUrlIndex = store.createIndex("by_current_url", "currentUrl", {unique: false});
+};
