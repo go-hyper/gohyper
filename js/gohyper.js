@@ -51,10 +51,12 @@ gohyper
 
 // create and open database
 var request = window.indexedDB.open("GoHyper", 1);
+var db;
 
-// database didn't exist before: create object store and indices
+// db didn't exist before: create object store "quotes" and indices
 request.onupgradeneeded = function() {
-  var db = request.result;
+  db = request.result;
+  // initialize db
   var store = db.createObjectStore("quotes", {
     keyPath: "id",
     autoIncrement: true
@@ -71,14 +73,16 @@ request.onupgradeneeded = function() {
     tags: ["tag1", "tag2"],
     comment: "Test comment",
     links: ["http://link.de", "http://link2.de"],
-    timestamp: (new Date()).toISOString()         // ISO 8601
+    timestamp: new Date().toISOString()           // ISO 8601
   });
+
+
 };
 
 request.onsuccess = function(event) {
-  var db = request.result;
+  db = request.result;
 };
 
 request.onerror = function(event) {
-  // TODO: handle error
+  // TODO: handle error (event.target.errorCode)
 };
