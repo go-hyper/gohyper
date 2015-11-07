@@ -2,9 +2,9 @@
   "manifest_version": 2,
 
   "name": "GoHyper",
-  "description": "This is a test version of GoHyper.",
+  "description": "This is a prototype of GoHyper.",
   "version": "1.0",
-  "version_name": "1.0 alpha",
+  "version_name": "GoHyper alpha",
 
    "applications": {
      "gecko": {
@@ -13,10 +13,10 @@
    },
 
   "icons": {
-    "16": "images/test.png",
-    "32": "images/test.png",
-    "48": "images/test.png",
-    "128": "images/test.png"
+    "16": "images/gohyper.png",
+    "32": "images/gohyper.png",
+    "48": "images/gohyper.png",
+    "128": "images/gohyper.png"
   },
 
   "permissions": [
@@ -38,8 +38,8 @@
 
   "browser_action": {
     "default_icon": {
-      "19": "images/test.png",
-      "38": "images/test.png"
+      "19": "images/gohyper.png",
+      "38": "images/gohyper.png"
     },
     "default_title": "GoHyper",
     "default_popup": "popup.html"
