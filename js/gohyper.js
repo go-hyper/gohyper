@@ -38,6 +38,14 @@ gohyper
     $scope.tags = [];
     $scope.comment = "";
 
+    chrome.runtime.getBackgroundPage(function(eventPage) {
+      // injects content.js into current tab's HTML
+      eventPage.getPageDetails(function (message) {
+        $scope.title = message.title;
+        $scope.$apply();
+      });
+    });
+
     $scope.push = function(input) {
       if ($scope.tags.indexOf(input) == -1) {
         $scope.tags.push(input);

@@ -1,17 +1,17 @@
 <form class="form-inline gh-form" role="form" name="form" ng-controller="QuoteController">
   <div class="form-group">
     <label for="title">Title</label>
-    <input readonly type="text" class="form-control gh-input" id="title" name="title" ng-model="title" placeholder="Title">
+    <input readonly type="text" class="form-control gh-input" name="title" ng-model="title" placeholder="Title">
   </div>
 
   <div class="form-group">
     <label for="currentUrl">Current URL</label>
-    <input readonly type="url" class="form-control gh-input" id="currentUrl" name="currentUrl" ng-model="currentUrl" placeholder="URL">
+    <input readonly type="url" class="form-control gh-input" name="currentUrl" ng-model="currentUrl" placeholder="URL">
   </div>
 
   <div class="form-group">
     <label for="quote">Quote</label>
-    <textarea readonly class="form-control gh-input" id="quote" name="quote" rows="4" ng-model="quote" placeholder="Quote"></textarea>
+    <textarea readonly class="form-control gh-input" name="quote" rows="4" ng-model="quote" placeholder="Quote"></textarea>
   </div>
 
   <div class="form-group">
@@ -27,7 +27,7 @@
       </span>
     </div>
     <div class="input-group">
-      <input class="form-control" type="text" id="input" name="tags" ng-model="input" placeholder="Tags">
+      <input class="form-control" type="text" name="tags" ng-model="input" placeholder="Tags">
       <span class="input-group-btn">
         <button class="btn btn-default" ng-click="push(input)">
           <i class="fa fa-plus-circle"></i> Add
@@ -38,7 +38,7 @@
 
   <div class="form-group">
     <label for="comment">Comment</label>
-    <textarea class="form-control gh-input" id="comment" name="comment" rows="2" ng-model="comment" placeholder="Comment"></textarea>
+    <textarea class="form-control gh-input" name="comment" rows="2" ng-model="comment" placeholder="Comment"></textarea>
   </div>
 
   <!--div class="form-group">
