@@ -6,13 +6,13 @@ gohyper
 
     $routeProvider
       .when('/', {
-        templateUrl: 'quote.html'
+        templateUrl: 'html/quote.html'
       })
       .when('/notepad', {
-        templateUrl: 'notepad.html'
+        templateUrl: 'html/notepad.html'
       })
       .when('/info', {
-        templateUrl: 'info.html'
+        templateUrl: 'html/info.html'
       });
 
     $indexedDBProvider
