@@ -1,8 +1,8 @@
-var gohyper = angular.module('gohyper', ['ngRoute']);
+var gohyper = angular.module('gohyper', ['ngRoute', 'indexedDB']);
 
 
 gohyper
-  .config(function($routeProvider) {
+  .config(function($routeProvider, $indexedDBProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'quote.html'
