@@ -42,6 +42,8 @@ gohyper
       // injects content.js into current tab's HTML
       eventPage.getPageDetails(function (message) {
         $scope.title = message.title;
+        $scope.currentUrl = message.currentUrl;
+        $scope.quote = message.quote;
         $scope.$apply();
       });
     });
@@ -57,9 +59,9 @@ gohyper
       $scope.objects = [];
       $indexedDB.openStore('quotes', function(store) {
         store.insert({
-          title: "Title of current web page",
-          currentUrl: "http://www.xyz.com",
-          quote: "This is a quote",
+          title: $scope.title,
+          currentUrl: $scope.currentUrl,
+          quote: $scope.quote,
           quoteLocation: "TODO",                        // quote location in DOM
           tags: $scope.tags,
           comment: $scope.comment,
