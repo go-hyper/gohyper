@@ -4,10 +4,10 @@
 
   <table class="table table-striped">
     <tbody>
-      <tr ng-repeat="datum in data">
+      <tr ng-repeat="quote in quotes">
         <td>
-          <p>"{{datum[0]}}"</p>
-          <a target="_blank" href="{{datum[1]}}">{{datum[1]}}</a>
+          <p>"{{quote.quote}}"</p>
+          <a target="_blank" href="{{quote.currentUrl}}">{{quote.currentUrl}}</a>
         </td>
         <td>
           <button type="button" class="btn btn-primary btn-xs gh-small-button">
