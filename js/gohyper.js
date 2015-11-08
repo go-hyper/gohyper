@@ -1,8 +1,9 @@
-var gohyper = angular.module('gohyper', ['ngRoute']);
+var gohyper = angular.module('gohyper', ['ngRoute', 'indexedDB']);
 
 
 gohyper
-  .config(function($routeProvider) {
+  .config(function($routeProvider, $indexedDBProvider) {
+
     $routeProvider
       .when('/', {
         templateUrl: 'quote.html'
@@ -12,6 +13,14 @@ gohyper
       })
       .when('/info', {
         templateUrl: 'info.html'
+      });
+
+    $indexedDBProvider
+      .connection('GoHyper')
+      .upgradeDatabase(1, function(event, db, tx){
+        var objStore = db.createObjectStore('quotes', {keyPath: 'id', autoIncrement: true});
+        objStore.createIndex('by_title', 'title', {unique: false});
+        objStore.createIndex('by_current_url', 'currentUrl', {unique: false});
       });
   });
 
@@ -25,7 +34,7 @@ gohyper
   });
 
 gohyper
-  .controller('QuoteController', function($scope) {
+  .controller('QuoteController', function($scope, $indexedDB) {
     $scope.tags = [];
     $scope.push = function(input) {
       if ($scope.tags.indexOf(input) == -1) {
@@ -33,6 +42,28 @@ gohyper
       }
       $scope.input = "";
     };
+
+    // TODO: add save function
+    $scope.objects = [];
+    $indexedDB.openStore('quotes', function(store) {
+      store.insert({
+        title: "Title of current web page",
+        currentUrl: "http://www.xyz.com",
+        quote: "This is a quote",
+        quoteLocation: "TODO",                        // quote location in DOM
+        tags: ["tag1", "tag2"],
+        comment: "Test comment",
+        links: ["http://link.de", "http://link2.de"],
+        timestamp: new Date().toISOString()           // ISO 8601
+      }).then(function(event) {
+        // TODO
+      });
+
+      store.getAll().then(function(quotes) {
+        // update scope
+        $scope.objects = quotes;
+      });
+    });
   });
 
 
