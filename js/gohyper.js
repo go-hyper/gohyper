@@ -79,12 +79,25 @@ gohyper
 gohyper
   .controller('NotepadController', function($scope, $indexedDB) {
 
-    $indexedDB.openStore('quotes', function(store) {
-
-      store.getAll().then(function(quotes) {
-        // update scope
-        $scope.quotes = quotes;
+    function getAll() {
+      $indexedDB.openStore('quotes', function(store) {
+        store.getAll().then(function(quotes) {
+          // update scope
+          $scope.quotes = quotes;
+        });
       });
-    });
+    }
+
+    getAll();
+
+    // delete a qoute
+    $scope.deleteQuote = function(id) {
+      $indexedDB.openStore('quotes', function(store) {
+        store.delete(id).then(function() {
+          // update quotes
+          getAll();
+        });
+      });
+    };
 
   });
