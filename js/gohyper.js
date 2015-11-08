@@ -36,6 +36,8 @@ gohyper
 gohyper
   .controller('QuoteController', function($scope, $indexedDB) {
     $scope.tags = [];
+    $scope.comment = "";
+
     $scope.push = function(input) {
       if ($scope.tags.indexOf(input) == -1) {
         $scope.tags.push(input);
@@ -52,7 +54,7 @@ gohyper
           quote: "This is a quote",
           quoteLocation: "TODO",                        // quote location in DOM
           tags: $scope.tags,
-          comment: "Test comment",
+          comment: $scope.comment,
           links: ["http://link.de", "http://link2.de"],
           timestamp: new Date().toISOString()           // ISO 8601
         }).then(function(event) {
