@@ -50,4 +50,20 @@
     </ul>
   </nav>
 
+  <div class="form-group" ng-if="filter.byUrl">
+    <div class="text-right">
+      <button type="button" class="btn btn-primary gh-save-button" ng-click="filter.byUrl = !filter.byUrl">
+        <i class="fa fa-list"></i> Show all
+      </button>
+    </div>
+  </div>
+
+  <div class="form-group" ng-if="!filter.byUrl">
+    <div class="text-right">
+      <button type="button" class="btn btn-primary gh-save-button" ng-click="filter.byUrl = !filter.byUrl">
+        <i class="fa fa-list"></i> Show less
+      </button>
+    </div>
+  </div>
+
 </div>

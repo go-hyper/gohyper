@@ -40,7 +40,7 @@ gohyper
 
     chrome.runtime.getBackgroundPage(function(eventPage) {
       // injects content.js into current tab's HTML
-      eventPage.getPageDetails(function (message) {
+      eventPage.getPageDetails(function(message) {
         $scope.title = message.title;
         $scope.currentUrl = message.currentUrl;
         $scope.quote = message.quote;
@@ -79,18 +79,36 @@ gohyper
 gohyper
   .controller('NotepadController', function($scope, $indexedDB) {
 
-    function getAll() {
+    // default
+    $scope.filter = {
+      byUrl: true
+    };
+
+    $scope.getQuotes = function() {
       $indexedDB.openStore('quotes', function(store) {
-        store.getAll().then(function(quotes) {
+
+        if ($scope.filter.byUrl) {
+          var find = store.query();
+          // TODO get current url
+          find = find.$eq("http://www.tagesschau.de/");
+          find = find.$index("by_current_url");
+
           // update scope
-          $scope.quotes = quotes;
-        });
+          store.eachWhere(find).then(function(e) {
+            $scope.quotes = e;
+          });
+        } else {
+          store.getAll().then(function(quotes) {
+            // update scope
+            $scope.quotes = quotes;
+          });
+        }
       });
-    }
+    };
 
-    getAll();
+    $scope.$watchGroup(['filter.byUrl'], $scope.getQuotes);
 
-    // count
+    // total count
     $indexedDB.openStore('quotes', function(store) {
       store.count().then(function(e) {
         $scope.count = e;
@@ -100,10 +118,7 @@ gohyper
     // delete a qoute
     $scope.deleteQuote = function(id) {
       $indexedDB.openStore('quotes', function(store) {
-        store.delete(id).then(function() {
-          // update quotes
-          getAll();
-        });
+        store.delete(id).then($scope.getQuotes);
       });
     };
 
