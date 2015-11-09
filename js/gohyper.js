@@ -90,6 +90,13 @@ gohyper
 
     getAll();
 
+    // count
+    $indexedDB.openStore('quotes', function(store) {
+      store.count().then(function(e) {
+        $scope.count = e;
+      });
+    });
+
     // delete a qoute
     $scope.deleteQuote = function(id) {
       $indexedDB.openStore('quotes', function(store) {
