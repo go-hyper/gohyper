@@ -35,36 +35,38 @@ gohyper
 
 gohyper
   .controller('QuoteController', function($scope, $indexedDB) {
-    $scope.tags = [];
-    $scope.comment = "";
+
+    $scope.form = {
+      tags: [],
+      comment: ""
+    };
 
     chrome.runtime.getBackgroundPage(function(eventPage) {
       // injects content.js into current tab's HTML
       eventPage.getPageDetails(function(message) {
-        $scope.title = message.title;
-        $scope.currentUrl = message.currentUrl;
-        $scope.quote = message.quote;
+        $scope.form.title = message.title;
+        $scope.form.currentUrl = message.currentUrl;
+        $scope.form.quote = message.quote;
         $scope.$apply();
       });
     });
 
     $scope.push = function(input) {
-      if ($scope.tags.indexOf(input) == -1) {
-        $scope.tags.push(input);
+      if ($scope.form.tags.indexOf(input) == -1) {
+        $scope.form.tags.push(input);
       }
-      $scope.input = "";
+      $scope.form.input = "";
     };
 
     $scope.addQuote = function() {
-      $scope.objects = [];
       $indexedDB.openStore('quotes', function(store) {
         store.insert({
-          title: $scope.title,
-          currentUrl: $scope.currentUrl,
-          quote: $scope.quote,
+          title: $scope.form.title,
+          currentUrl: $scope.form.currentUrl,
+          quote: $scope.form.quote,
           quoteLocation: "TODO",                        // quote location in DOM
-          tags: $scope.tags,
-          comment: $scope.comment,
+          tags: $scope.form.tags,
+          comment: $scope.form.comment,
           links: ["http://link.de", "http://link2.de"],
           timestamp: new Date().toISOString()           // ISO 8601
         }).then(function(event) {
