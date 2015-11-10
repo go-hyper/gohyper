@@ -6,7 +6,11 @@
     <tbody>
       <tr ng-repeat="quote in quotes">
         <td>
-          <p><a target="_blank" href="{{quote.currentUrl}}">{{quote.currentUrl}}</a></p>
+          <p>
+            <a target="_blank" href="{{quote.currentUrl}}" title="{{quote.currentUrl}}">
+              {{quote.currentUrl | limitTo: 35}}{{quote.currentUrl.length > 35 ? '...' : ''}}
+            </a>
+          </p>
 
           <!-- http://stackoverflow.com/a/25892456/4419582 -->
           <p>"{{ quote.quote | limitTo: 40 }}{{quote.quote.length > 40 ? '...' : ''}}"</p>
