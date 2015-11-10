@@ -81,6 +81,13 @@ gohyper
 gohyper
   .controller('NotepadController', function($scope, $indexedDB) {
 
+    $scope.pagination = {
+      page: 1,
+      maxPerPage: 5,
+      total: undefined,
+      maxSize: 3
+    };
+
     // default
     $scope.filter = {
       byUrl: true
@@ -88,32 +95,32 @@ gohyper
 
     $scope.getQuotes = function() {
       $indexedDB.openStore('quotes', function(store) {
-
         if ($scope.filter.byUrl) {
           var find = store.query();
           // TODO get current url
           find = find.$eq("http://www.tagesschau.de/");
           find = find.$index("by_current_url");
-
           // update scope
-          store.eachWhere(find).then(function(e) {
-            $scope.quotes = e;
+          store.eachWhere(find).then(function(response) {
+            $scope.quotes = response;
+            // $scope.pagination.total = $scope.quotes.length;
           });
         } else {
           store.getAll().then(function(quotes) {
             // update scope
             $scope.quotes = quotes;
+            // $scope.pagination.total = $scope.quotes.length;
           });
         }
       });
     };
 
-    $scope.$watchGroup(['filter.byUrl'], $scope.getQuotes);
+    $scope.$watchGroup(['filter.byUrl', 'pagination.page'], $scope.getQuotes);
 
     // total count
     $indexedDB.openStore('quotes', function(store) {
-      store.count().then(function(e) {
-        $scope.count = e;
+      store.count().then(function(response) {
+        $scope.count = response;
       });
     });
 

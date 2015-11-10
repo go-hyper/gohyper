@@ -36,23 +36,10 @@
     </tbody>
   </table>
 
-  <!--nav class="text-center" ng-if="quotes.length > 5">
-    <ul class="pagination pagination-sm">
-      <li>
-        <a href="#" aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
-      </li>
-      <li><a href="#">1</a></li>
-      <li><a href="#">2</a></li>
-      <li><a href="#">3</a></li>
-      <li>
-        <a href="#" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
-    </ul>
-  </nav-->
+  <div class="text-center" ng-if="quotes.length > 5">
+    <uib-pagination boundary-links="true" total-items="pagination.total" ng-model="pagination.page" class="pagination-sm" max-size="pagination.maxSize" boundary-links="true" rotate="false" num-pages="numPages"
+    previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+  </div>
 
   <div class="form-group" ng-if="filter.byUrl">
     <div class="text-right">
