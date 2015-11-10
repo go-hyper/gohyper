@@ -81,6 +81,10 @@ gohyper
 gohyper
   .controller('NotepadController', function($scope, $indexedDB) {
 
+    chrome.tabs.getSelected(function(tab) {
+      $scope.currentUrl = tab.url;
+    });
+
     $scope.pagination = {
       page: 1,
       maxPerPage: 5,
@@ -97,8 +101,7 @@ gohyper
       $indexedDB.openStore('quotes', function(store) {
         if ($scope.filter.byUrl) {
           var find = store.query();
-          // TODO get current url
-          find = find.$eq("http://www.tagesschau.de/");
+          find = find.$eq($scope.currentUrl);
           find = find.$index("by_current_url");
           // update scope
           store.eachWhere(find).then(function(response) {
@@ -115,7 +118,7 @@ gohyper
       });
     };
 
-    $scope.$watchGroup(['filter.byUrl', 'pagination.page'], $scope.getQuotes);
+    $scope.$watchGroup(['filter.byUrl', 'pagination.page', 'currentUrl'], $scope.getQuotes);
 
     // total count
     $indexedDB.openStore('quotes', function(store) {
