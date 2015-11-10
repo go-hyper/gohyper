@@ -1,4 +1,4 @@
-var gohyper = angular.module('gohyper', ['ngRoute', 'indexedDB']);
+var gohyper = angular.module('gohyper', ['ngRoute', 'indexedDB', 'ui.bootstrap']);
 
 gohyper
   .config(function($routeProvider, $indexedDBProvider) {
