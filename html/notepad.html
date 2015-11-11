@@ -25,9 +25,11 @@
 
         </td>
         <td>
-          <button type="button" class="btn btn-primary btn-xs gh-small-button">
-            <i class="fa fa-pencil-square-o"></i> Edit
-          </button>
+          <a href="#/quote/edit/1">
+            <button type="button" class="btn btn-primary btn-xs gh-small-button">
+              <i class="fa fa-pencil-square-o"></i> Edit {{quote.id}}
+            </button>
+          </a>
           <button type="button" class="btn btn-danger btn-xs gh-small-button" ng-click="deleteQuote(quote.id)">
             <i class="fa fa-times"></i> Remove
           </button>
