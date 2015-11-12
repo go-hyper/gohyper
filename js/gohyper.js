@@ -25,7 +25,12 @@ gohyper
         objStore.createIndex('by_title', 'title', {unique: false});
         objStore.createIndex('by_current_url', 'currentUrl', {unique: false});
       });
-  });
+
+  }).config(['$compileProvider', function($compileProvider) {
+      // http://stackoverflow.com/questions/15606751/angular-changes-urls-to-unsafe-in-extension-page
+      $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
+    }
+  ]);
 
 
 gohyper
