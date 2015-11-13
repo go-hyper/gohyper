@@ -21,7 +21,6 @@ gohyper
       .connection('GoHyper')
       .upgradeDatabase(1, function(event, db, tx){
         var objStore = db.createObjectStore('quotes', {keyPath: 'id', autoIncrement: true});
-        objStore.createIndex('by_id', 'id', {unique: true});
         objStore.createIndex('by_title', 'title', {unique: false});
         objStore.createIndex('by_current_url', 'currentUrl', {unique: false});
       });
@@ -90,17 +89,13 @@ gohyper
 gohyper
   .controller('EditQuoteController', function($scope, $indexedDB, $routeParams) {
 
-    // dummy data
-    $scope.data = {
-      title: "test",
-      currentUrl: "url",
-      quote: "quote",
-      quoteLocation: "TODO",
-      tags: ["tag", "test"],
-      comment: "comment",
-      links: ["http://link.de", "http://link2.de"],
-      timestamp: "2015-11-11T16:26:16.371Z"
-    }
+    $indexedDB.openStore('quotes', function(store) {
+      store.find(parseInt($routeParams.id)).then(function(response) {
+        angular.extend($scope, response);
+      });
+    });
+
+    // TODO update quote
 
   });
 
