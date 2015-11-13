@@ -4,7 +4,7 @@
 
   <table class="table table-striped">
     <tbody>
-      <tr ng-repeat="quote in quotes">
+      <tr ng-repeat="quote in quotes | orderBy: '-update_timestamp'">
         <td>
           <p>
             <a target="_blank" href="{{quote.currentUrl}}" title="{{quote.currentUrl}}">
