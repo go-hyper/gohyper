@@ -23,6 +23,8 @@ gohyper
         var objStore = db.createObjectStore('quotes', {keyPath: 'id', autoIncrement: true});
         objStore.createIndex('by_title', 'title', {unique: false});
         objStore.createIndex('by_current_url', 'currentUrl', {unique: false});
+        objStore.createIndex('by_create_timestamp', 'create_timestamp', {unique: true});
+        objStore.createIndex('by_update_timestamp', 'update_timestamp', {unique: true});
       });
 
   }).config(['$compileProvider', function($compileProvider) {
@@ -42,7 +44,7 @@ gohyper
 
 
 gohyper
-  .controller('QuoteController', function($scope, $indexedDB) {
+  .controller('QuoteController', function($scope, $indexedDB, $location) {
 
     $scope.form = {
       tags: [],
@@ -75,11 +77,11 @@ gohyper
           quoteLocation: "TODO",                        // quote location in DOM
           tags: $scope.form.tags,
           comment: $scope.form.comment,
-          links: ["http://link.de", "http://link2.de"],
+          links: ["http://link.de", "http://link2.de"], // TODO
           create_timestamp: new Date().toISOString(),   // ISO 8601
-          update_timestamp: ""
+          update_timestamp: new Date().toISOString()
         }).then(function(event) {
-          // TODO
+          $location.path('/notepad');
         });
       });
     };
@@ -90,16 +92,17 @@ gohyper
 gohyper
   .controller('EditQuoteController', function($scope, $indexedDB, $routeParams, $location) {
 
+    $scope.quote = {};
+
     $indexedDB.openStore('quotes', function(store) {
       store.find(parseInt($routeParams.id)).then(function(response) {
-        angular.extend($scope, response);
-        $scope.response = response;
+        angular.copy(response, $scope.quote);
       });
     });
 
     $scope.push = function(input) {
-      if ($scope.tags.indexOf(input) == -1) {
-        $scope.tags.push(input);
+      if ($scope.quote.tags.indexOf(input) == -1) {
+        $scope.quote.tags.push(input);
       }
       $scope.input = "";
     };
@@ -107,15 +110,15 @@ gohyper
     $scope.saveQuote = function() {
       $indexedDB.openStore('quotes', function(store) {
         store.upsert({
-          "id": parseInt($routeParams.id),
-          "title": $scope.title,
-          "currentUrl": $scope.currentUrl,
-          "quote": $scope.quote,
-          "quoteLocation": "TODO",
-          "tags": $scope.tags,
-          "comment": $scope.comment,
-          "links": ["http://link.de", "http://link2.de"],
-          "create_timestamp": $scope.response.create_timestamp,
+          "id": $scope.quote.id,
+          "title": $scope.quote.title,
+          "currentUrl": $scope.quote.currentUrl,
+          "quote": $scope.quote.quote,
+          "quoteLocation": $scope.quote.quoteLocation,
+          "tags": $scope.quote.tags,
+          "comment": $scope.quote.comment,
+          "links": $scope.quote.links,
+          "create_timestamp": $scope.quote.create_timestamp,
           "update_timestamp": new Date().toISOString()
         }).then(function(response) {
           // TODO route to show all
@@ -152,8 +155,10 @@ gohyper
           var find = store.query();
           find = find.$eq($scope.currentUrl);
           find = find.$index("by_current_url");
+
           // update scope
           store.eachWhere(find).then(function(response) {
+
             $scope.quotes = response;
             // $scope.pagination.total = $scope.quotes.length;
           });
