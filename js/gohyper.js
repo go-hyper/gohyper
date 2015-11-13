@@ -76,7 +76,8 @@ gohyper
           tags: $scope.form.tags,
           comment: $scope.form.comment,
           links: ["http://link.de", "http://link2.de"],
-          timestamp: new Date().toISOString()           // ISO 8601
+          create_timestamp: new Date().toISOString(),   // ISO 8601
+          update_timestamp: ""
         }).then(function(event) {
           // TODO
         });
@@ -87,15 +88,41 @@ gohyper
 
 
 gohyper
-  .controller('EditQuoteController', function($scope, $indexedDB, $routeParams) {
+  .controller('EditQuoteController', function($scope, $indexedDB, $routeParams, $location) {
 
     $indexedDB.openStore('quotes', function(store) {
       store.find(parseInt($routeParams.id)).then(function(response) {
         angular.extend($scope, response);
+        $scope.response = response;
       });
     });
 
-    // TODO update quote
+    $scope.push = function(input) {
+      if ($scope.tags.indexOf(input) == -1) {
+        $scope.tags.push(input);
+      }
+      $scope.input = "";
+    };
+
+    $scope.saveQuote = function() {
+      $indexedDB.openStore('quotes', function(store) {
+        store.upsert({
+          "id": parseInt($routeParams.id),
+          "title": $scope.title,
+          "currentUrl": $scope.currentUrl,
+          "quote": $scope.quote,
+          "quoteLocation": "TODO",
+          "tags": $scope.tags,
+          "comment": $scope.comment,
+          "links": ["http://link.de", "http://link2.de"],
+          "create_timestamp": $scope.response.create_timestamp,
+          "update_timestamp": new Date().toISOString()
+        }).then(function(response) {
+          // TODO route to show all
+          $location.path('/notepad');
+        });
+      });
+    };
 
   });
 
