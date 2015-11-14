@@ -4,20 +4,59 @@
 
   <table class="table table-striped">
     <tbody>
-      <tr ng-repeat="datum in data">
+      <tr ng-repeat="quote in quotes | orderBy: '-update_timestamp'">
         <td>
-          <p>"{{datum[0]}}"</p>
-          <a target="_blank" href="{{datum[1]}}">{{datum[1]}}</a>
+          <p>
+            <a target="_blank" href="{{quote.currentUrl}}" title="{{quote.currentUrl}}">
+              {{quote.currentUrl | limitTo: 35}}{{quote.currentUrl.length > 35 ? '...' : ''}}
+            </a>
+          </p>
+
+          <!-- http://stackoverflow.com/a/25892456/4419582 -->
+          <p>"{{ quote.quote | limitTo: 40 }}{{quote.quote.length > 40 ? '...' : ''}}"</p>
+
+          <p>
+            <span ng-repeat="tag in quote.tags">
+              <span class="label label-default gh-label">
+                {{tag}}
+              </span>
+            </span>
+          </p>
+
         </td>
         <td>
-          <button type="button" class="btn btn-primary btn-xs gh-small-button">
-            <i class="fa fa-pencil-square-o"></i> Edit
-          </button>
-          <button type="button" class="btn btn-danger btn-xs gh-small-button">
+          <a href="#/quote/edit/{{quote.id}}">
+            <button type="button" class="btn btn-primary btn-xs gh-small-button">
+              <i class="fa fa-pencil-square-o"></i> Edit
+            </button>
+          </a>
+          <button type="button" class="btn btn-danger btn-xs gh-small-button" ng-click="deleteQuote(quote.id)">
             <i class="fa fa-times"></i> Remove
           </button>
         </td>
       </tr>
     </tbody>
   </table>
+
+  <div class="text-center" ng-if="quotes.length > 5">
+    <uib-pagination boundary-links="true" total-items="pagination.total" ng-model="pagination.page" class="pagination-sm" max-size="pagination.maxSize" boundary-links="true" rotate="false" num-pages="numPages"
+    previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+  </div>
+
+  <div class="form-group" ng-if="filter.byUrl">
+    <div class="text-right">
+      <button type="button" class="btn btn-primary gh-save-button" ng-click="filter.byUrl = !filter.byUrl">
+        <i class="fa fa-list"></i> Show all
+      </button>
+    </div>
+  </div>
+
+  <div class="form-group" ng-if="!filter.byUrl">
+    <div class="text-right">
+      <button type="button" class="btn btn-primary gh-save-button" ng-click="filter.byUrl = !filter.byUrl">
+        <i class="fa fa-list"></i> Show less
+      </button>
+    </div>
+  </div>
+
 </div>

@@ -1,0 +1,53 @@
+<form class="form-inline gh-form" role="form" name="quoteForm" ng-controller="EditQuoteController">
+
+  <div class="form-group">
+    <label for="title">Title</label>
+    <input readonly type="text" class="form-control gh-input" name="title" ng-model="quote.title">
+  </div>
+
+  <div class="form-group">
+    <label for="currentUrl">Current URL</label>
+    <input readonly type="url" class="form-control gh-input" name="currentUrl" ng-model="quote.currentUrl">
+  </div>
+
+  <div class="form-group">
+    <label for="quote">Quote</label>
+    <textarea readonly class="form-control gh-input" name="quote" rows="4" ng-model="quote.quote"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="tags">Tags</label>
+    <div class="gh-label-group" ng-if="quote.tags.length">
+      <span ng-repeat="tag in quote.tags">
+        <span class="label label-default gh-label">
+          {{tag}}
+          <a href="" ng-click="quote.tags.splice($index, 1)">
+            <i class="remove glyphicon glyphicon-remove-circle gh-remove"></i>
+          </a>
+        </span>
+      </span>
+    </div>
+    <div class="input-group">
+      <input class="form-control" type="text" name="tags" ng-model="input" placeholder="Tags">
+      <span class="input-group-btn">
+        <button class="btn btn-default" ng-click="push(input);">
+          <i class="fa fa-plus-circle"></i> Add
+        </button>
+      </span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="comment">Comment</label>
+    <textarea class="form-control gh-input" name="comment" rows="2" ng-model="quote.comment" placeholder="Comment"></textarea>
+  </div>
+
+  <div class="form-group">
+    <div class="text-right">
+      <button type="button" class="btn btn-primary gh-save-button" ng-click="clicked = true; saveQuote();" ng-disabled="clicked || input.length > 0">
+        <i class="fa fa-check-circle"></i> Save
+      </button>
+    </div>
+  </div>
+
+</form>
