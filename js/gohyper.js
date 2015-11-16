@@ -137,7 +137,8 @@ gohyper
 gohyper
   .controller('NotepadController', function($scope, $indexedDB) {
 
-    chrome.tabs.getSelected(function(tab) {
+    chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+      var tab = arrayOfTabs[0];
       $scope.currentUrl = tab.url;
     });
 

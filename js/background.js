@@ -1,7 +1,9 @@
 'use strict';
 
 function updateBadge() {
-  chrome.tabs.getSelected(function(tab) {
+
+  chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+    var tab = arrayOfTabs[0];
     var currentUrl = tab.url;
 
     // search and show how many quotes exist on active tab and update badge
