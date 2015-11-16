@@ -81,6 +81,10 @@ gohyper
           create_timestamp: new Date().toISOString(),   // ISO 8601
           update_timestamp: new Date().toISOString()
         }).then(function(event) {
+
+          // get connection to background page and call updateBadge
+          chrome.extension.getBackgroundPage().updateBadge();
+
           $location.path('/notepad');
         });
       });
@@ -186,6 +190,9 @@ gohyper
       $indexedDB.openStore('quotes', function(store) {
         store.delete(id).then($scope.getQuotes);
       });
+
+      // get connection to background page and call updateBadge
+      chrome.extension.getBackgroundPage().updateBadge();
     };
 
   });
