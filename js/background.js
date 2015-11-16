@@ -1,12 +1,48 @@
 'use strict';
 
-chrome.browserAction.setBadgeText({
-  // TODO: e.g. show how many quotes are on the current site
-  text: '1'
+// get current URL of active tab
+chrome.tabs.onActivated.addListener(function(info) {
+  chrome.tabs.get(info.tabId, function(tab) {
+    var currentUrl = tab.url;
+
+    // search and show how many quotes exist on active tab and update badge
+    // get database connection
+    var request  = indexedDB.open("GoHyper");
+    request.onsuccess = function() {
+      var db = request.result;
+      var store = db.transaction("quotes", "readonly").objectStore("quotes");
+
+      var index = store.index("by_current_url");
+      var singleKeyRange = IDBKeyRange.only(currentUrl);
+
+      // count all quotes on active tab
+      var quotes = [];
+      index.openCursor(singleKeyRange).onsuccess = function(event) {
+        var cursor = event.target.result;
+        if (cursor) {
+          quotes.push(cursor.value);
+          cursor.continue();
+        } else {
+          // update badge text
+          if (quotes.length) {
+            chrome.browserAction.setBadgeText({
+              text: quotes.length.toString()
+            });
+          } else {
+            chrome.browserAction.setBadgeText({
+              text: ''
+            });
+          }
+        }
+      };
+
+    };
+  });
 });
 
+
 chrome.browserAction.setBadgeBackgroundColor({
-  color: '#0D47A1'
+  color: '#000'
 });
 
 // set up context menu at install time
