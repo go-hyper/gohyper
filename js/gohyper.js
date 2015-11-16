@@ -156,23 +156,25 @@ gohyper
 
     $scope.getQuotes = function() {
       $indexedDB.openStore('quotes', function(store) {
-        if ($scope.filter.byUrl) {
-          var find = store.query();
-          find = find.$eq($scope.currentUrl);
-          find = find.$index("by_current_url");
+        if ($scope.currentUrl) {
+          if ($scope.filter.byUrl) {
+            var find = store.query();
+            find = find.$eq($scope.currentUrl);
+            find = find.$index("by_current_url");
 
-          // update scope
-          store.eachWhere(find).then(function(response) {
-
-            $scope.quotes = response;
-            // $scope.pagination.total = $scope.quotes.length;
-          });
-        } else {
-          store.getAll().then(function(quotes) {
             // update scope
-            $scope.quotes = quotes;
-            // $scope.pagination.total = $scope.quotes.length;
-          });
+            store.eachWhere(find).then(function(response) {
+
+              $scope.quotes = response;
+              // $scope.pagination.total = $scope.quotes.length;
+            });
+          } else {
+            store.getAll().then(function(quotes) {
+              // update scope
+              $scope.quotes = quotes;
+              // $scope.pagination.total = $scope.quotes.length;
+            });
+          }
         }
       });
     };
