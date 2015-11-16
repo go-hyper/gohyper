@@ -1,5 +1,19 @@
 'use strict';
 
+// initialize database for first use
+var request = window.indexedDB.open("GoHyper");
+
+request.onupgradeneeded = function(event) {
+  var db = event.target.result;
+  // create an objectStore for this database
+  var objStore = db.createObjectStore("quotes", {keyPath: "id", autoIncrement: true});
+  objStore.createIndex("by_title", "title", {unique: false});
+  objStore.createIndex("by_current_url", "currentUrl", {unique: false});
+  objStore.createIndex("by_create_timestamp", "create_timestamp", {unique: true});
+  objStore.createIndex("by_update_timestamp", "update_timestamp", {unique: true});
+};
+
+
 function updateBadge() {
   chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
     var tab = arrayOfTabs[0];
