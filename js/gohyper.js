@@ -81,6 +81,10 @@ gohyper
           create_timestamp: new Date().toISOString(),   // ISO 8601
           update_timestamp: new Date().toISOString()
         }).then(function(event) {
+
+          // get connection to background page and call updateBadge
+          chrome.extension.getBackgroundPage().updateBadge();
+
           $location.path('/notepad');
         });
       });
@@ -133,7 +137,8 @@ gohyper
 gohyper
   .controller('NotepadController', function($scope, $indexedDB) {
 
-    chrome.tabs.getSelected(function(tab) {
+    chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+      var tab = arrayOfTabs[0];
       $scope.currentUrl = tab.url;
     });
 
@@ -151,23 +156,25 @@ gohyper
 
     $scope.getQuotes = function() {
       $indexedDB.openStore('quotes', function(store) {
-        if ($scope.filter.byUrl) {
-          var find = store.query();
-          find = find.$eq($scope.currentUrl);
-          find = find.$index("by_current_url");
+        if ($scope.currentUrl) {
+          if ($scope.filter.byUrl) {
+            var find = store.query();
+            find = find.$eq($scope.currentUrl);
+            find = find.$index("by_current_url");
 
-          // update scope
-          store.eachWhere(find).then(function(response) {
-
-            $scope.quotes = response;
-            // $scope.pagination.total = $scope.quotes.length;
-          });
-        } else {
-          store.getAll().then(function(quotes) {
             // update scope
-            $scope.quotes = quotes;
-            // $scope.pagination.total = $scope.quotes.length;
-          });
+            store.eachWhere(find).then(function(response) {
+
+              $scope.quotes = response;
+              // $scope.pagination.total = $scope.quotes.length;
+            });
+          } else {
+            store.getAll().then(function(quotes) {
+              // update scope
+              $scope.quotes = quotes;
+              // $scope.pagination.total = $scope.quotes.length;
+            });
+          }
         }
       });
     };
@@ -186,6 +193,9 @@ gohyper
       $indexedDB.openStore('quotes', function(store) {
         store.delete(id).then($scope.getQuotes);
       });
+
+      // get connection to background page and call updateBadge
+      chrome.extension.getBackgroundPage().updateBadge();
     };
 
   });
