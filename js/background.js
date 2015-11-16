@@ -1,7 +1,6 @@
 'use strict';
 
 function updateBadge() {
-
   chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
     var tab = arrayOfTabs[0];
     var currentUrl = tab.url;
@@ -41,6 +40,45 @@ function updateBadge() {
   });
 }
 
+
+chrome.tabs.onUpdated.addListener(function(info) {
+  chrome.tabs.get(info.tabId, function(tab) {
+    var currentUrl = tab.url;
+
+    // search and show how many quotes exist on active tab and update badge
+    // get database connection
+    var request  = indexedDB.open("GoHyper");
+    request.onsuccess = function() {
+      var db = request.result;
+      var store = db.transaction("quotes", "readonly").objectStore("quotes");
+
+      var index = store.index("by_current_url");
+      var singleKeyRange = IDBKeyRange.only(currentUrl);
+
+      // count all quotes on active tab
+      var quotes = [];
+      index.openCursor(singleKeyRange).onsuccess = function(event) {
+        var cursor = event.target.result;
+        if (cursor) {
+          quotes.push(cursor.value);
+          cursor.continue();
+        } else {
+          // update badge text
+          if (quotes.length) {
+            chrome.browserAction.setBadgeText({
+              text: quotes.length.toString()
+            });
+          } else {
+            chrome.browserAction.setBadgeText({
+              text: ''
+            });
+          }
+        }
+      };
+
+    };
+  });
+});
 
 
 // get current URL of active tab
