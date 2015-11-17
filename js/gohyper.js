@@ -23,8 +23,8 @@ gohyper
         var objStore = db.createObjectStore('quotes', {keyPath: 'id', autoIncrement: true});
         objStore.createIndex('by_title', 'title', {unique: false});
         objStore.createIndex('by_current_url', 'currentUrl', {unique: false});
-        objStore.createIndex('by_create_timestamp', 'create_timestamp', {unique: true});
-        objStore.createIndex('by_update_timestamp', 'update_timestamp', {unique: true});
+        objStore.createIndex('by_create_timestamp', 'createTimestamp', {unique: true});
+        objStore.createIndex('by_update_timestamp', 'updateTimestamp', {unique: true});
       });
 
   }).config(['$compileProvider', function($compileProvider) {
@@ -78,8 +78,8 @@ gohyper
           tags: $scope.form.tags,
           comment: $scope.form.comment,
           links: ["http://link.de", "http://link2.de"], // TODO
-          create_timestamp: new Date().toISOString(),   // ISO 8601
-          update_timestamp: new Date().toISOString()
+          createTimestamp: new Date().toISOString(),   // ISO 8601
+          updateTimestamp: new Date().toISOString()
         }).then(function(event) {
 
           // get connection to background page and call updateBadge
@@ -122,8 +122,8 @@ gohyper
           "tags": $scope.quote.tags,
           "comment": $scope.quote.comment,
           "links": $scope.quote.links,
-          "create_timestamp": $scope.quote.create_timestamp,
-          "update_timestamp": new Date().toISOString()
+          "createTimestamp": $scope.quote.createTimestamp,
+          "updateTimestamp": new Date().toISOString()
         }).then(function(response) {
           // TODO route to show all
           $location.path('/notepad');

@@ -9,14 +9,15 @@ request.onupgradeneeded = function(event) {
   var objStore = db.createObjectStore("quotes", {keyPath: "id", autoIncrement: true});
   objStore.createIndex("by_title", "title", {unique: false});
   objStore.createIndex("by_current_url", "currentUrl", {unique: false});
-  objStore.createIndex("by_create_timestamp", "create_timestamp", {unique: true});
-  objStore.createIndex("by_update_timestamp", "update_timestamp", {unique: true});
+  objStore.createIndex("by_create_timestamp", "createTimestamp", {unique: true});
+  objStore.createIndex("by_update_timestamp", "updateTimestamp", {unique: true});
 };
 
-
 function updateBadge() {
+  // get active tab on current window
   chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
     var tab = arrayOfTabs[0];
+    // get url of active tab
     var currentUrl = tab.url;
 
     // search and show how many quotes exist on active tab and update badge
@@ -54,13 +55,11 @@ function updateBadge() {
   });
 }
 
-
+// fires when tab is updated
 chrome.tabs.onUpdated.addListener(updateBadge);
 
-
-// get current URL of active tab
+// fires when active tab changes
 chrome.tabs.onActivated.addListener(updateBadge);
-
 
 chrome.browserAction.setBadgeBackgroundColor({
   color: '#000'
@@ -75,7 +74,6 @@ chrome.runtime.onInstalled.addListener(function() {
   });
 });
 
-// chrome.contextMenus.onClicked.addListener(onClickHandler);
 chrome.contextMenus.onClicked.addListener(function(info) {
   if (info.menuItemId === "GoHyper1") {
     var quote = info.selectionText;
@@ -86,10 +84,10 @@ chrome.contextMenus.onClicked.addListener(function(info) {
 
 // is called onload in the popup code
 function getPageDetails(callback) {
-    // injects content script into current page
-    chrome.tabs.executeScript(null, { file: 'js/content.js' });
-    // perform the callback when a message is received from the content script
-    chrome.runtime.onMessage.addListener(function(message) {
-      callback(message);
-    });
+  // injects content script into current page
+  chrome.tabs.executeScript(null, { file: 'js/content.js' });
+  // perform the callback when a message is received from the content script
+  chrome.runtime.onMessage.addListener(function(message) {
+    callback(message);
+  });
 };
