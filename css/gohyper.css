@@ -52,3 +52,15 @@ html, body {
 * {
   border-radius: 0 !important;
 }
+
+blockquote {
+  font-size: 13px;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+}
+
+.gh-quote-icon {
+  font-size: 2.2em;
+  margin-right: 0.2em;
+  color: #e0e0e0;
+}

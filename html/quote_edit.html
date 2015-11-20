@@ -1,18 +1,12 @@
 <form class="form-inline gh-form" role="form" name="quoteForm" ng-controller="EditQuoteController">
 
-  <div class="form-group">
-    <label for="title">Title</label>
-    <input readonly type="text" class="form-control gh-input" name="title" ng-model="quote.title">
-  </div>
-
-  <div class="form-group">
-    <label for="currentUrl">Current URL</label>
-    <input readonly type="url" class="form-control gh-input" name="currentUrl" ng-model="quote.currentUrl">
-  </div>
-
-  <div class="form-group">
-    <label for="quote">Quote</label>
-    <textarea readonly class="form-control gh-input" name="quote" rows="4" ng-model="quote.quote"></textarea>
+  <div class="form-group text-muted">
+    <blockquote>
+      <p>
+        <i class="fa fa-quote-left gh-quote-icon"></i>
+        {{quote.quote}}
+      </p>
+    </blockquote>
   </div>
 
   <div class="form-group">
