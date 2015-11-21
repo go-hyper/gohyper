@@ -12,6 +12,26 @@
     </div>
 
     <div class="form-group">
+      <label for="hyperlink">Hyperlink to</label>
+      <div ng-if="form.hyperlinks.length">
+        <span ng-repeat="link in form.hyperlinks">
+          <a target="_blank" href="{{link}}" title="{{link}}">
+            {{link | limitTo: 50}}{{link.length > 50 ? '...' : ''}}
+          </a>
+          <br>
+        </span>
+      </div>
+      <div class="input-group">
+        <input class="form-control" type="text" name="hyperlinks" ng-model="form.hyperlink" placeholder="URL" ng-keypress="($event.which === 13) ? pushLink(form.hyperlink) : 0">
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button" ng-click="pushLink(form.hyperlink);">
+            <i class="fa fa-plus-circle"></i> Add
+          </button>
+        </span>
+      </div>
+    </div>
+
+    <div class="form-group">
       <label for="tags">Tags</label>
       <div class="gh-label-group" ng-if="form.tags.length">
         <span ng-repeat="tag in form.tags">
@@ -24,9 +44,9 @@
         </span>
       </div>
       <div class="input-group">
-        <input class="form-control" type="text" name="tags" ng-model="form.input" placeholder="Tags">
+        <input class="form-control" type="text" name="tags" ng-model="form.tag" placeholder="Tags" ng-keypress="($event.which === 13) ? pushTag(form.tag) : 0">
         <span class="input-group-btn">
-          <button class="btn btn-default" ng-click="push(form.input);">
+          <button class="btn btn-default" type="button" ng-click="pushTag(form.tag);">
             <i class="fa fa-plus-circle"></i> Add
           </button>
         </span>
@@ -38,31 +58,9 @@
       <textarea class="form-control gh-input" name="comment" rows="2" ng-model="form.comment" placeholder="Comment"></textarea>
     </div>
 
-    <!--div class="form-group">
-      <label for="url">Link to</label>
-      <div class="gh-label-group" ng-if="urls.length">
-        <span ng-repeat="url in urls">
-          <span class="label label-default gh-label">
-            {{url}}
-            <a href="" ng-click="urls.splice($index, 1)">
-              <i class="remove glyphicon glyphicon-remove-circle gh-remove"></i>
-            </a>
-          </span>
-        </span>
-      </div>
-      <div class="input-group">
-        <input class="form-control" type="url" name="urls" ng-model="url" placeholder="URL">
-        <span class="input-group-btn">
-          <button class="btn btn-default" ng-click="">
-            <i class="fa fa-plus-circle"></i> Add
-          </button>
-        </span>
-      </div>
-    </div-->
-
     <div class="form-group">
       <div class="text-right">
-        <button type="button" class="btn btn-primary gh-save-button" ng-click="clicked = true; addQuote();" ng-disabled="clicked || form.input.length > 0">
+        <button type="button" class="btn btn-primary gh-save-button" ng-click="clicked = true; addQuote();" ng-disabled="clicked || form.tag.length > 0 || form.hyperlink.length > 0">
           <i class="fa fa-check-circle"></i> Save
         </button>
       </div>

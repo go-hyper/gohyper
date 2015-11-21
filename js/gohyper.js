@@ -47,6 +47,7 @@ gohyper
   .controller('QuoteController', function($scope, $indexedDB, $location) {
 
     $scope.form = {
+      hyperlinks: [],
       tags: [],
       comment: ""
     };
@@ -61,11 +62,18 @@ gohyper
       });
     });
 
-    $scope.push = function(input) {
-      if ($scope.form.tags.indexOf(input) == -1) {
-        $scope.form.tags.push(input);
+    $scope.pushTag = function(tag) {
+      if ($scope.form.tags.indexOf(tag) == -1) {
+        $scope.form.tags.push(tag);
       }
-      $scope.form.input = "";
+      $scope.form.tag = "";
+    };
+
+    $scope.pushLink = function(hyperlink) {
+      if ($scope.form.hyperlinks.indexOf(hyperlink) == -1) {
+        $scope.form.hyperlinks.push(hyperlink);
+      }
+      $scope.form.hyperlink = "";
     };
 
     $scope.addQuote = function() {
@@ -77,8 +85,8 @@ gohyper
           quoteLocation: "TODO",                        // quote location in DOM
           tags: $scope.form.tags,
           comment: $scope.form.comment,
-          links: ["http://link.de", "http://link2.de"], // TODO
-          createTimestamp: new Date().toISOString(),   // ISO 8601
+          hyperlinks: $scope.form.hyperlinks,
+          createTimestamp: new Date().toISOString(),    // ISO 8601
           updateTimestamp: new Date().toISOString()
         }).then(function(event) {
 
@@ -121,7 +129,7 @@ gohyper
           "quoteLocation": $scope.quote.quoteLocation,
           "tags": $scope.quote.tags,
           "comment": $scope.quote.comment,
-          "links": $scope.quote.links,
+          "hyperlinks": $scope.quote.hyperlinks,
           "createTimestamp": $scope.quote.createTimestamp,
           "updateTimestamp": new Date().toISOString()
         }).then(function(response) {
