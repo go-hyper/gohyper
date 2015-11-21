@@ -112,11 +112,18 @@ gohyper
       });
     });
 
-    $scope.push = function(input) {
-      if ($scope.quote.tags.indexOf(input) == -1) {
-        $scope.quote.tags.push(input);
+    $scope.pushTag = function(tag) {
+      if ($scope.quote.tags.indexOf(tag) == -1) {
+        $scope.quote.tags.push(tag);
       }
-      $scope.input = "";
+      $scope.quote.tag = "";
+    };
+
+    $scope.pushLink = function(hyperlink) {
+      if ($scope.quote.hyperlinks.indexOf(hyperlink) == -1) {
+        $scope.quote.hyperlinks.push(hyperlink);
+      }
+      $scope.quote.hyperlink = "";
     };
 
     $scope.saveQuote = function() {
