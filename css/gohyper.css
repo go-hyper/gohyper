@@ -65,3 +65,8 @@ blockquote {
   margin-right: 0.2em;
   color: #e0e0e0;
 }
+
+.gh-link {
+  font-size: 13px;
+  margin-bottom: 0.5em;
+}

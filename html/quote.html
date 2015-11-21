@@ -13,7 +13,7 @@
 
     <div class="form-group">
       <label for="hyperlink">Hyperlink to</label>
-      <div ng-if="form.hyperlinks.length">
+      <div class="gh-link" ng-if="form.hyperlinks.length">
         <span ng-repeat="link in form.hyperlinks">
           <a target="_blank" href="{{link}}" title="{{link}}">
             {{link | limitTo: 50}}{{link.length > 50 ? '...' : ''}}
