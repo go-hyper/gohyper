@@ -18,6 +18,9 @@
           <a target="_blank" href="{{link}}" title="{{link}}">
             {{link | limitTo: 50}}{{link.length > 50 ? '...' : ''}}
           </a>
+          <a href="" ng-click="form.hyperlinks.splice($index, 1)">
+            <i class="remove glyphicon glyphicon-remove-circle gh-remove"></i>
+          </a>
           <br>
         </span>
       </div>
