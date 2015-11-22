@@ -23,6 +23,7 @@ gohyper
         var objStore = db.createObjectStore('quotes', {keyPath: 'id', autoIncrement: true});
         objStore.createIndex('by_title', 'title', {unique: false});
         objStore.createIndex('by_current_url', 'currentUrl', {unique: false});
+        objStore.createIndex('by_hyperlinks', 'hyperlinks', {unique: false, multiEntry: true});
         objStore.createIndex('by_create_timestamp', 'createTimestamp', {unique: true});
         objStore.createIndex('by_update_timestamp', 'updateTimestamp', {unique: true});
       });
