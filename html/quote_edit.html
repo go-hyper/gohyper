@@ -1,18 +1,36 @@
 <form class="form-inline gh-form" role="form" name="quoteForm" ng-controller="EditQuoteController">
 
-  <div class="form-group">
-    <label for="title">Title</label>
-    <input readonly type="text" class="form-control gh-input" name="title" ng-model="quote.title">
+  <div class="form-group text-muted">
+    <blockquote>
+      <p>
+        <i class="fa fa-quote-left gh-quote-icon"></i>
+        {{quote.quote}}
+      </p>
+    </blockquote>
   </div>
 
   <div class="form-group">
-    <label for="currentUrl">Current URL</label>
-    <input readonly type="url" class="form-control gh-input" name="currentUrl" ng-model="quote.currentUrl">
-  </div>
-
-  <div class="form-group">
-    <label for="quote">Quote</label>
-    <textarea readonly class="form-control gh-input" name="quote" rows="4" ng-model="quote.quote"></textarea>
+    <label for="hyperlink">Hyperlink to</label>
+    <div class="gh-link" ng-if="quote.hyperlinks.length">
+      <span ng-repeat="link in quote.hyperlinks">
+        <a target="_blank" href="{{link}}" title="{{link}}">
+          {{link | limitTo: 45}}{{link.length > 45 ? '...' : ''}}
+        </a>
+        <a href="" ng-click="quote.hyperlinks.splice($index, 1)">
+          <i class="remove glyphicon glyphicon-remove-circle gh-remove"></i>
+        </a>
+        <br>
+      </span>
+    </div>
+    <div class="input-group">
+      <input class="form-control" type="text" name="hyperlinks" ng-model="quote.hyperlink" uib-typeahead="link for link in links | filter:$viewValue"
+        placeholder="URL" ng-keypress="($event.which === 13) && pushLink(quote.hyperlink)">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" ng-click="pushLink(quote.hyperlink);">
+          <i class="fa fa-plus-circle"></i> Add
+        </button>
+      </span>
+    </div>
   </div>
 
   <div class="form-group">
@@ -28,9 +46,9 @@
       </span>
     </div>
     <div class="input-group">
-      <input class="form-control" type="text" name="tags" ng-model="input" placeholder="Tags">
+      <input class="form-control" type="text" name="tags" ng-model="quote.tag" placeholder="Tags" ng-keypress="($event.which === 13) && pushTag(quote.tag)">
       <span class="input-group-btn">
-        <button class="btn btn-default" ng-click="push(input);">
+        <button class="btn btn-default" type="button" ng-click="pushTag(quote.tag);">
           <i class="fa fa-plus-circle"></i> Add
         </button>
       </span>
@@ -44,7 +62,7 @@
 
   <div class="form-group">
     <div class="text-right">
-      <button type="button" class="btn btn-primary gh-save-button" ng-click="clicked = true; saveQuote();" ng-disabled="clicked || input.length > 0">
+      <button type="button" class="btn btn-primary gh-save-button" ng-click="clicked = true; saveQuote();" ng-disabled="clicked || quote.tag.length > 0 || quote.hyperlink.length > 0">
         <i class="fa fa-check-circle"></i> Save
       </button>
     </div>

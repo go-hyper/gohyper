@@ -23,6 +23,7 @@ gohyper
         var objStore = db.createObjectStore('quotes', {keyPath: 'id', autoIncrement: true});
         objStore.createIndex('by_title', 'title', {unique: false});
         objStore.createIndex('by_current_url', 'currentUrl', {unique: false});
+        objStore.createIndex('by_hyperlinks', 'hyperlinks', {unique: false, multiEntry: true});
         objStore.createIndex('by_create_timestamp', 'createTimestamp', {unique: true});
         objStore.createIndex('by_update_timestamp', 'updateTimestamp', {unique: true});
       });
@@ -47,6 +48,7 @@ gohyper
   .controller('QuoteController', function($scope, $indexedDB, $location) {
 
     $scope.form = {
+      hyperlinks: [],
       tags: [],
       comment: ""
     };
@@ -61,12 +63,30 @@ gohyper
       });
     });
 
-    $scope.push = function(input) {
-      if ($scope.form.tags.indexOf(input) == -1) {
-        $scope.form.tags.push(input);
+    $scope.pushTag = function(tag) {
+      if ($scope.form.tags.indexOf(tag) == -1 && tag.length) {
+        $scope.form.tags.push(tag);
       }
-      $scope.form.input = "";
+      $scope.form.tag = "";
     };
+
+    $scope.pushLink = function(hyperlink) {
+      if ($scope.form.hyperlinks.indexOf(hyperlink) == -1 && hyperlink.length) {
+        $scope.form.hyperlinks.push(hyperlink);
+      }
+      $scope.form.hyperlink = "";
+    };
+
+    $scope.links = [];
+
+    // TODO filter doubles and don't show urls already added
+    $indexedDB.openStore('quotes', function(store) {
+      store.getAll().then(function(response) {
+        for (var i = 0; i < response.length; i++) {
+          $scope.links.push(response[i].currentUrl);
+        }
+      });
+    });
 
     $scope.addQuote = function() {
       $indexedDB.openStore('quotes', function(store) {
@@ -77,8 +97,8 @@ gohyper
           quoteLocation: "TODO",                        // quote location in DOM
           tags: $scope.form.tags,
           comment: $scope.form.comment,
-          links: ["http://link.de", "http://link2.de"], // TODO
-          createTimestamp: new Date().toISOString(),   // ISO 8601
+          hyperlinks: $scope.form.hyperlinks,
+          createTimestamp: new Date().toISOString(),    // ISO 8601
           updateTimestamp: new Date().toISOString()
         }).then(function(event) {
 
@@ -104,12 +124,30 @@ gohyper
       });
     });
 
-    $scope.push = function(input) {
-      if ($scope.quote.tags.indexOf(input) == -1) {
-        $scope.quote.tags.push(input);
+    $scope.pushTag = function(tag) {
+      if ($scope.quote.tags.indexOf(tag) == -1 && tag.length) {
+        $scope.quote.tags.push(tag);
       }
-      $scope.input = "";
+      $scope.quote.tag = "";
     };
+
+    $scope.pushLink = function(hyperlink) {
+      if ($scope.quote.hyperlinks.indexOf(hyperlink) == -1 && hyperlink.length) {
+        $scope.quote.hyperlinks.push(hyperlink);
+      }
+      $scope.quote.hyperlink = "";
+    };
+
+    $scope.links = [];
+
+    // TODO filter doubles and don't show urls already added
+    $indexedDB.openStore('quotes', function(store) {
+      store.getAll().then(function(response) {
+        for (var i = 0; i < response.length; i++) {
+          $scope.links.push(response[i].currentUrl);
+        }
+      });
+    });
 
     $scope.saveQuote = function() {
       $indexedDB.openStore('quotes', function(store) {
@@ -121,7 +159,7 @@ gohyper
           "quoteLocation": $scope.quote.quoteLocation,
           "tags": $scope.quote.tags,
           "comment": $scope.quote.comment,
-          "links": $scope.quote.links,
+          "hyperlinks": $scope.quote.hyperlinks,
           "createTimestamp": $scope.quote.createTimestamp,
           "updateTimestamp": new Date().toISOString()
         }).then(function(response) {

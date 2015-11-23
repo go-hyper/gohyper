@@ -74,18 +74,25 @@ chrome.runtime.onInstalled.addListener(function() {
   });
 });
 
-chrome.contextMenus.onClicked.addListener(function(info) {
+chrome.contextMenus.onClicked.addListener(function(info, tab) {
   if (info.menuItemId === "GoHyper1") {
     var quote = info.selectionText;
     var currentUrl = info.currentUrl;
+    // send message to content script
     // TODO
+    chrome.tabs.sendMessage(tab.id, {greeting: "hello"});
   }
 });
 
-// is called onload in the popup code
+// inject content.js
+chrome.webNavigation.onCompleted.addListener(function(details) {
+  chrome.tabs.executeScript(details.tabId, {file: 'js/content.js'});
+});
+
+// is called onload in the gohyper.js code
 function getPageDetails(callback) {
-  // injects content script into current page
-  chrome.tabs.executeScript(null, { file: 'js/content.js' });
+  // inject content script into current page
+  chrome.tabs.executeScript(null, {file: 'js/content.js'});
   // perform the callback when a message is received from the content script
   chrome.runtime.onMessage.addListener(function(message) {
     callback(message);
