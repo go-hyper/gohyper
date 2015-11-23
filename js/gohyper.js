@@ -159,6 +159,8 @@ gohyper
             if ($scope.links.indexOf(response[i].currentUrl) === -1 ) {
               // filter already added urls
               if ($scope.quote.hyperlinks.indexOf(response[i].currentUrl) === -1) {
+                // TODO filter url of current quote?
+                // if (response[i].currentUrl != $scope.quote.currentUrl) {
                 $scope.links.push(response[i].currentUrl);
               }
             }
