@@ -86,6 +86,7 @@ gohyper
           for (var i = 0; i < response.length; i++) {
             // filter doubles
             if ($scope.links.indexOf(response[i].currentUrl) === -1 ) {
+              // filter already added urls
               if ($scope.form.hyperlinks.indexOf(response[i].currentUrl) === -1) {
                 $scope.links.push(response[i].currentUrl);
               }
@@ -156,6 +157,7 @@ gohyper
           for (var i = 0; i < response.length; i++) {
             // filter doubles
             if ($scope.links.indexOf(response[i].currentUrl) === -1 ) {
+              // filter already added urls
               if ($scope.quote.hyperlinks.indexOf(response[i].currentUrl) === -1) {
                 $scope.links.push(response[i].currentUrl);
               }
