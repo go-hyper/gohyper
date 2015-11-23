@@ -75,20 +75,28 @@ gohyper
         $scope.form.hyperlinks.push(hyperlink);
       }
       $scope.form.hyperlink = "";
+      // filter already added urls
+      $scope.updateLinks();
     };
 
-    $scope.links = [];
-
-    // TODO don't show urls already added
-    $indexedDB.openStore('quotes', function(store) {
-      store.getAll().then(function(response) {
-        for (var i = 0; i < response.length; i++) {
-          if ($scope.links.indexOf(response[i].currentUrl) === -1 ) {
-            $scope.links.push(response[i].currentUrl);
+    $scope.updateLinks = function() {
+      $scope.links = [];
+      $indexedDB.openStore('quotes', function(store) {
+        store.getAll().then(function(response) {
+          for (var i = 0; i < response.length; i++) {
+            // filter doubles
+            if ($scope.links.indexOf(response[i].currentUrl) === -1 ) {
+              if ($scope.form.hyperlinks.indexOf(response[i].currentUrl) === -1) {
+                $scope.links.push(response[i].currentUrl);
+              }
+            }
           }
-        }
+        });
       });
-    });
+    };
+
+    // call function
+    $scope.updateLinks();
 
     $scope.addQuote = function() {
       $indexedDB.openStore('quotes', function(store) {
