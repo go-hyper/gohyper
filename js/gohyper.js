@@ -64,18 +64,29 @@ gohyper
     });
 
     $scope.pushTag = function(tag) {
-      if ($scope.form.tags.indexOf(tag) == -1) {
+      if ($scope.form.tags.indexOf(tag) == -1 && tag.length) {
         $scope.form.tags.push(tag);
       }
       $scope.form.tag = "";
     };
 
     $scope.pushLink = function(hyperlink) {
-      if ($scope.form.hyperlinks.indexOf(hyperlink) == -1) {
+      if ($scope.form.hyperlinks.indexOf(hyperlink) == -1 && hyperlink.length) {
         $scope.form.hyperlinks.push(hyperlink);
       }
       $scope.form.hyperlink = "";
     };
+
+    $scope.links = [];
+
+    // TODO filter doubles and don't show urls already added
+    $indexedDB.openStore('quotes', function(store) {
+      store.getAll().then(function(response) {
+        for (var i = 0; i < response.length; i++) {
+          $scope.links.push(response[i].currentUrl);
+        }
+      });
+    });
 
     $scope.addQuote = function() {
       $indexedDB.openStore('quotes', function(store) {
@@ -114,18 +125,29 @@ gohyper
     });
 
     $scope.pushTag = function(tag) {
-      if ($scope.quote.tags.indexOf(tag) == -1) {
+      if ($scope.quote.tags.indexOf(tag) == -1 && tag.length) {
         $scope.quote.tags.push(tag);
       }
       $scope.quote.tag = "";
     };
 
     $scope.pushLink = function(hyperlink) {
-      if ($scope.quote.hyperlinks.indexOf(hyperlink) == -1) {
+      if ($scope.quote.hyperlinks.indexOf(hyperlink) == -1 && hyperlink.length) {
         $scope.quote.hyperlinks.push(hyperlink);
       }
       $scope.quote.hyperlink = "";
     };
+
+    $scope.links = [];
+
+    // TODO filter doubles and don't show urls already added
+    $indexedDB.openStore('quotes', function(store) {
+      store.getAll().then(function(response) {
+        for (var i = 0; i < response.length; i++) {
+          $scope.links.push(response[i].currentUrl);
+        }
+      });
+    });
 
     $scope.saveQuote = function() {
       $indexedDB.openStore('quotes', function(store) {

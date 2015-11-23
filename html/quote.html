@@ -16,7 +16,7 @@
       <div class="gh-link" ng-if="form.hyperlinks.length">
         <span ng-repeat="link in form.hyperlinks">
           <a target="_blank" href="{{link}}" title="{{link}}">
-            {{link | limitTo: 50}}{{link.length > 50 ? '...' : ''}}
+            {{link | limitTo: 45}}{{link.length > 45 ? '...' : ''}}
           </a>
           <a href="" ng-click="form.hyperlinks.splice($index, 1)">
             <i class="remove glyphicon glyphicon-remove-circle gh-remove"></i>
@@ -25,7 +25,8 @@
         </span>
       </div>
       <div class="input-group">
-        <input class="form-control" type="text" name="hyperlinks" ng-model="form.hyperlink" placeholder="URL" ng-keypress="($event.which === 13) && pushLink(form.hyperlink)">
+        <input class="form-control" type="text" name="hyperlinks" ng-model="form.hyperlink" uib-typeahead="link for link in links | filter:$viewValue"
+          placeholder="URL" ng-keypress="($event.which === 13) && pushLink(form.hyperlink)">
         <span class="input-group-btn">
           <button class="btn btn-default" type="button" ng-click="pushLink(form.hyperlink);">
             <i class="fa fa-plus-circle"></i> Add
