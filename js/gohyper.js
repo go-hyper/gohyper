@@ -79,11 +79,13 @@ gohyper
 
     $scope.links = [];
 
-    // TODO filter doubles and don't show urls already added
+    // TODO don't show urls already added
     $indexedDB.openStore('quotes', function(store) {
       store.getAll().then(function(response) {
         for (var i = 0; i < response.length; i++) {
-          $scope.links.push(response[i].currentUrl);
+          if ($scope.links.indexOf(response[i].currentUrl) === -1 ) {
+            $scope.links.push(response[i].currentUrl);
+          }
         }
       });
     });
