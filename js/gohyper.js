@@ -1,3 +1,5 @@
+'use strict';
+
 var gohyper = angular.module('gohyper', ['ngRoute', 'indexedDB', 'ui.bootstrap']);
 
 gohyper

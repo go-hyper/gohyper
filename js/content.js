@@ -1,3 +1,5 @@
+'use strict';
+
 // send a message containing the page details back to the event/background page
 chrome.runtime.sendMessage({
   'title': document.title,
