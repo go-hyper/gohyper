@@ -2,6 +2,14 @@
 
 rangy.init();
 
+// TODO (check if fixed)
+// workaround, see https://github.com/timdown/rangy/issues/146#issuecomment-38368638
+var elem = document.querySelector(":focus");
+if (elem) {
+  elem.blur();
+  elem.focus();
+}
+
 // send a message containing the page details back to the event/background page
 chrome.runtime.sendMessage({
   'title': document.title,
