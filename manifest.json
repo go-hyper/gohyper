@@ -5,6 +5,7 @@
   "description": "This is a prototype of GoHyper.",
   "version": "1.0",
   "version_name": "GoHyper alpha",
+  "homepage_url": "https://github.com/jengeb/gohyper",
 
    "applications": {
      "gecko": {

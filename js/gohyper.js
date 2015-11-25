@@ -14,9 +14,6 @@ gohyper
       })
       .when('/notepad', {
         templateUrl: 'html/notepad.html'
-      })
-      .when('/info', {
-        templateUrl: 'html/info.html'
       });
 
     $indexedDBProvider
