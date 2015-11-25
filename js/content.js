@@ -29,8 +29,15 @@ function makeEditableAndHighlight(colour) {
 
 // wait for messages from event/background page belonging to context menu's onclick events
 chrome.runtime.onMessage.addListener(function(message, sender) {
-  makeEditableAndHighlight("yellow");
+  // makeEditableAndHighlight("yellow");
   var sel = rangy.getSelection();
-  // TODO
-  console.log(sel);
+  var serializedRanges = sel.getAllRanges().map(
+    function(range) {
+      // 3rd argument root element
+      return rangy.serializeRange(range, true, document.body);
+    }
+  );
+
+  console.log(serializedRanges);
+
 });
