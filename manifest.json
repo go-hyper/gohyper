@@ -34,6 +34,14 @@
     "persistent": false
   },
 
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["bower_components/rangy/rangy-core.js", "bower_components/rangy/rangy-classapplier.js",
+        "bower_components/rangy/rangy-highlighter.js", "bower_components/rangy/rangy-serializer.js", "js/content.js"]
+    }
+  ],
+
   "browser_action": {
     "default_icon": {
       "19": "images/gohyper.png",
