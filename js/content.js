@@ -1,5 +1,7 @@
 'use strict';
 
+rangy.init();
+
 // send a message containing the page details back to the event/background page
 chrome.runtime.sendMessage({
   'title': document.title,
@@ -28,5 +30,7 @@ function makeEditableAndHighlight(colour) {
 // wait for messages from event/background page belonging to context menu's onclick events
 chrome.runtime.onMessage.addListener(function(message, sender) {
   makeEditableAndHighlight("yellow");
+  var sel = rangy.getSelection();
   // TODO
+  console.log(sel);
 });
