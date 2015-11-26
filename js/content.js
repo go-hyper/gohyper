@@ -41,7 +41,7 @@ chrome.runtime.onMessage.addListener(function(message, sender) {
   var sel = rangy.getSelection();
   var serializedRanges = sel.getAllRanges().map(
     function(range) {
-      // 3rd argument root element
+      // 3rd argument: root element
       return rangy.serializeRange(range, true, document.body);
     }
   );
