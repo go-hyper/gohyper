@@ -46,6 +46,8 @@ chrome.runtime.onMessage.addListener(function(message, sender) {
     }
   );
 
+  makeEditableAndHighlight("yellow");
+
   console.log(serializedRanges);
 
 });
