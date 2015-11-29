@@ -10,6 +10,39 @@ if (elem) {
   elem.focus();
 }
 
+// inject container with button and iframe
+var outerContainer = document.createElement('div');
+var shadow = outerContainer.createShadowRoot();
+var style = document.createElement('style');
+style.innerHTML = '@import "' + chrome.runtime.getURL('css/content.css') + '";';
+var innerContainer = document.createElement('div');
+var button = document.createElement('button');
+var iframe = document.createElement('iframe');
+iframe.src = chrome.runtime.getURL('iframe.html');
+
+var active = false;
+function setActive(_active) {
+  active = _active;
+  innerContainer.className = 'gohyper-container';
+  if (active) {
+    innerContainer.className += ' gohyper-active';
+  }
+  button.innerHTML = active ? '&gt;' : '&lt;';
+}
+// init
+setActive(false);
+
+innerContainer.appendChild(button);
+innerContainer.appendChild(iframe);
+shadow.appendChild(style);
+shadow.appendChild(innerContainer);
+document.body.appendChild(outerContainer);
+
+button.onclick = function() {
+  setActive(!active);
+};
+
+
 // send a message containing the page details back to the event/background page
 chrome.runtime.sendMessage({
   'title': document.title,

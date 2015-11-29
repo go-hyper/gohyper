@@ -37,9 +37,14 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
+      "css": ["css/content.css"],
       "js": ["bower_components/rangy/rangy-core.js", "bower_components/rangy/rangy-classapplier.js",
         "bower_components/rangy/rangy-highlighter.js", "bower_components/rangy/rangy-serializer.js", "js/content.js"]
     }
+  ],
+
+  "web_accessible_resources": [
+    "iframe.html", "css/content.css"
   ],
 
   "browser_action": {

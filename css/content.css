@@ -1,0 +1,35 @@
+.gohyper-container {
+  position: fixed;
+  z-index: 9999;
+  right: -30%;
+  top: 0;
+  bottom: 0;
+  width: 30%;
+  background-color: #E0E0E0;
+  transition: right ease 0.5s;
+}
+
+.gohyper-container.gohyper-active {
+  right: 0;
+}
+
+.gohyper-container > button {
+  position: absolute;
+  left: -30px;
+  width: 30px;
+  top: 0;
+  height: 30px;
+  background-color: #9E9E9E;
+  border: none;
+  transition: left ease 0.5s;
+}
+
+.gohyper-container.gohyper-active > button {
+  left: 0;
+}
+
+.gohyper-container > iframe {
+  height: 100%;
+  width: 100%;
+  border: none;
+}
