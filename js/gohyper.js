@@ -1,3 +1,5 @@
+'use strict';
+
 var gohyper = angular.module('gohyper', ['ngRoute', 'indexedDB', 'ui.bootstrap']);
 
 gohyper
@@ -12,9 +14,6 @@ gohyper
       })
       .when('/notepad', {
         templateUrl: 'html/notepad.html'
-      })
-      .when('/info', {
-        templateUrl: 'html/info.html'
       });
 
     $indexedDBProvider
@@ -75,18 +74,29 @@ gohyper
         $scope.form.hyperlinks.push(hyperlink);
       }
       $scope.form.hyperlink = "";
+      // filter already added urls
+      $scope.updateLinks();
     };
 
-    $scope.links = [];
-
-    // TODO filter doubles and don't show urls already added
-    $indexedDB.openStore('quotes', function(store) {
-      store.getAll().then(function(response) {
-        for (var i = 0; i < response.length; i++) {
-          $scope.links.push(response[i].currentUrl);
-        }
+    $scope.updateLinks = function() {
+      $scope.links = [];
+      $indexedDB.openStore('quotes', function(store) {
+        store.getAll().then(function(response) {
+          for (var i = 0; i < response.length; i++) {
+            // filter doubles
+            if ($scope.links.indexOf(response[i].currentUrl) === -1 ) {
+              // filter already added urls
+              if ($scope.form.hyperlinks.indexOf(response[i].currentUrl) === -1) {
+                $scope.links.push(response[i].currentUrl);
+              }
+            }
+          }
+        });
       });
-    });
+    };
+
+    // call function
+    $scope.updateLinks();
 
     $scope.addQuote = function() {
       $indexedDB.openStore('quotes', function(store) {
@@ -136,18 +146,30 @@ gohyper
         $scope.quote.hyperlinks.push(hyperlink);
       }
       $scope.quote.hyperlink = "";
+      $scope.updateLinks();
     };
 
-    $scope.links = [];
-
-    // TODO filter doubles and don't show urls already added
-    $indexedDB.openStore('quotes', function(store) {
-      store.getAll().then(function(response) {
-        for (var i = 0; i < response.length; i++) {
-          $scope.links.push(response[i].currentUrl);
-        }
+    $scope.updateLinks = function() {
+      $scope.links = [];
+      $indexedDB.openStore('quotes', function(store) {
+        store.getAll().then(function(response) {
+          for (var i = 0; i < response.length; i++) {
+            // filter doubles
+            if ($scope.links.indexOf(response[i].currentUrl) === -1 ) {
+              // filter already added urls
+              if ($scope.quote.hyperlinks.indexOf(response[i].currentUrl) === -1) {
+                // TODO filter url of current quote?
+                // if (response[i].currentUrl != $scope.quote.currentUrl) {
+                $scope.links.push(response[i].currentUrl);
+              }
+            }
+          }
+        });
       });
-    });
+    };
+
+    // call function
+    $scope.updateLinks();
 
     $scope.saveQuote = function() {
       $indexedDB.openStore('quotes', function(store) {

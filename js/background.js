@@ -9,6 +9,7 @@ request.onupgradeneeded = function(event) {
   var objStore = db.createObjectStore("quotes", {keyPath: "id", autoIncrement: true});
   objStore.createIndex("by_title", "title", {unique: false});
   objStore.createIndex("by_current_url", "currentUrl", {unique: false});
+  objStore.createIndex('by_hyperlinks', 'hyperlinks', {unique: false, multiEntry: true});
   objStore.createIndex("by_create_timestamp", "createTimestamp", {unique: true});
   objStore.createIndex("by_update_timestamp", "updateTimestamp", {unique: true});
 };
@@ -84,10 +85,6 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
   }
 });
 
-// inject content.js
-chrome.webNavigation.onCompleted.addListener(function(details) {
-  chrome.tabs.executeScript(details.tabId, {file: 'js/content.js'});
-});
 
 // is called onload in the gohyper.js code
 function getPageDetails(callback) {

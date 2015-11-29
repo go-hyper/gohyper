@@ -70,3 +70,8 @@ blockquote {
   font-size: 13px;
   margin-bottom: 0.5em;
 }
+
+/* reduce padding */
+.dropdown-menu > li > a {
+  padding: 2px 10px;
+}

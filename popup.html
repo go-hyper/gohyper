@@ -11,6 +11,10 @@
     <script src="bower_components/angular-route/angular-route.min.js"></script>
     <script src="bower_components/angular-indexedDB/angular-indexed-db.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/rangy/rangy-core.js"></script>
+    <script src="bower_components/rangy/rangy-classapplier.js"></script>
+    <script src="bower_components/rangy/rangy-highlighter.js"></script>
+    <script src="bower_components/rangy/rangy-serializer.js"></script>
     <script type="text/javascript" src="js/gohyper.js"></script>
   </head>
   <body>
@@ -27,9 +31,7 @@
       <ul class="nav nav-tabs">
         <li role="presentation" ng-class="{active: isActive('/') || isActive('/quote')}"><a href="#/">Quote</a></li>
         <li role="presentation" ng-class="{active: isActive('/notepad')}"><a href="#/notepad">Notepad</a></li>
-        <li role="presentation" ng-class="{active: isActive('/info')}"><a href="#/info">Info</a></li>
       </ul>
-
 
       <div ng-view></div>
 

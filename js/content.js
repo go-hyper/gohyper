@@ -1,3 +1,15 @@
+'use strict';
+
+rangy.init();
+
+// TODO (check if fixed)
+// workaround, see https://github.com/timdown/rangy/issues/146#issuecomment-38368638
+var elem = document.querySelector(":focus");
+if (elem) {
+  elem.blur();
+  elem.focus();
+}
+
 // send a message containing the page details back to the event/background page
 chrome.runtime.sendMessage({
   'title': document.title,
@@ -25,6 +37,17 @@ function makeEditableAndHighlight(colour) {
 
 // wait for messages from event/background page belonging to context menu's onclick events
 chrome.runtime.onMessage.addListener(function(message, sender) {
+  // makeEditableAndHighlight("yellow");
+  var sel = rangy.getSelection();
+  var serializedRanges = sel.getAllRanges().map(
+    function(range) {
+      // 3rd argument: root element
+      return rangy.serializeRange(range, true, document.body);
+    }
+  );
+
   makeEditableAndHighlight("yellow");
-  // TODO
+
+  console.log(serializedRanges);
+
 });
