@@ -44,7 +44,7 @@
   ],
 
   "web_accessible_resources": [
-    "iframe.html", "css/content.css"
+    "iframe.html", "css/content.css", "bower_components/font-awesome/*"
   ],
 
   "browser_action": {

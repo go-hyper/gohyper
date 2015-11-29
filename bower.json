@@ -14,7 +14,8 @@
     "angular-route": "~1.4.7",
     "angular-indexedDB": "angular-indexed-db#~1.1.3",
     "angular-bootstrap": "~0.14.3",
-    "rangy": "~1.3.0"
+    "rangy": "~1.3.0",
+    "font-awesome": "fontawesome#~4.5.0"
   },
   "resolutions": {
     "angular": "~1.4.7"

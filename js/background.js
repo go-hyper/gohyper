@@ -89,7 +89,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
 // is called onload in the gohyper.js code
 function getPageDetails(callback) {
   // inject content script into current page
-  chrome.tabs.executeScript(null, {file: 'js/content.js'});
+  // chrome.tabs.executeScript(null, {file: 'js/content.js'});
   // perform the callback when a message is received from the content script
   chrome.runtime.onMessage.addListener(function(message) {
     callback(message);
