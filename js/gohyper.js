@@ -7,7 +7,7 @@ gohyper
 
     $routeProvider
       .when('/', {
-        templateUrl: 'html/quote.html'
+        templateUrl: 'iframe.html'
       })
       .when('/quote/edit/:id', {
         templateUrl: 'html/quote_edit.html'

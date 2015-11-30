@@ -52,7 +52,6 @@
       "19": "images/gohyper.png",
       "38": "images/gohyper.png"
     },
-    "default_title": "GoHyper",
-    "default_popup": "popup.html"
+    "default_title": "GoHyper"
   }
 }
