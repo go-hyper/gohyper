@@ -23,6 +23,7 @@
   border: none;
   transition: left ease 0.5s;
   cursor: pointer;
+  opacity: 0.8;
 }
 
 .gohyper-container.gohyper-active > button {
