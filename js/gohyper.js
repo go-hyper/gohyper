@@ -1,9 +1,9 @@
 'use strict';
 
-var gohyper = angular.module('gohyper', ['ngRoute', 'indexedDB', 'ui.bootstrap']);
+var gohyper = angular.module('gohyper', ['ngRoute', 'ui.bootstrap']);
 
 gohyper
-  .config(function($routeProvider, $indexedDBProvider) {
+  .config(function($routeProvider) {
 
     $routeProvider
       .when('/', {
@@ -14,17 +14,6 @@ gohyper
       })
       .when('/notepad', {
         templateUrl: 'html/notepad.html'
-      });
-
-    $indexedDBProvider
-      .connection('GoHyper')
-      .upgradeDatabase(1, function(event, db, tx){
-        var objStore = db.createObjectStore('quotes', {keyPath: 'id', autoIncrement: true});
-        objStore.createIndex('by_title', 'title', {unique: false});
-        objStore.createIndex('by_current_url', 'currentUrl', {unique: false});
-        objStore.createIndex('by_hyperlinks', 'hyperlinks', {unique: false, multiEntry: true});
-        objStore.createIndex('by_create_timestamp', 'createTimestamp', {unique: true});
-        objStore.createIndex('by_update_timestamp', 'updateTimestamp', {unique: true});
       });
 
   }).config(['$compileProvider', function($compileProvider) {
@@ -44,7 +33,7 @@ gohyper
 
 
 gohyper
-  .controller('QuoteController', function($scope, $indexedDB, $location) {
+  .controller('QuoteController', function($scope, $location) {
 
     $scope.form = {
       hyperlinks: [],
@@ -52,6 +41,7 @@ gohyper
       comment: ""
     };
 
+/*
     chrome.runtime.getBackgroundPage(function(eventPage) {
       // injects content.js into current tab's HTML
       eventPage.getPageDetails(function(message) {
@@ -61,6 +51,11 @@ gohyper
         $scope.$apply();
       });
     });
+*/
+
+    $scope.form.title = "Test TODO";
+    $scope.form.currentUrl = "http://www.wikipedia.de";
+    $scope.form.quote = "Test TODO";
 
     $scope.pushTag = function(tag) {
       if ($scope.form.tags.indexOf(tag) == -1 && tag.length) {
@@ -78,6 +73,7 @@ gohyper
       $scope.updateLinks();
     };
 
+    /*
     $scope.updateLinks = function() {
       $scope.links = [];
       $indexedDB.openStore('quotes', function(store) {
@@ -94,45 +90,45 @@ gohyper
         });
       });
     };
+    */
 
     // call function
-    $scope.updateLinks();
+    // $scope.updateLinks();
 
     $scope.addQuote = function() {
-      $indexedDB.openStore('quotes', function(store) {
-        store.insert({
-          title: $scope.form.title,
-          currentUrl: $scope.form.currentUrl,
-          quote: $scope.form.quote,
-          quoteLocation: "TODO",                        // quote location in DOM
-          tags: $scope.form.tags,
-          comment: $scope.form.comment,
-          hyperlinks: $scope.form.hyperlinks,
-          createTimestamp: new Date().toISOString(),    // ISO 8601
-          updateTimestamp: new Date().toISOString()
-        }).then(function(event) {
-
-          // get connection to background page and call updateBadge
-          chrome.extension.getBackgroundPage().updateBadge();
-
-          $location.path('/notepad');
-        });
+      chrome.runtime.sendMessage({
+        'subject': 'addQuote',
+        'title': $scope.form.title,
+        'currentUrl': $scope.form.currentUrl,
+        'quote': $scope.form.quote,
+        'quoteLocation': 'TODO',
+        'tags': $scope.form.tags,
+        'comment': $scope.form.comment,
+        'hyperlinks': $scope.form.hyperlinks,
+        'createTimestamp': new Date().toISOString(),
+        'updateTimestamp': new Date().toISOString()
       });
+      // get connection to background page and call updateBadge
+      // TODO
+      // chrome.runtime.getBackgroundPage().updateBadge();
+      //$location.path('/notepad');
     };
 
   });
 
 
 gohyper
-  .controller('EditQuoteController', function($scope, $indexedDB, $routeParams, $location) {
+  .controller('EditQuoteController', function($scope, $routeParams, $location) {
 
     $scope.quote = {};
 
-    $indexedDB.openStore('quotes', function(store) {
-      store.find(parseInt($routeParams.id)).then(function(response) {
-        angular.copy(response, $scope.quote);
-      });
+    // find one by id
+    chrome.runtime.sendMessage({
+      'subject': 'findOneById',
+      'id': parseInt($routeParams.id)
     });
+
+    // angular.copy(response, $scope.quote);
 
     $scope.pushTag = function(tag) {
       if ($scope.quote.tags.indexOf(tag) == -1 && tag.length) {
@@ -149,6 +145,7 @@ gohyper
       $scope.updateLinks();
     };
 
+    /*
     $scope.updateLinks = function() {
       $scope.links = [];
       $indexedDB.openStore('quotes', function(store) {
@@ -167,35 +164,35 @@ gohyper
         });
       });
     };
+    */
+
 
     // call function
     $scope.updateLinks();
 
     $scope.saveQuote = function() {
-      $indexedDB.openStore('quotes', function(store) {
-        store.upsert({
-          "id": $scope.quote.id,
-          "title": $scope.quote.title,
-          "currentUrl": $scope.quote.currentUrl,
-          "quote": $scope.quote.quote,
-          "quoteLocation": $scope.quote.quoteLocation,
-          "tags": $scope.quote.tags,
-          "comment": $scope.quote.comment,
-          "hyperlinks": $scope.quote.hyperlinks,
-          "createTimestamp": $scope.quote.createTimestamp,
-          "updateTimestamp": new Date().toISOString()
-        }).then(function(response) {
-          // TODO route to show all
-          $location.path('/notepad');
-        });
+      chrome.runtime.sendMessage({
+        'subject': 'updateQuote',
+        'id': $scope.quote.id,
+        'title': $scope.quote.title,
+        'currentUrl': $scope.quote.currentUrl,
+        'quote': $scope.quote.quote,
+        'quoteLocation': $scope.quote.quoteLocation,
+        'tags': $scope.quote.tags,
+        'comment': $scope.quote.comment,
+        'hyperlinks': $scope.quote.hyperlinks,
+        'createTimestamp': $scope.quote.createTimestamp,
+        'updateTimestamp': new Date().toISOString()
       });
+      // TODO route to show all
+      // $location.path('/notepad');
     };
 
   });
 
 
 gohyper
-  .controller('NotepadController', function($scope, $indexedDB) {
+  .controller('NotepadController', function($scope) {
 
     chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
       var tab = arrayOfTabs[0];
@@ -215,6 +212,12 @@ gohyper
     };
 
     $scope.getQuotes = function() {
+      chrome.runtime.sendMessage({
+        'subject': 'getQuotes'
+      });
+      // await response
+
+      /*
       $indexedDB.openStore('quotes', function(store) {
         if ($scope.currentUrl) {
           if ($scope.filter.byUrl) {
@@ -236,23 +239,27 @@ gohyper
             });
           }
         }
-      });
+      }); */
+
     };
 
     $scope.$watchGroup(['filter.byUrl', 'pagination.page', 'currentUrl'], $scope.getQuotes);
 
     // total count
-    $indexedDB.openStore('quotes', function(store) {
-      store.count().then(function(response) {
-        $scope.count = response;
-      });
+    chrome.runtime.sendMessage({
+      'subject': 'count'
     });
 
-    // delete a qoute
+    // await response: $scope.count = response;
+
+    // delete a quote
     $scope.deleteQuote = function(id) {
-      $indexedDB.openStore('quotes', function(store) {
-        store.delete(id).then($scope.getQuotes);
+      chrome.runtime.sendMessage({
+        'subject': 'deleteQuote',
+        'id': id,
       });
+
+      // store.delete(id).then($scope.getQuotes);
 
       // get connection to background page and call updateBadge
       chrome.extension.getBackgroundPage().updateBadge();

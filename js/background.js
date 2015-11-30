@@ -1,18 +1,53 @@
 'use strict';
 
-// initialize database for first use
-var request = window.indexedDB.open("GoHyper");
+/*
+    Database initialization and CRUD operations
+*/
 
+// initialize database for first use
+var request = window.indexedDB.open('GoHyper', 1);
+
+// database didn't exist before: create object store and indices
 request.onupgradeneeded = function(event) {
   var db = event.target.result;
   // create an objectStore for this database
-  var objStore = db.createObjectStore("quotes", {keyPath: "id", autoIncrement: true});
-  objStore.createIndex("by_title", "title", {unique: false});
-  objStore.createIndex("by_current_url", "currentUrl", {unique: false});
+  var objStore = db.createObjectStore('quotes', {keyPath: 'id', autoIncrement: true});
+  objStore.createIndex('by_title', 'title', {unique: false});
+  objStore.createIndex('by_current_url', 'currentUrl', {unique: false});
   objStore.createIndex('by_hyperlinks', 'hyperlinks', {unique: false, multiEntry: true});
-  objStore.createIndex("by_create_timestamp", "createTimestamp", {unique: true});
-  objStore.createIndex("by_update_timestamp", "updateTimestamp", {unique: true});
+  objStore.createIndex('by_create_timestamp', 'createTimestamp', {unique: true});
+  objStore.createIndex('by_update_timestamp', 'updateTimestamp', {unique: true});
 };
+
+chrome.runtime.onMessage.addListener(function(message) {
+  switch(message.subject) {
+    // create
+    case 'addQuote':
+      console.log(message);
+      // TODO add quote to db
+      break;
+
+    // read
+    case 'getQuotes':
+      console.log(message);
+      // TODO read/get quote(s)
+      break;
+
+    // update
+    case 'updateQuote':
+      console.log(message);
+      // TODO update quote in db
+      break;
+
+    // delete
+    case 'deleteQuote':
+      console.log(message);
+      // TODO delete quote in db
+      break;
+  }
+});
+
+
 
 function updateBadge() {
   // get active tab on current window
