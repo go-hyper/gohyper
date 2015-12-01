@@ -25,7 +25,7 @@ request.onsuccess = function() {
 }
 
 // CRUD
-chrome.runtime.onMessage.addListener(function(message) {
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   switch(message.subject) {
     // create
     case 'addQuote':
@@ -44,23 +44,21 @@ chrome.runtime.onMessage.addListener(function(message) {
       // open a read and write database transaction
       var transaction = db.transaction('quotes', 'readwrite');
 
-      transaction.oncomplete = function(event) {
-        console.log('successful transaction' + new Date().toISOString());
-      };
-
-      transaction.onerror = function(event) {
-        console.log('error in transaction');
-      };
-
       // create an object store on the transaction
       var store = transaction.objectStore('quotes');
 
       // add new quote to the object store
       var addRequest = store.add(newQuote[0]);
 
-      addRequest.onsuccess = function(event) {
-        console.log('successful create' + new Date().toISOString());
+      // see note in add-section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
+      transaction.oncomplete = function(event) {
+        console.log('successful transaction');
       };
+
+      transaction.onerror = function(event) {
+        console.log('error in transaction');
+      };
+
 
 /*
       // TODO message/response to gohyper.js
