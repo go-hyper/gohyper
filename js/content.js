@@ -49,12 +49,13 @@ document.onclick =  function() {
   setActive(false);
 };
 
-// send a message containing the page details back to the event/background page
+/* send a message containing the page details back to the event/background page
 chrome.runtime.sendMessage({
   'title': document.title,
   'currentUrl': window.location.href,
   'quote': window.getSelection().toString()
 });
+*/
 
 // http://stackoverflow.com/questions/3223682/change-css-of-selected-text-using-javascript
 function makeEditableAndHighlight(colour) {
@@ -88,5 +89,16 @@ chrome.runtime.onMessage.addListener(function(message, sender) {
   makeEditableAndHighlight("yellow");
 
   console.log(serializedRanges);
+
+  // TODO
+  // send a message containing the page details back to the event/background page
+  chrome.runtime.sendMessage({
+    'title': message.title,
+    'currentUrl': message.currentUrl,
+    'quote': message.quote,
+    'quoteLocation': serializedRanges
+  });
+
+  setActive(true);
 
 });

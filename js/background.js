@@ -148,22 +148,24 @@ chrome.browserAction.setBadgeBackgroundColor({
   color: '#000'
 });
 
+
 // set up context menu at install time
 chrome.runtime.onInstalled.addListener(function() {
   chrome.contextMenus.create({
-    "title": 'Add "%s" to GoHyper',
-    "contexts": ["selection"],
-    "id": "GoHyper1"
+    'title': 'Add "%s" to GoHyper',
+    'contexts': ['selection'],
+    'id': 'GoHyper1'
   });
 });
 
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
-  if (info.menuItemId === "GoHyper1") {
-    var quote = info.selectionText;
-    var currentUrl = info.currentUrl;
-    // send message to content script
-    // TODO
-    chrome.tabs.sendMessage(tab.id, {greeting: "hello"});
+  if (info.menuItemId === 'GoHyper1') {
+    // send message to content script TODO
+    chrome.tabs.sendMessage(tab.id, {
+      'currentUrl': info.pageUrl,
+      'quote': info.selectionText,
+      'title': tab.title
+    });
   }
 });
 
