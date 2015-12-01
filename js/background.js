@@ -44,25 +44,31 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       // open a read and write database transaction
       var transaction = db.transaction('quotes', 'readwrite');
 
+      // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
+      // successful transaction
+      transaction.oncomplete = function(event) {
+        // response to sender (gohyper.js)
+        sendResponse({status: 'success'});
+      };
+
+      // error in transaction
+      transaction.onerror = function(event) {
+        // response to sender (gohyper.js)
+        sendResponse({status: 'error'});
+      };
+
       // create an object store on the transaction
       var store = transaction.objectStore('quotes');
 
       // add new quote to the object store
       var addRequest = store.add(newQuote[0]);
 
-      // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
-      transaction.oncomplete = function(event) {
-        console.log('successful transaction');
-        // response to sender (gohyper.js)
-        sendResponse({status: 'success'});
-      };
-
-      transaction.onerror = function(event) {
-        console.log('error in transaction');
-        // response to sender (gohyper.js)
-        sendResponse({status: 'error'});
-      };
-
+      /*
+      The callback "function becomes invalid when the event listener returns, unless you return true from the event listener to indicate
+      you wish to send a response asynchronously (this will keep the message channel open to the other end until sendResponse is called)."
+      (see https://developer.chrome.com/extensions/runtime#event-onMessage)
+      */
+      return true;
       break;
 
     // read

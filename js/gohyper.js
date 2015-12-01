@@ -70,7 +70,7 @@ gohyper
       }
       $scope.form.hyperlink = "";
       // filter already added urls
-      $scope.updateLinks();
+      //$scope.updateLinks();
     };
 
     /*
@@ -107,11 +107,17 @@ gohyper
         'hyperlinks': $scope.form.hyperlinks,
         'createTimestamp': new Date().toISOString(),
         'updateTimestamp': new Date().toISOString()
+      }, function(response) {
+        if (response.status === 'success') {
+          // TODO
+          // get connection to background page and call updateBadge
+          // chrome.runtime.getBackgroundPage().updateBadge();
+          // $location.path('/notepad');
+        // 'error'
+        } else {
+          // TODO
+        }
       });
-      // get connection to background page and call updateBadge
-      // TODO
-      // chrome.runtime.getBackgroundPage().updateBadge();
-      //$location.path('/notepad');
     };
 
   });
@@ -168,7 +174,7 @@ gohyper
 
 
     // call function
-    $scope.updateLinks();
+    // $scope.updateLinks();
 
     $scope.saveQuote = function() {
       chrome.runtime.sendMessage({
