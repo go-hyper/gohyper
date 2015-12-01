@@ -50,30 +50,19 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       // add new quote to the object store
       var addRequest = store.add(newQuote[0]);
 
-      // see note in add-section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
+      // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
       transaction.oncomplete = function(event) {
         console.log('successful transaction');
+        // response to sender (gohyper.js)
+        sendResponse({status: 'success'});
       };
 
       transaction.onerror = function(event) {
         console.log('error in transaction');
+        // response to sender (gohyper.js)
+        sendResponse({status: 'error'});
       };
 
-
-/*
-      // TODO message/response to gohyper.js
-      chrome.tabs.sendMessage({
-        'tabid': tabId, // TODO
-        'subject': 'addQuote',
-        'response': 'success'
-      });
-
-      chrome.tabs.sendMessage({
-        'tabid': tabId, // TODO
-        'subject': 'addQuote',
-        'response': 'error'
-      });
-*/
       break;
 
     // read
