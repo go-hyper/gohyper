@@ -142,7 +142,7 @@ gohyper
         $scope.quote.hyperlinks.push(hyperlink);
       }
       $scope.quote.hyperlink = "";
-      $scope.updateLinks();
+      //$scope.updateLinks();
     };
 
     /*

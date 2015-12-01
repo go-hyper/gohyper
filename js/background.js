@@ -4,12 +4,13 @@
     Database initialization and CRUD operations
 */
 
-// initialize database for first use
-var request = window.indexedDB.open('GoHyper', 1);
+// init for first use
+var request = window.indexedDB.open('GoHyper');
+var db;
 
 // database didn't exist before: create object store and indices
-request.onupgradeneeded = function(event) {
-  var db = event.target.result;
+request.onupgradeneeded = function() {
+  db = request.result;
   // create an objectStore for this database
   var objStore = db.createObjectStore('quotes', {keyPath: 'id', autoIncrement: true});
   objStore.createIndex('by_title', 'title', {unique: false});
@@ -19,12 +20,62 @@ request.onupgradeneeded = function(event) {
   objStore.createIndex('by_update_timestamp', 'updateTimestamp', {unique: true});
 };
 
+request.onsuccess = function() {
+  db = request.result;
+}
+
+// CRUD
 chrome.runtime.onMessage.addListener(function(message) {
   switch(message.subject) {
     // create
     case 'addQuote':
-      console.log(message);
-      // TODO add quote to db
+      var newQuote = [{
+        title: message.title,
+        currentUrl: message.currentUrl,
+        quote: message.quote,
+        quoteLocation: message.quoteLocation,
+        tags: message.tags,
+        comment: message.comment,
+        hyperlinks: message.hyperlinks,
+        createTimestamp: message.createTimestamp,
+        updateTimestamp: message.updateTimestamp
+      }];
+
+      // open a read and write database transaction
+      var transaction = db.transaction('quotes', 'readwrite');
+
+      transaction.oncomplete = function(event) {
+        console.log('successful transaction' + new Date().toISOString());
+      };
+
+      transaction.onerror = function(event) {
+        console.log('error in transaction');
+      };
+
+      // create an object store on the transaction
+      var store = transaction.objectStore('quotes');
+
+      // add new quote to the object store
+      var addRequest = store.add(newQuote[0]);
+
+      addRequest.onsuccess = function(event) {
+        console.log('successful create' + new Date().toISOString());
+      };
+
+/*
+      // TODO message/response to gohyper.js
+      chrome.tabs.sendMessage({
+        'tabid': tabId, // TODO
+        'subject': 'addQuote',
+        'response': 'success'
+      });
+
+      chrome.tabs.sendMessage({
+        'tabid': tabId, // TODO
+        'subject': 'addQuote',
+        'response': 'error'
+      });
+*/
       break;
 
     // read
