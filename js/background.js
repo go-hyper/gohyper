@@ -99,6 +99,9 @@ chrome.runtime.onMessage.addListener(function(message) {
 });
 
 
+/*
+    Functions that run in background (badge, context menu)
+*/
 
 function updateBadge() {
   // get active tab on current window

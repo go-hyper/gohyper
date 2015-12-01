@@ -40,10 +40,14 @@ shadow.appendChild(style);
 shadow.appendChild(innerContainer);
 document.body.appendChild(outerContainer);
 
-button.onclick = function() {
+button.onclick = function(event) {
   setActive(!active);
+  event.stopPropagation();
 };
 
+document.onclick =  function() {
+  setActive(false);
+};
 
 // send a message containing the page details back to the event/background page
 chrome.runtime.sendMessage({
