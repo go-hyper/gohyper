@@ -38,7 +38,7 @@ gohyper
     $scope.form = {
       hyperlinks: [],
       tags: [],
-      comment: ""
+      comment: ''
     };
 
     chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
@@ -54,14 +54,14 @@ gohyper
       if ($scope.form.tags.indexOf(tag) == -1 && tag.length) {
         $scope.form.tags.push(tag);
       }
-      $scope.form.tag = "";
+      $scope.form.tag = '';
     };
 
     $scope.pushLink = function(hyperlink) {
       if ($scope.form.hyperlinks.indexOf(hyperlink) == -1 && hyperlink.length) {
         $scope.form.hyperlinks.push(hyperlink);
       }
-      $scope.form.hyperlink = "";
+      $scope.form.hyperlink = '';
       // filter already added urls
       //$scope.updateLinks();
     };
@@ -105,7 +105,7 @@ gohyper
 
           // TODO
           // get connection to background page and call updateBadge
-          // chrome.runtime.getBackgroundPage().updateBadge();
+          chrome.runtime.getBackgroundPage().updateBadge();
           // $location.path('/notepad');
         // 'error'
         } else {
@@ -134,14 +134,14 @@ gohyper
       if ($scope.quote.tags.indexOf(tag) == -1 && tag.length) {
         $scope.quote.tags.push(tag);
       }
-      $scope.quote.tag = "";
+      $scope.quote.tag = '';
     };
 
     $scope.pushLink = function(hyperlink) {
       if ($scope.quote.hyperlinks.indexOf(hyperlink) == -1 && hyperlink.length) {
         $scope.quote.hyperlinks.push(hyperlink);
       }
-      $scope.quote.hyperlink = "";
+      $scope.quote.hyperlink = '';
       //$scope.updateLinks();
     };
 
@@ -223,7 +223,7 @@ gohyper
           if ($scope.filter.byUrl) {
             var find = store.query();
             find = find.$eq($scope.currentUrl);
-            find = find.$index("by_current_url");
+            find = find.$index('by_current_url');
 
             // update scope
             store.eachWhere(find).then(function(response) {

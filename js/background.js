@@ -105,12 +105,12 @@ function updateBadge() {
 
     // search and show how many quotes exist on active tab and update badge
     // get database connection
-    var request  = indexedDB.open("GoHyper");
+    var request  = indexedDB.open('GoHyper');
     request.onsuccess = function() {
       var db = request.result;
-      var store = db.transaction("quotes", "readonly").objectStore("quotes");
+      var store = db.transaction('quotes', 'readonly').objectStore('quotes');
 
-      var index = store.index("by_current_url");
+      var index = store.index('by_current_url');
       var singleKeyRange = IDBKeyRange.only(currentUrl);
 
       // count all quotes on active tab

@@ -4,7 +4,7 @@ rangy.init();
 
 // TODO (check if fixed)
 // workaround, see https://github.com/timdown/rangy/issues/146#issuecomment-38368638
-var elem = document.querySelector(":focus");
+var elem = document.querySelector(':focus');
 if (elem) {
   elem.blur();
   elem.focus();
@@ -55,16 +55,16 @@ function makeEditableAndHighlight(colour) {
   if (sel.rangeCount && sel.getRangeAt) {
     range = sel.getRangeAt(0);
   }
-  document.designMode = "on";
+  document.designMode = 'on';
   if (range) {
     sel.removeAllRanges();
     sel.addRange(range);
   }
   // Use HiliteColor since some browsers apply BackColor to the whole block
-  if (!document.execCommand("HiliteColor", false, colour)) {
-    document.execCommand("BackColor", false, colour);
+  if (!document.execCommand('HiliteColor', false, colour)) {
+    document.execCommand('BackColor', false, colour);
   }
-  document.designMode = "off";
+  document.designMode = 'off';
 }
 
 // wait for messages from event/background page belonging to context menu's onclick events
@@ -88,7 +88,7 @@ chrome.runtime.onMessage.addListener(function(message, sender) {
   });
   */
 
-  makeEditableAndHighlight("yellow");
+  makeEditableAndHighlight('yellow');
 
   // if response from gohyper.js then (if all values are set)
   setActive(true);
