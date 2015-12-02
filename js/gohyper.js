@@ -41,9 +41,14 @@ gohyper
       comment: ""
     };
 
-    $scope.form.title = "Test TODO";
-    $scope.form.currentUrl = "http://www.wikipedia.de";
-    $scope.form.quote = "Test TODO";
+    chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+      $scope.$apply(function() {
+        $scope.form.quote = message.quote;
+        $scope.form.title = message.title;
+        $scope.form.currentUrl = message.currentUrl;
+      });
+      sendResponse({data: 'applied'});
+    });
 
     $scope.pushTag = function(tag) {
       if ($scope.form.tags.indexOf(tag) == -1 && tag.length) {
@@ -97,6 +102,7 @@ gohyper
         'updateTimestamp': new Date().toISOString()
       }, function(response) {
         if (response.status === 'success') {
+
           // TODO
           // get connection to background page and call updateBadge
           // chrome.runtime.getBackgroundPage().updateBadge();

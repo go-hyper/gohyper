@@ -165,6 +165,9 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
       'currentUrl': info.pageUrl,
       'quote': info.selectionText,
       'title': tab.title
+    }, function(response) {
+      console.log(response.data);
+      //TODO
     });
   }
 });
