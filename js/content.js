@@ -49,14 +49,6 @@ document.onclick =  function() {
   setActive(false);
 };
 
-/* send a message containing the page details back to the event/background page
-chrome.runtime.sendMessage({
-  'title': document.title,
-  'currentUrl': window.location.href,
-  'quote': window.getSelection().toString()
-});
-*/
-
 // http://stackoverflow.com/questions/3223682/change-css-of-selected-text-using-javascript
 function makeEditableAndHighlight(colour) {
   var range, sel = window.getSelection();

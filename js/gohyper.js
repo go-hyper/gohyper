@@ -41,18 +41,6 @@ gohyper
       comment: ""
     };
 
-/*
-    chrome.runtime.getBackgroundPage(function(eventPage) {
-      // injects content.js into current tab's HTML
-      eventPage.getPageDetails(function(message) {
-        $scope.form.title = message.title;
-        $scope.form.currentUrl = message.currentUrl;
-        $scope.form.quote = message.quote;
-        $scope.$apply();
-      });
-    });
-*/
-
     $scope.form.title = "Test TODO";
     $scope.form.currentUrl = "http://www.wikipedia.de";
     $scope.form.quote = "Test TODO";
