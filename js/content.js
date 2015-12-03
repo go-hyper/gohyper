@@ -68,7 +68,7 @@ function makeEditableAndHighlight(colour) {
 }
 
 // wait for messages from event/background page belonging to context menu's onclick events
-chrome.runtime.onMessage.addListener(function(message, sender) {
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   var sel = rangy.getSelection();
   var serializedRanges = sel.getAllRanges().map(
     function(range) {
@@ -77,20 +77,17 @@ chrome.runtime.onMessage.addListener(function(message, sender) {
     }
   );
 
-  //console.log(serializedRanges);
-
-  /* TODO to gohyper.js
-  chrome.runtime.sendMessage({
+  sendResponse({
+    'subject': 'quoteData',
     'title': message.title,
     'currentUrl': message.currentUrl,
     'quote': message.quote,
     'quoteLocation': serializedRanges
   });
-  */
 
   makeEditableAndHighlight('yellow');
 
-  // if response from gohyper.js then (if all values are set)
+  // if response from gohyper.js then (if all values are set) TODO
   setActive(true);
 
 });

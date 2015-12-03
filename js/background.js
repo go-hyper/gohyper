@@ -163,12 +163,18 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
   if (info.menuItemId === 'GoHyper1') {
     // send message to content script TODO
     chrome.tabs.sendMessage(tab.id, {
+      'subject': 'initialQuoteData',
       'currentUrl': info.pageUrl,
       'quote': info.selectionText,
       'title': tab.title
     }, function(response) {
-      console.log(response.data);
-      //TODO
+      chrome.tabs.sendMessage(tab.id, {
+        'subject': response.subject,
+        'currentUrl': response.currentUrl,
+        'quote': response.quote,
+        'title': response.title,
+        'quoteLocation': response.quoteLocation
+      });
     });
   }
 });

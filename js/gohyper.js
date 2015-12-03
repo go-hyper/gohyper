@@ -41,13 +41,21 @@ gohyper
       comment: ''
     };
 
-    chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-      $scope.$apply(function() {
-        $scope.form.quote = message.quote;
-        $scope.form.title = message.title;
-        $scope.form.currentUrl = message.currentUrl;
-      });
-      sendResponse({data: 'applied'});
+    chrome.runtime.onMessage.addListener(function(message, sender) {
+      if (message.subject == 'initialQuoteData') {
+        $scope.$apply(function() {
+          $scope.form.quote = message.quote;
+          $scope.form.title = message.title;
+          $scope.form.currentUrl = message.currentUrl;
+        });
+      } else if (message.subject == 'quoteData') {
+        $scope.$apply(function() {
+          $scope.form.quote = message.quote;
+          $scope.form.title = message.title;
+          $scope.form.currentUrl = message.currentUrl;
+          $scope.form.quoteLocation = message.quoteLocation
+        });
+      }
     });
 
     $scope.pushTag = function(tag) {
@@ -94,7 +102,7 @@ gohyper
         'title': $scope.form.title,
         'currentUrl': $scope.form.currentUrl,
         'quote': $scope.form.quote,
-        'quoteLocation': 'TODO',
+        'quoteLocation': $scope.form.quoteLocation,
         'tags': $scope.form.tags,
         'comment': $scope.form.comment,
         'hyperlinks': $scope.form.hyperlinks,
