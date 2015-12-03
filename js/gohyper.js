@@ -104,9 +104,8 @@ gohyper
         if (response.status === 'success') {
 
           // TODO
-          // get connection to background page and call updateBadge
-          chrome.runtime.getBackgroundPage().updateBadge();
           // $location.path('/notepad');
+
         // 'error'
         } else {
           // TODO
