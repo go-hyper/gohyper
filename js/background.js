@@ -90,7 +90,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       */
       return true;
 
-    // read
+    // read: get all quotes filtered by current url and sorted by timestamp
     case 'getQuotes':
       var currentUrl = sender.tab.url;
       // open a read database transaction
@@ -121,6 +121,40 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
           if (cursor.value.currentUrl == currentUrl) {
             quotes.push(cursor.value);
           }
+          cursor.continue();
+        } else {
+          // TODO
+        }
+      };
+      return true;
+
+    // getAll: get all quotes (needed to update links in typeahead input field)
+    case 'getAll':
+      // open a read database transaction
+      var transaction = db.transaction('quotes', 'readonly');
+
+      // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
+      // successful transaction
+      transaction.oncomplete = function(event) {
+        // response to sender (gohyper.js)
+        sendResponse({status: 'success', data: quotes});
+      };
+
+      // error in transaction
+      transaction.onerror = function(event) {
+        // response to sender (gohyper.js)
+        sendResponse({status: 'error'});
+      };
+
+      // create an object store on the transaction
+      var store = transaction.objectStore('quotes');
+
+      var quotes = [];
+
+      store.openCursor().onsuccess = function(event) {
+        var cursor = event.target.result;
+        if (cursor) {
+          quotes.push(cursor.value);
           cursor.continue();
         } else {
           // TODO

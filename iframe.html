@@ -123,11 +123,11 @@
                   </p>
 
                   <p>
-                    <span ng-repeat="link in quote.hyperlinks">
+                    <div ng-repeat="link in quote.hyperlinks">
                       <a target="_blank" href="{{link}}" title="{{link}}">
                         {{link | limitTo: 35}}{{link.length > 35 ? '...' : ''}}
                       </a>
-                    </span>
+                    </div>
                   </p>
 
                 </td>

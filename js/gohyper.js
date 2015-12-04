@@ -78,7 +78,7 @@ gohyper
       }
       $scope.form.hyperlink = '';
       // filter already added urls
-      //$scope.updateLinks();
+      $scope.updateLinks();
     };
 
     // set values to default
@@ -96,27 +96,26 @@ gohyper
       });
     }
 
-    /*
     $scope.updateLinks = function() {
-      $scope.links = [];
-      $indexedDB.openStore('quotes', function(store) {
-        store.getAll().then(function(response) {
-          for (var i = 0; i < response.length; i++) {
-            // filter doubles
-            if ($scope.links.indexOf(response[i].currentUrl) === -1 ) {
-              // filter already added urls
-              if ($scope.form.hyperlinks.indexOf(response[i].currentUrl) === -1) {
-                $scope.links.push(response[i].currentUrl);
-              }
+      chrome.runtime.sendMessage({
+        'subject': 'getAll'
+      }, function(response) {
+        $scope.links = [];
+        // get all quotes (in response.data)
+        for (var i = 0; i < response.data.length; i++) {
+          // filter doubles
+          if ($scope.links.indexOf(response.data[i].currentUrl) == -1 ) {
+            // filter already added urls
+            if ($scope.form.hyperlinks.indexOf(response.data[i].currentUrl) == -1) {
+              $scope.links.push(response.data[i].currentUrl);
             }
           }
-        });
+        }
       });
     };
-    */
 
     // call function
-    // $scope.updateLinks();
+    $scope.updateLinks();
 
     $scope.addQuote = function() {
       chrome.runtime.sendMessage({
@@ -131,13 +130,8 @@ gohyper
         'createTimestamp': new Date().toISOString(),
         'updateTimestamp': new Date().toISOString()
       }, function(response) {
-        if (response.status === 'success') {
-
-          // TODO
-          // $location.path('/notepad');
-
+        if (response.status == 'success') {
           $scope.setToDefault();
-
         // 'error'
         } else {
           // TODO
@@ -232,11 +226,6 @@ gohyper
       maxSize: 3
     };
 
-    // default
-    $scope.filter = {
-      byUrl: true
-    };
-
     $scope.getQuotes = function() {
       chrome.runtime.sendMessage({
         'subject': 'getQuotes'
@@ -249,7 +238,7 @@ gohyper
       });
     };
 
-    $scope.$watchGroup(['filter.byUrl', 'pagination.page', 'currentUrl'], $scope.getQuotes);
+    $scope.$watchGroup(['pagination.page'], $scope.getQuotes);
 
     // total count
     chrome.runtime.sendMessage({
