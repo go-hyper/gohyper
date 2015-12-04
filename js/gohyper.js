@@ -260,12 +260,17 @@ gohyper
       chrome.runtime.sendMessage({
         'subject': 'deleteQuote',
         'id': id,
+      }, function(response) {
+        if (response.status == 'success') {
+          $scope.$apply(function() {
+            //$scope.getQuotes;
+            // TODO search for better solution (store.delete(id).then($scope.getQuotes);)
+            $scope.quotes = response.data;
+          });
+        } else {
+          // TODO
+        }
       });
-
-      // store.delete(id).then($scope.getQuotes);
-
-      // get connection to background page and call updateBadge
-      chrome.extension.getBackgroundPage().updateBadge();
     };
 
   });
