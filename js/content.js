@@ -47,6 +47,9 @@ button.onclick = function(event) {
 
 document.onclick =  function() {
   setActive(false);
+  chrome.runtime.sendMessage({
+    'subject': 'documentOnclick'
+  });
 };
 
 // http://stackoverflow.com/questions/3223682/change-css-of-selected-text-using-javascript
@@ -88,5 +91,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     setActive(true);
   } else if (message.subject == 'highlightText') {
     makeEditableAndHighlight('yellow');
+    setActive(false);
   }
 });

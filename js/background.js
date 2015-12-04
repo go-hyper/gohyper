@@ -27,6 +27,13 @@ request.onsuccess = function() {
 // CRUD
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   switch(message.subject) {
+
+    case 'documentOnclick':
+      chrome.tabs.sendMessage(sender.tab.id, {
+        'subject': 'documentOnclick'
+      });
+      break;
+
     // create
     case 'addQuote':
       var newQuote = [{
@@ -66,10 +73,8 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       updateBadge();
 
       // highlight selected text (call function in content.js)
-      chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
-        chrome.tabs.sendMessage(arrayOfTabs[0].id, {
-          'subject': 'highlightText'
-        });
+      chrome.tabs.sendMessage(sender.tab.id, {
+        'subject': 'highlightText'
       });
 
       /*
@@ -81,9 +86,37 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
     // read
     case 'getQuotes':
-      console.log(message);
-      // TODO read/get quote(s)
-      break;
+      // open a read database transaction
+      var transaction = db.transaction('quotes', 'readonly');
+
+      // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
+      // successful transaction
+      transaction.oncomplete = function(event) {
+        // response to sender (gohyper.js)
+        sendResponse({status: 'success', data: quotes});
+      };
+
+      // error in transaction
+      transaction.onerror = function(event) {
+        // response to sender (gohyper.js)
+        sendResponse({status: 'error'});
+      };
+
+      // create an object store on the transaction
+      var store = transaction.objectStore('quotes');
+
+      var quotes = [];
+
+      store.openCursor().onsuccess = function(event) {
+        var cursor = event.target.result;
+        if (cursor) {
+          quotes.push(cursor.value);
+          cursor.continue();
+        } else {
+          // TODO
+        }
+      };
+      return true;
 
     // update
     case 'updateQuote':

@@ -43,7 +43,10 @@ gohyper
     };
 
     chrome.runtime.onMessage.addListener(function(message, sender) {
-      if (message.subject == 'initialQuoteData') {
+      if (message.subject == 'documentOnclick') {
+        // set values to default
+        $scope.setToDefault();
+      } else if (message.subject == 'initialQuoteData') {
         $scope.$apply(function() {
           $scope.form.quote = message.quote;
           $scope.form.title = message.title;
@@ -74,6 +77,21 @@ gohyper
       // filter already added urls
       //$scope.updateLinks();
     };
+
+    // set values to default
+    $scope.setToDefault = function() {
+      $scope.$apply(function() {
+        $scope.form.title = '';
+        $scope.form.currentUrl = '';
+        $scope.form.quote = '';
+        $scope.form.quoteLocation = '';
+        $scope.form.tags = '';
+        $scope.form.comment = '';
+        $scope.form.hyperlinks = [];
+        $scope.form.createTimestamp = '';
+        $scope.form.updateTimestamp = '';
+      });
+    }
 
     /*
     $scope.updateLinks = function() {
@@ -114,6 +132,8 @@ gohyper
 
           // TODO
           // $location.path('/notepad');
+
+          $scope.setToDefault();
 
         // 'error'
         } else {
@@ -202,10 +222,10 @@ gohyper
 gohyper
   .controller('NotepadController', function($scope) {
 
-    chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+    /*chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
       var tab = arrayOfTabs[0];
       $scope.currentUrl = tab.url;
-    });
+    }); */
 
     $scope.pagination = {
       page: 1,
@@ -222,8 +242,12 @@ gohyper
     $scope.getQuotes = function() {
       chrome.runtime.sendMessage({
         'subject': 'getQuotes'
+      }, function(response) {
+        if (response.status == 'success') {
+          // TODO
+          console.log(response);
+        }
       });
-      // await response
 
       /*
       $indexedDB.openStore('quotes', function(store) {
