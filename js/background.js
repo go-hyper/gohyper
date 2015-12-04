@@ -65,6 +65,13 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
       updateBadge();
 
+      // highlight selected text (call function in content.js)
+      chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+        chrome.tabs.sendMessage(arrayOfTabs[0].id, {
+          'subject': 'highlightText'
+        });
+      });
+
       /*
       The callback "function becomes invalid when the event listener returns, unless you return true from the event listener to indicate
       you wish to send a response asynchronously (this will keep the message channel open to the other end until sendResponse is called)."
@@ -161,7 +168,7 @@ chrome.runtime.onInstalled.addListener(function() {
 
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
   if (info.menuItemId === 'GoHyper1') {
-    // send message to content script TODO
+    // send message to content script
     chrome.tabs.sendMessage(tab.id, {
       'subject': 'initialQuoteData',
       'currentUrl': info.pageUrl,
@@ -169,7 +176,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
       'title': tab.title
     }, function(response) {
       chrome.tabs.sendMessage(tab.id, {
-        'subject': response.subject,
+        'subject': response.subject, // 'quoteData'
         'currentUrl': response.currentUrl,
         'quote': response.quote,
         'title': response.title,

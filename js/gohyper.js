@@ -22,7 +22,7 @@ gohyper
     }
   ]);
 
-
+/*
 gohyper
   .controller('NavigationController', function($scope, $location){
     $scope.isActive = function(str) {
@@ -30,6 +30,7 @@ gohyper
       return reg.test($location.path());
     };
   });
+*/
 
 
 gohyper
