@@ -7,12 +7,6 @@
   "version_name": "GoHyper alpha",
   "homepage_url": "https://github.com/jengeb/gohyper",
 
-   "applications": {
-     "gecko": {
-       "id": "gohyper@mozilla.org"
-     }
-   },
-
   "icons": {
     "16": "images/gohyper.png",
     "32": "images/gohyper.png",
