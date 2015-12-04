@@ -222,11 +222,6 @@ gohyper
 gohyper
   .controller('NotepadController', function($scope) {
 
-    /*chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
-      var tab = arrayOfTabs[0];
-      $scope.currentUrl = tab.url;
-    }); */
-
     $scope.pagination = {
       page: 1,
       maxPerPage: 5,
@@ -244,8 +239,9 @@ gohyper
         'subject': 'getQuotes'
       }, function(response) {
         if (response.status == 'success') {
+          $scope.quotes = response.data;
+        } else {
           // TODO
-          console.log(response);
         }
       });
 
