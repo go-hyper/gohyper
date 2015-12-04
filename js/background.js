@@ -24,7 +24,6 @@ request.onsuccess = function() {
   db = request.result;
 }
 
-// CRUD
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   switch(message.subject) {
 
@@ -34,6 +33,13 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       });
       break;
 
+    case 'buttonOnclick':
+      chrome.tabs.sendMessage(sender.tab.id, {
+        'subject': 'buttonOnclick'
+      });
+      break;
+
+    // CRUD
     // create
     case 'addQuote':
       var newQuote = [{

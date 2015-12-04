@@ -43,6 +43,9 @@ document.body.appendChild(outerContainer);
 button.onclick = function(event) {
   setActive(!active);
   event.stopPropagation();
+  chrome.runtime.sendMessage({
+    'subject': 'buttonOnclick'
+  });
 };
 
 document.onclick =  function() {

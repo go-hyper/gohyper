@@ -46,6 +46,9 @@ gohyper
       if (message.subject == 'documentOnclick') {
         // set values to default
         $scope.setToDefault();
+      } else if (message.subject == 'buttonOnclick') {
+        // TODO check later (!form.quotes im view)
+        $scope.setToDefault();
       } else if (message.subject == 'initialQuoteData') {
         $scope.$apply(function() {
           $scope.form.quote = message.quote;
@@ -85,7 +88,7 @@ gohyper
         $scope.form.currentUrl = '';
         $scope.form.quote = '';
         $scope.form.quoteLocation = '';
-        $scope.form.tags = '';
+        $scope.form.tags = [];
         $scope.form.comment = '';
         $scope.form.hyperlinks = [];
         $scope.form.createTimestamp = '';
