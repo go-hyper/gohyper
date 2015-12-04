@@ -107,7 +107,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
       var quotes = [];
 
-      store.openCursor().onsuccess = function(event) {
+      store.index('by_update_timestamp').openCursor(null, 'prev').onsuccess = function(event) {
         var cursor = event.target.result;
         if (cursor) {
           quotes.push(cursor.value);
