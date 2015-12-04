@@ -86,6 +86,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
     // read
     case 'getQuotes':
+      var currentUrl = sender.tab.url;
       // open a read database transaction
       var transaction = db.transaction('quotes', 'readonly');
 
@@ -109,8 +110,11 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
       store.index('by_update_timestamp').openCursor(null, 'prev').onsuccess = function(event) {
         var cursor = event.target.result;
+        // filter by currentUrl
         if (cursor) {
-          quotes.push(cursor.value);
+          if (cursor.value.currentUrl == currentUrl) {
+            quotes.push(cursor.value);
+          }
           cursor.continue();
         } else {
           // TODO
