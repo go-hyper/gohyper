@@ -272,7 +272,8 @@ chrome.runtime.onInstalled.addListener(function() {
   chrome.contextMenus.create({
     'title': 'Add "%s" to GoHyper',
     'contexts': ['selection'],
-    'id': 'GoHyper1'
+    'id': 'GoHyper1',
+    'documentUrlPatterns': ['http://*/*', 'https://*/*']
   });
 });
 

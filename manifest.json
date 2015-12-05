@@ -33,7 +33,8 @@
       "matches": ["http://*/*", "https://*/*"],
       "css": ["css/content.css"],
       "js": ["bower_components/rangy/rangy-core.js", "bower_components/rangy/rangy-classapplier.js",
-        "bower_components/rangy/rangy-highlighter.js", "bower_components/rangy/rangy-serializer.js", "js/content.js"]
+        "bower_components/rangy/rangy-highlighter.js", "bower_components/rangy/rangy-serializer.js", "js/content.js"],
+      "exclude_globs": ["*.pdf"]
     }
   ],
 
