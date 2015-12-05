@@ -55,6 +55,19 @@ document.onclick =  function() {
   });
 };
 
+chrome.runtime.sendMessage({
+  'subject': 'getQuotes'
+}, function(response) {
+  if (response.status == 'success' && response.data.length) {
+    var first = response.data[0].quoteLocation;
+    rangy.deserializeRange(first, document.body).select();
+    makeEditableAndHighlight("yellow");
+  } else {
+    // TODO
+  }
+});
+
+
 // http://stackoverflow.com/questions/3223682/change-css-of-selected-text-using-javascript
 function makeEditableAndHighlight(colour) {
   var range, sel = window.getSelection();
