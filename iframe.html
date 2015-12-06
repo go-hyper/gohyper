@@ -109,7 +109,7 @@
 
           <table class="table table-striped">
             <tbody>
-              <tr ng-repeat="quote in quotes">
+              <tr ng-repeat="quote in quotes | orderBy: '-updateTimestamp'">
                 <td>
                   <!-- http://stackoverflow.com/a/25892456/4419582 -->
                   <p>"{{quote.quote | limitTo: 60 }}{{quote.quote.length > 60 ? '...' : ''}}"</p>

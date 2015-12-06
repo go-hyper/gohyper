@@ -78,7 +78,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       */
       return true;
 
-// read: get all quotes filtered by current url and sorted by timestamp
+// read: get all quotes filtered by current url
     case 'getQuotes':
       var currentUrl = sender.tab.url;
       // open a read database transaction
@@ -102,10 +102,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
       var quotes = [];
 
-      store.index('by_update_timestamp').openCursor(null, 'prev').onsuccess = function(event) {
+      store.openCursor().onsuccess = function(event) {
         var cursor = event.target.result;
-        // filter by currentUrl
         if (cursor) {
+          // filter by currentUrl
           if (cursor.value.currentUrl == currentUrl) {
             quotes.push(cursor.value);
           }
