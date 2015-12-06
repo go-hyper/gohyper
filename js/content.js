@@ -55,13 +55,17 @@ document.onclick =  function() {
   });
 };
 
+// get all quotes for current url
 chrome.runtime.sendMessage({
   'subject': 'getQuotes'
 }, function(response) {
   if (response.status == 'success' && response.data.length) {
-    var first = response.data[0].quoteLocation;
-    rangy.deserializeRange(first, document.body).select();
-    makeEditableAndHighlight("yellow");
+    for (var i = 0; i < response.data.length; i++) {
+      var quote = response.data[i].quoteLocation;
+      rangy.deserializeRange(quote, document.body).select();
+      makeEditableAndHighlight("yellow");
+    }
+    document.getSelection().empty();
   } else {
     // TODO
   }
@@ -108,5 +112,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   } else if (message.subject == 'highlightText') {
     makeEditableAndHighlight('yellow');
     setActive(false);
+    document.getSelection().empty();
   }
 });
