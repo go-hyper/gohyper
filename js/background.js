@@ -78,7 +78,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       */
       return true;
 
-// read: get all quotes filtered by current url
+// read: get quotes filtered by current url
     case 'getQuotes':
       var currentUrl = sender.tab.url;
       // open a read database transaction
@@ -102,13 +102,11 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
       var quotes = [];
 
-      store.openCursor().onsuccess = function(event) {
+      // filter by currentUrl
+      store.index('by_current_url').openCursor(IDBKeyRange.only(currentUrl)).onsuccess = function(event) {
         var cursor = event.target.result;
         if (cursor) {
-          // filter by currentUrl
-          if (cursor.value.currentUrl == currentUrl) {
-            quotes.push(cursor.value);
-          }
+          quotes.push(cursor.value);
           cursor.continue();
         } else {
           // TODO
