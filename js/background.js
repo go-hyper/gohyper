@@ -24,23 +24,11 @@ request.onsuccess = function() {
   db = request.result;
 }
 
+// CRUD operations
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   switch(message.subject) {
 
-    case 'documentOnclick':
-      chrome.tabs.sendMessage(sender.tab.id, {
-        'subject': 'documentOnclick'
-      });
-      break;
-
-    case 'buttonOnclick':
-      chrome.tabs.sendMessage(sender.tab.id, {
-        'subject': 'buttonOnclick'
-      });
-      break;
-
-    // CRUD
-    // create
+// create a new quote
     case 'addQuote':
       var newQuote = [{
         title: message.title,
@@ -90,7 +78,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       */
       return true;
 
-    // read: get all quotes filtered by current url and sorted by timestamp
+// read: get all quotes filtered by current url and sorted by timestamp
     case 'getQuotes':
       var currentUrl = sender.tab.url;
       // open a read database transaction
@@ -128,7 +116,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       };
       return true;
 
-    // getAll: get all quotes (needed to update links in typeahead input field)
+// getAll: get all quotes (needed to update links in typeahead input field)
     case 'getAll':
       // open a read database transaction
       var transaction = db.transaction('quotes', 'readonly');
@@ -162,13 +150,13 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       };
       return true;
 
-    // update
+// update
     case 'updateQuote':
       console.log(message);
       // TODO update quote in db
       break;
 
-    // delete
+// delete
     case 'deleteQuote':
       var transaction = db.transaction('quotes', 'readwrite');
       var store = transaction.objectStore('quotes');
@@ -215,8 +203,25 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 
 /*
-    Functions that run in background (badge, context menu)
+    Functions that run in background belonging to click events, badge and context menu
 */
+
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+  switch(message.subject) {
+
+    case 'documentOnclick':
+      chrome.tabs.sendMessage(sender.tab.id, {
+        'subject': 'documentOnclick'
+      });
+      break;
+
+    case 'buttonOnclick':
+      chrome.tabs.sendMessage(sender.tab.id, {
+        'subject': 'buttonOnclick'
+      });
+      break;
+  }
+});
 
 function updateBadge() {
   // get active tab on current window
@@ -269,7 +274,6 @@ chrome.tabs.onActivated.addListener(updateBadge);
 chrome.browserAction.setBadgeBackgroundColor({
   color: '#000'
 });
-
 
 // set up context menu at install time
 chrome.runtime.onInstalled.addListener(function() {

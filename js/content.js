@@ -55,7 +55,7 @@ document.onclick =  function() {
   });
 };
 
-// get all quotes for current url
+// get and highlight all quotes for current url
 chrome.runtime.sendMessage({
   'subject': 'getQuotes'
 }, function(response) {
@@ -70,7 +70,6 @@ chrome.runtime.sendMessage({
     // TODO
   }
 });
-
 
 // http://stackoverflow.com/questions/3223682/change-css-of-selected-text-using-javascript
 function makeEditableAndHighlight(colour) {
