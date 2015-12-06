@@ -65,7 +65,7 @@ chrome.runtime.sendMessage({
       rangy.deserializeRange(quote, document.body).select();
       makeEditableAndHighlight("yellow");
     }
-    document.getSelection().empty();
+    document.getSelection().removeAllRanges();
   } else {
     // TODO
   }
@@ -112,6 +112,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   } else if (message.subject == 'highlightText') {
     makeEditableAndHighlight('yellow');
     setActive(false);
-    document.getSelection().empty();
+    document.getSelection().removeAllRanges();
+  } else if (message.subject == 'deserializeQuote') {
+    console.log('remove highlighted quote');
+    // TODO
   }
+
 });
