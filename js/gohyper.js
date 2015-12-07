@@ -22,16 +22,6 @@ gohyper
     }
   ]);
 
-/*
-gohyper
-  .controller('NavigationController', function($scope, $location){
-    $scope.isActive = function(str) {
-      var reg = new RegExp('^'+str+'(\/.*)?$');
-      return reg.test($location.path());
-    };
-  });
-*/
-
 
 gohyper
   .controller('QuoteController', function($scope, $location) {
