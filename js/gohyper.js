@@ -7,7 +7,7 @@ gohyper
 
     $routeProvider
       .when('/', {
-        templateUrl: 'iframe.html'
+        templateUrl: 'html/quote.html'
       })
       .when('/quote/edit/:id', {
         templateUrl: 'html/quote_edit.html'
@@ -122,6 +122,7 @@ gohyper
       }, function(response) {
         if (response.status == 'success') {
           $scope.setToDefault();
+          $location.path('/notepad');
         // 'error'
         } else {
           // TODO
@@ -221,7 +222,9 @@ gohyper
         'subject': 'getQuotes'
       }, function(response) {
         if (response.status == 'success') {
-          $scope.quotes = response.data;
+          $scope.$apply(function() {
+            $scope.quotes = response.data;
+          });
         } else {
           // TODO
         }

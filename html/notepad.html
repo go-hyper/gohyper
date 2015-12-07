@@ -1,19 +1,13 @@
 <div class="gh-margin" ng-controller="NotepadController">
 
-  <h4>Quote and URL</h4>
+  <h4>Selected quotes</h4>
 
   <table class="table table-striped">
     <tbody>
-      <tr ng-repeat="quote in quotes | orderBy: '-update_timestamp'">
+      <tr ng-repeat="quote in quotes | orderBy: '-updateTimestamp'">
         <td>
-          <p>
-            <a target="_blank" href="{{quote.currentUrl}}" title="{{quote.currentUrl}}">
-              {{quote.currentUrl | limitTo: 35}}{{quote.currentUrl.length > 35 ? '...' : ''}}
-            </a>
-          </p>
-
           <!-- http://stackoverflow.com/a/25892456/4419582 -->
-          <p>"{{ quote.quote | limitTo: 40 }}{{quote.quote.length > 40 ? '...' : ''}}"</p>
+          <p>"{{quote.quote | limitTo: 60}}{{quote.quote.length > 60 ? '...' : ''}}"</p>
 
           <p>
             <span ng-repeat="tag in quote.tags">
@@ -21,6 +15,14 @@
                 {{tag}}
               </span>
             </span>
+          </p>
+
+          <p>
+            <div ng-repeat="link in quote.hyperlinks">
+              <a target="_blank" href="{{link}}" title="{{link}}">
+                {{link | limitTo: 35}}{{link.length > 35 ? '...' : ''}}
+              </a>
+            </div>
           </p>
 
         </td>
@@ -41,22 +43,6 @@
   <div class="text-center" ng-if="quotes.length > 5">
     <uib-pagination boundary-links="true" total-items="pagination.total" ng-model="pagination.page" class="pagination-sm" max-size="pagination.maxSize" boundary-links="true" rotate="false" num-pages="numPages"
     previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
-  </div>
-
-  <div class="form-group" ng-if="filter.byUrl">
-    <div class="text-right">
-      <button type="button" class="btn btn-primary gh-save-button" ng-click="filter.byUrl = !filter.byUrl">
-        <i class="fa fa-list"></i> Show all
-      </button>
-    </div>
-  </div>
-
-  <div class="form-group" ng-if="!filter.byUrl">
-    <div class="text-right">
-      <button type="button" class="btn btn-primary gh-save-button" ng-click="filter.byUrl = !filter.byUrl">
-        <i class="fa fa-list"></i> Show less
-      </button>
-    </div>
   </div>
 
 </div>
