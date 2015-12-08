@@ -22,9 +22,31 @@ gohyper
     }
   ]);
 
+gohyper.factory('quoteService', function($rootScope, $location) {
+  var data = {
+    quote: {}
+  };
+  chrome.runtime.onMessage.addListener(function(message, sender) {
+    if (message.subject === 'quoteData') {
+      angular.copy({
+        quote: message.quote,
+        title: message.title,
+        currentUrl: message.currentUrl,
+        quoteLocation: message.quoteLocation
+      }, data.quote);
+      $location.path('/');
+      $rootScope.$apply();
+    } else if (message.subject === 'buttonOnclick') {
+      $location.path('/notepad');
+      $rootScope.$apply();
+    }
+  });
+  return data;
+});
+
 
 gohyper
-  .controller('QuoteController', function($scope, $location) {
+  .controller('QuoteController', function($scope, $location, quoteService) {
 
     $scope.form = {
       hyperlinks: [],
@@ -32,38 +54,17 @@ gohyper
       comment: ''
     };
 
-    chrome.runtime.onMessage.addListener(function(message, sender) {
-      if (message.subject == 'documentOnclick') {
-        // set values to default
-        $scope.setToDefault();
-      } else if (message.subject == 'buttonOnclick') {
-        // TODO check later (!form.quotes im view)
-        $scope.setToDefault();
-      } else if (message.subject == 'initialQuoteData') {
-        $scope.$apply(function() {
-          $scope.form.quote = message.quote;
-          $scope.form.title = message.title;
-          $scope.form.currentUrl = message.currentUrl;
-        });
-      } else if (message.subject == 'quoteData') {
-        $scope.$apply(function() {
-          $scope.form.quote = message.quote;
-          $scope.form.title = message.title;
-          $scope.form.currentUrl = message.currentUrl;
-          $scope.form.quoteLocation = message.quoteLocation
-        });
-      }
-    });
+    $scope.quote = quoteService.quote;
 
     $scope.pushTag = function(tag) {
-      if ($scope.form.tags.indexOf(tag) == -1 && tag.length) {
+      if ($scope.form.tags.indexOf(tag) === -1 && tag.length) {
         $scope.form.tags.push(tag);
       }
       $scope.form.tag = '';
     };
 
     $scope.pushLink = function(hyperlink) {
-      if ($scope.form.hyperlinks.indexOf(hyperlink) == -1 && hyperlink.length) {
+      if ($scope.form.hyperlinks.indexOf(hyperlink) === -1 && hyperlink.length) {
         $scope.form.hyperlinks.push(hyperlink);
       }
       $scope.form.hyperlink = '';
@@ -71,36 +72,23 @@ gohyper
       $scope.updateLinks();
     };
 
-    // set values to default
-    $scope.setToDefault = function() {
-      $scope.$apply(function() {
-        $scope.form.title = '';
-        $scope.form.currentUrl = '';
-        $scope.form.quote = '';
-        $scope.form.quoteLocation = '';
-        $scope.form.tags = [];
-        $scope.form.comment = '';
-        $scope.form.hyperlinks = [];
-        $scope.form.createTimestamp = '';
-        $scope.form.updateTimestamp = '';
-      });
-    }
-
     $scope.updateLinks = function() {
       chrome.runtime.sendMessage({
         'subject': 'getAll'
       }, function(response) {
-        $scope.links = [];
-        // get all quotes (in response.data)
-        for (var i = 0; i < response.data.length; i++) {
-          // filter doubles
-          if ($scope.links.indexOf(response.data[i].currentUrl) == -1 ) {
-            // filter already added urls
-            if ($scope.form.hyperlinks.indexOf(response.data[i].currentUrl) == -1) {
-              $scope.links.push(response.data[i].currentUrl);
+        $scope.$apply(function() {
+          $scope.links = [];
+          // get all quotes (in response.data)
+          for (var i = 0; i < response.data.length; i++) {
+            // filter doubles
+            if ($scope.links.indexOf(response.data[i].currentUrl) === -1 ) {
+              // filter already added urls
+              if ($scope.form.hyperlinks.indexOf(response.data[i].currentUrl) === -1) {
+                $scope.links.push(response.data[i].currentUrl);
+              }
             }
           }
-        }
+        });
       });
     };
 
@@ -110,18 +98,17 @@ gohyper
     $scope.addQuote = function() {
       chrome.runtime.sendMessage({
         'subject': 'addQuote',
-        'title': $scope.form.title,
-        'currentUrl': $scope.form.currentUrl,
-        'quote': $scope.form.quote,
-        'quoteLocation': $scope.form.quoteLocation,
+        'title': $scope.quote.title,
+        'currentUrl': $scope.quote.currentUrl,
+        'quote': $scope.quote.quote,
+        'quoteLocation': $scope.quote.quoteLocation,
         'tags': $scope.form.tags,
         'comment': $scope.form.comment,
         'hyperlinks': $scope.form.hyperlinks,
         'createTimestamp': new Date().toISOString(),
         'updateTimestamp': new Date().toISOString()
       }, function(response) {
-        if (response.status == 'success') {
-          $scope.setToDefault();
+        if (response.status === 'success') {
           $location.path('/notepad');
         // 'error'
         } else {
@@ -142,49 +129,51 @@ gohyper
     chrome.runtime.sendMessage({
       'subject': 'findOneById',
       'id': parseInt($routeParams.id)
+    }, function(response) {
+      if (response.status === 'success') {
+        $scope.quote = response.data[0];
+      }
     });
 
     // angular.copy(response, $scope.quote);
 
     $scope.pushTag = function(tag) {
-      if ($scope.quote.tags.indexOf(tag) == -1 && tag.length) {
+      if ($scope.quote.tags.indexOf(tag) === -1 && tag.length) {
         $scope.quote.tags.push(tag);
       }
       $scope.quote.tag = '';
     };
 
     $scope.pushLink = function(hyperlink) {
-      if ($scope.quote.hyperlinks.indexOf(hyperlink) == -1 && hyperlink.length) {
+      if ($scope.quote.hyperlinks.indexOf(hyperlink) === -1 && hyperlink.length) {
         $scope.quote.hyperlinks.push(hyperlink);
       }
       $scope.quote.hyperlink = '';
-      //$scope.updateLinks();
+      $scope.updateLinks();
     };
 
-    /*
     $scope.updateLinks = function() {
-      $scope.links = [];
-      $indexedDB.openStore('quotes', function(store) {
-        store.getAll().then(function(response) {
-          for (var i = 0; i < response.length; i++) {
+      chrome.runtime.sendMessage({
+        'subject': 'getAll'
+      }, function(response) {
+        $scope.$apply(function() {
+          $scope.links = [];
+          // get all quotes (in response.data)
+          for (var i = 0; i < response.data.length; i++) {
             // filter doubles
-            if ($scope.links.indexOf(response[i].currentUrl) === -1 ) {
+            if ($scope.links.indexOf(response.data[i].currentUrl) === -1 ) {
               // filter already added urls
-              if ($scope.quote.hyperlinks.indexOf(response[i].currentUrl) === -1) {
-                // TODO filter url of current quote?
-                // if (response[i].currentUrl != $scope.quote.currentUrl) {
-                $scope.links.push(response[i].currentUrl);
+              if ($scope.quote.hyperlinks.indexOf(response.data[i].currentUrl) === -1) {
+                $scope.links.push(response.data[i].currentUrl);
               }
             }
           }
         });
       });
     };
-    */
-
 
     // call function
-    // $scope.updateLinks();
+    $scope.updateLinks();
 
     $scope.saveQuote = function() {
       chrome.runtime.sendMessage({
@@ -208,7 +197,7 @@ gohyper
 
 
 gohyper
-  .controller('NotepadController', function($scope) {
+  .controller('NotepadController', function($scope, $location) {
 
     $scope.pagination = {
       page: 1,
@@ -221,7 +210,7 @@ gohyper
       chrome.runtime.sendMessage({
         'subject': 'getQuotes'
       }, function(response) {
-        if (response.status == 'success') {
+        if (response.status === 'success') {
           $scope.$apply(function() {
             $scope.quotes = response.data;
           });
@@ -246,7 +235,7 @@ gohyper
         'subject': 'deleteQuote',
         'id': id,
       }, function(response) {
-        if (response.status == 'success') {
+        if (response.status === 'success') {
           $scope.$apply(function() {
             //$scope.getQuotes;
             // TODO search for better solution (store.delete(id).then($scope.getQuotes);)

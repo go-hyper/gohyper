@@ -148,6 +148,32 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       };
       return true;
 
+// findOneById
+    case 'findOneById':
+      var id = message.id;
+      var transaction = db.transaction('quotes', 'readonly');
+      // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
+      transaction.oncomplete = function(event) {
+        // response to sender (gohyper.js)
+        sendResponse({status: 'success', data: quote});
+      };
+      transaction.onerror = function(event) {
+        // response to sender (gohyper.js)
+        sendResponse({status: 'error'});
+      };
+      var store = transaction.objectStore('quotes');
+      var singleKeyRange = IDBKeyRange.only(id);
+      var quote = [];
+      store.openCursor(singleKeyRange).onsuccess = function(event) {
+        var cursor = event.target.result;
+        if (cursor) {
+          quote.push(cursor.value);
+          cursor.continue();
+        } else {
+        }
+      };
+      return true;
+
 // update
     case 'updateQuote':
       console.log(message);
@@ -182,7 +208,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         var cursor = event.target.result;
         // filter by currentUrl
         if (cursor) {
-          if (cursor.value.currentUrl == currentUrl) {
+          if (cursor.value.currentUrl === currentUrl) {
             quotes.push(cursor.value);
           }
           cursor.continue();

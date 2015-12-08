@@ -59,7 +59,7 @@ document.onclick =  function() {
 chrome.runtime.sendMessage({
   'subject': 'getQuotes'
 }, function(response) {
-  if (response.status == 'success' && response.data.length) {
+  if (response.status === 'success' && response.data.length) {
     for (var i = 0; i < response.data.length; i++) {
       var quote = response.data[i].quoteLocation;
       rangy.deserializeRange(quote, document.body).select();
@@ -91,7 +91,7 @@ function makeEditableAndHighlight(colour) {
 
 // wait for messages from event/background page belonging to context menu's onclick events
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  if (message.subject == 'initialQuoteData') {
+  if (message.subject === 'initialQuoteData') {
     var sel = rangy.getSelection();
     var serializedRanges = sel.getAllRanges().map(
       function(range) {
@@ -108,11 +108,11 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     });
     // if response from gohyper.js then (if all values are set) TODO
     setActive(true);
-  } else if (message.subject == 'highlightText') {
+  } else if (message.subject === 'highlightText') {
     makeEditableAndHighlight('yellow');
     setActive(false);
     document.getSelection().removeAllRanges();
-  } else if (message.subject == 'deserializeQuote') {
+  } else if (message.subject === 'deserializeQuote') {
     console.log('remove highlighted quote');
     // TODO
   }
