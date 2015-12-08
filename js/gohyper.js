@@ -175,7 +175,7 @@ gohyper
     // call function
     $scope.updateLinks();
 
-    $scope.saveQuote = function() {
+    $scope.updateQuote = function() {
       chrome.runtime.sendMessage({
         'subject': 'updateQuote',
         'quote': {
@@ -200,6 +200,11 @@ gohyper
         }
       });
     };
+
+    $scope.discard = function() {
+      $location.path('/notepad');
+    };
+
   });
 
 
