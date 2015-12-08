@@ -241,7 +241,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   switch(message.subject) {
-
     case 'documentOnclick':
       chrome.tabs.sendMessage(sender.tab.id, {
         'subject': 'documentOnclick'
@@ -260,56 +259,91 @@ function updateBadge() {
   // get active tab on current window
   chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
     var tab = arrayOfTabs[0];
-    // get url of active tab
-    var currentUrl = tab.url;
+    if (tab !== undefined && tab.url !== undefined) {
+      // get url of active tab
+      var currentUrl = tab.url;
 
-    // search and show how many quotes exist on active tab and update badge
-    // get database connection
-    var request  = indexedDB.open('GoHyper');
-    request.onsuccess = function() {
-      var db = request.result;
-      var store = db.transaction('quotes', 'readonly').objectStore('quotes');
+      // search and show how many quotes exist on active tab and update badge
+      // get database connection
+      var request  = indexedDB.open('GoHyper');
+      request.onsuccess = function() {
+        var db = request.result;
+        var store = db.transaction('quotes', 'readonly').objectStore('quotes');
 
-      var index = store.index('by_current_url');
-      var singleKeyRange = IDBKeyRange.only(currentUrl);
+        var index = store.index('by_current_url');
+        var singleKeyRange = IDBKeyRange.only(currentUrl);
 
-      // count all quotes on active tab
-      var quotes = [];
-      index.openCursor(singleKeyRange).onsuccess = function(event) {
-        var cursor = event.target.result;
-        if (cursor) {
-          quotes.push(cursor.value);
-          cursor.continue();
-        } else {
-          // update badge text
-          if (quotes.length) {
-            chrome.browserAction.setBadgeText({
-              text: quotes.length.toString()
-            });
+        // count all quotes on active tab
+        var quotes = [];
+        index.openCursor(singleKeyRange).onsuccess = function(event) {
+          var cursor = event.target.result;
+          if (cursor) {
+            quotes.push(cursor.value);
+            cursor.continue();
           } else {
-            chrome.browserAction.setBadgeText({
-              text: ''
-            });
+            // update badge text
+            if (quotes.length) {
+              chrome.browserAction.setBadgeText({
+                text: quotes.length.toString()
+              });
+            } else {
+              chrome.browserAction.setBadgeText({
+                text: ''
+              });
+            }
           }
-        }
-      };
+        };
 
-    };
+      };
+    }
+  });
+}
+
+// set extension 'active'
+function setBlueIcon(tabId) {
+  chrome.browserAction.setIcon({
+    path: 'images/icon.png',
+    tabId: tabId,
   });
 }
 
 // fires when tab is updated
-chrome.tabs.onUpdated.addListener(updateBadge);
+chrome.tabs.onUpdated.addListener(function(sender) {
+  // checks if content script is active (e.g. it is not injected in PDFs)
+  chrome.tabs.sendMessage(sender, {
+    'subject': 'checkActive'
+  }, function(response) {
+    if (response !== undefined && response.status === 'success') {
+      setBlueIcon(sender);
+      updateBadge();
+    } else {
+      // TODO
+    }
+  });
+});
 
 // fires when active tab changes
-chrome.tabs.onActivated.addListener(updateBadge);
+chrome.tabs.onActivated.addListener(function(sender) {
+  var tabId = sender.tabId;
+  // checks if content script is active (e.g. it is not injected in PDFs)
+  chrome.tabs.sendMessage(tabId, {
+    'subject': 'checkActive'
+  }, function(response) {
+    if (response !== undefined && response.status === 'success') {
+      setBlueIcon(tabId);
+    } else {
+      // TODO
+    }
+    updateBadge();
+  });
+});
 
 chrome.browserAction.setBadgeBackgroundColor({
-  color: '#000'
+  color: '#448AFF'
 });
 
 // set up context menu at install time
-chrome.runtime.onInstalled.addListener(function() {
+chrome.runtime.onInstalled.addListener(function(sender) {
   chrome.contextMenus.create({
     'title': 'Add "%s" to GoHyper',
     'contexts': ['selection'],

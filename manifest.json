@@ -8,10 +8,9 @@
   "homepage_url": "https://github.com/jengeb/gohyper",
 
   "icons": {
-    "16": "images/gohyper.png",
-    "32": "images/gohyper.png",
-    "48": "images/gohyper.png",
-    "128": "images/gohyper.png"
+    "16": "images/icon.png",
+    "48": "images/icon.png",
+    "128": "images/icon.png"
   },
 
   "permissions": [
@@ -43,10 +42,7 @@
   ],
 
   "browser_action": {
-    "default_icon": {
-      "19": "images/gohyper.png",
-      "38": "images/gohyper.png"
-    },
+    "default_icon": "images/icon-gray.png",
     "default_title": "GoHyper"
   }
 }

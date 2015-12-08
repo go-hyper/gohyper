@@ -89,9 +89,14 @@ function makeEditableAndHighlight(colour) {
   document.designMode = 'off';
 }
 
-// wait for messages from event/background page belonging to context menu's onclick events
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  if (message.subject === 'initialQuoteData') {
+  if (message.subject === 'checkActive') {
+    sendResponse({
+      'status': 'success'
+    });
+  }
+  // wait for messages from event/background page belonging to context menu's onclick events
+  else if (message.subject === 'initialQuoteData') {
     var sel = rangy.getSelection();
     var serializedRanges = sel.getAllRanges().map(
       function(range) {
