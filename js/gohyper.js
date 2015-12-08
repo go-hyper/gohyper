@@ -192,7 +192,9 @@ gohyper
         }
       }, function(response) {
         if (response.status === 'success') {
-          $location.path('/notepad');
+          $scope.$apply(function() {
+            $location.path('/notepad');
+          });
         } else {
           // TODO
         }
