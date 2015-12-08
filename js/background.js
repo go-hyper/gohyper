@@ -148,7 +148,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       };
       return true;
 
-// findOneById
+// findOneById TODO (improve code: better solution?)
     case 'findOneById':
       var id = message.id;
       var transaction = db.transaction('quotes', 'readonly');
@@ -176,9 +176,18 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 // update
     case 'updateQuote':
-      console.log(message);
-      // TODO update quote in db
-      break;
+      var quote = message.quote;
+      var transaction = db.transaction('quotes', 'readwrite');
+      var store = transaction.objectStore('quotes');
+      var request = store.put(quote);
+      // response to sender (gohyper.js)
+      transaction.oncomplete = function(event) {
+        sendResponse({status: 'success'});
+      };
+      transaction.onerror = function(event) {
+        sendResponse({status: 'error'});
+      };
+      return true;
 
 // delete
     case 'deleteQuote':

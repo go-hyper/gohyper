@@ -125,7 +125,7 @@ gohyper
 
     $scope.quote = {};
 
-    // find one by id
+    // find one quote by id
     chrome.runtime.sendMessage({
       'subject': 'findOneById',
       'id': parseInt($routeParams.id)
@@ -178,21 +178,26 @@ gohyper
     $scope.saveQuote = function() {
       chrome.runtime.sendMessage({
         'subject': 'updateQuote',
-        'id': $scope.quote.id,
-        'title': $scope.quote.title,
-        'currentUrl': $scope.quote.currentUrl,
-        'quote': $scope.quote.quote,
-        'quoteLocation': $scope.quote.quoteLocation,
-        'tags': $scope.quote.tags,
-        'comment': $scope.quote.comment,
-        'hyperlinks': $scope.quote.hyperlinks,
-        'createTimestamp': $scope.quote.createTimestamp,
-        'updateTimestamp': new Date().toISOString()
+        'quote': {
+          'id': $scope.quote.id,
+          'title': $scope.quote.title,
+          'currentUrl': $scope.quote.currentUrl,
+          'quote': $scope.quote.quote,
+          'quoteLocation': $scope.quote.quoteLocation,
+          'tags': $scope.quote.tags,
+          'comment': $scope.quote.comment,
+          'hyperlinks': $scope.quote.hyperlinks,
+          'createTimestamp': $scope.quote.createTimestamp,
+          'updateTimestamp': new Date().toISOString()
+        }
+      }, function(response) {
+        if (response.status === 'success') {
+          $location.path('/notepad');
+        } else {
+          // TODO
+        }
       });
-      // TODO route to show all
-      // $location.path('/notepad');
     };
-
   });
 
 
