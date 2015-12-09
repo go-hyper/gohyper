@@ -62,7 +62,11 @@
 
   <div class="form-group">
     <div class="text-right">
-      <button type="button" class="btn btn-primary gh-save-button" ng-click="clicked = true; saveQuote();" ng-disabled="clicked || quote.tag.length > 0 || quote.hyperlink.length > 0">
+      <button type="button" class="btn btn-danger gh-save-button" ng-click="clicked = true; discard();">
+        <i class="fa fa-chevron-circle-left"></i> Back
+      </button>
+
+      <button type="button" class="btn btn-primary gh-save-button" ng-click="clicked = true; updateQuote();" ng-disabled="clicked || quote.tag.length > 0 || quote.hyperlink.length > 0">
         <i class="fa fa-check-circle"></i> Save
       </button>
     </div>

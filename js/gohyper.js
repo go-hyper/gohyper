@@ -1,9 +1,9 @@
 'use strict';
 
-var gohyper = angular.module('gohyper', ['ngRoute', 'indexedDB', 'ui.bootstrap']);
+var gohyper = angular.module('gohyper', ['ngRoute', 'ui.bootstrap']);
 
 gohyper
-  .config(function($routeProvider, $indexedDBProvider) {
+  .config(function($routeProvider) {
 
     $routeProvider
       .when('/', {
@@ -16,78 +16,75 @@ gohyper
         templateUrl: 'html/notepad.html'
       });
 
-    $indexedDBProvider
-      .connection('GoHyper')
-      .upgradeDatabase(1, function(event, db, tx){
-        var objStore = db.createObjectStore('quotes', {keyPath: 'id', autoIncrement: true});
-        objStore.createIndex('by_title', 'title', {unique: false});
-        objStore.createIndex('by_current_url', 'currentUrl', {unique: false});
-        objStore.createIndex('by_hyperlinks', 'hyperlinks', {unique: false, multiEntry: true});
-        objStore.createIndex('by_create_timestamp', 'createTimestamp', {unique: true});
-        objStore.createIndex('by_update_timestamp', 'updateTimestamp', {unique: true});
-      });
-
   }).config(['$compileProvider', function($compileProvider) {
       // http://stackoverflow.com/questions/15606751/angular-changes-urls-to-unsafe-in-extension-page
       $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
     }
   ]);
 
-
-gohyper
-  .controller('NavigationController', function($scope, $location){
-    $scope.isActive = function(str) {
-      var reg = new RegExp('^'+str+'(\/.*)?$');
-      return reg.test($location.path());
-    };
+gohyper.factory('quoteService', function($rootScope, $location) {
+  var data = {
+    quote: {}
+  };
+  chrome.runtime.onMessage.addListener(function(message, sender) {
+    if (message.subject === 'quoteData') {
+      angular.copy({
+        quote: message.quote,
+        title: message.title,
+        currentUrl: message.currentUrl,
+        quoteLocation: message.quoteLocation
+      }, data.quote);
+      $location.path('/');
+      $rootScope.$apply();
+    } else if (message.subject === 'buttonOnclick') {
+      $location.path('/notepad');
+      $rootScope.$apply();
+    }
   });
+  return data;
+});
 
 
 gohyper
-  .controller('QuoteController', function($scope, $indexedDB, $location) {
+  .controller('QuoteController', function($scope, $location, quoteService) {
 
     $scope.form = {
       hyperlinks: [],
       tags: [],
-      comment: ""
+      comment: ''
     };
 
-    chrome.runtime.getBackgroundPage(function(eventPage) {
-      // injects content.js into current tab's HTML
-      eventPage.getPageDetails(function(message) {
-        $scope.form.title = message.title;
-        $scope.form.currentUrl = message.currentUrl;
-        $scope.form.quote = message.quote;
-        $scope.$apply();
-      });
-    });
+    $scope.quote = quoteService.quote;
 
     $scope.pushTag = function(tag) {
-      if ($scope.form.tags.indexOf(tag) == -1 && tag.length) {
+      if ($scope.form.tags.indexOf(tag) === -1 && tag.length) {
         $scope.form.tags.push(tag);
       }
-      $scope.form.tag = "";
+      $scope.form.tag = '';
     };
 
     $scope.pushLink = function(hyperlink) {
-      if ($scope.form.hyperlinks.indexOf(hyperlink) == -1 && hyperlink.length) {
+      if ($scope.form.hyperlinks.indexOf(hyperlink) === -1 && hyperlink.length) {
         $scope.form.hyperlinks.push(hyperlink);
       }
-      $scope.form.hyperlink = "";
+      $scope.form.hyperlink = '';
       // filter already added urls
       $scope.updateLinks();
     };
 
     $scope.updateLinks = function() {
-      $scope.links = [];
-      $indexedDB.openStore('quotes', function(store) {
-        store.getAll().then(function(response) {
-          for (var i = 0; i < response.length; i++) {
+      chrome.runtime.sendMessage({
+        'subject': 'getAll'
+      }, function(response) {
+        $scope.$apply(function() {
+          $scope.links = [];
+          // get all quotes (in response.data)
+          for (var i = 0; i < response.data.length; i++) {
             // filter doubles
-            if ($scope.links.indexOf(response[i].currentUrl) === -1 ) {
+            if ($scope.links.indexOf(response.data[i].currentUrl) === -1 ) {
               // filter already added urls
-              if ($scope.form.hyperlinks.indexOf(response[i].currentUrl) === -1) {
-                $scope.links.push(response[i].currentUrl);
+              if ($scope.form.hyperlinks.indexOf(response.data[i].currentUrl) === -1) {
+                $scope.links.push(response.data[i].currentUrl);
               }
             }
           }
@@ -99,24 +96,24 @@ gohyper
     $scope.updateLinks();
 
     $scope.addQuote = function() {
-      $indexedDB.openStore('quotes', function(store) {
-        store.insert({
-          title: $scope.form.title,
-          currentUrl: $scope.form.currentUrl,
-          quote: $scope.form.quote,
-          quoteLocation: "TODO",                        // quote location in DOM
-          tags: $scope.form.tags,
-          comment: $scope.form.comment,
-          hyperlinks: $scope.form.hyperlinks,
-          createTimestamp: new Date().toISOString(),    // ISO 8601
-          updateTimestamp: new Date().toISOString()
-        }).then(function(event) {
-
-          // get connection to background page and call updateBadge
-          chrome.extension.getBackgroundPage().updateBadge();
-
+      chrome.runtime.sendMessage({
+        'subject': 'addQuote',
+        'title': $scope.quote.title,
+        'currentUrl': $scope.quote.currentUrl,
+        'quote': $scope.quote.quote,
+        'quoteLocation': $scope.quote.quoteLocation,
+        'tags': $scope.form.tags,
+        'comment': $scope.form.comment,
+        'hyperlinks': $scope.form.hyperlinks,
+        'createTimestamp': new Date().toISOString(),
+        'updateTimestamp': new Date().toISOString()
+      }, function(response) {
+        if (response.status === 'success') {
           $location.path('/notepad');
-        });
+        // 'error'
+        } else {
+          // TODO
+        }
       });
     };
 
@@ -124,43 +121,50 @@ gohyper
 
 
 gohyper
-  .controller('EditQuoteController', function($scope, $indexedDB, $routeParams, $location) {
+  .controller('EditQuoteController', function($scope, $routeParams, $location) {
 
     $scope.quote = {};
 
-    $indexedDB.openStore('quotes', function(store) {
-      store.find(parseInt($routeParams.id)).then(function(response) {
-        angular.copy(response, $scope.quote);
-      });
+    // find one quote by id
+    chrome.runtime.sendMessage({
+      'subject': 'findOneById',
+      'id': parseInt($routeParams.id)
+    }, function(response) {
+      if (response.status === 'success') {
+        $scope.quote = response.data[0];
+      }
     });
 
+    // angular.copy(response, $scope.quote);
+
     $scope.pushTag = function(tag) {
-      if ($scope.quote.tags.indexOf(tag) == -1 && tag.length) {
+      if ($scope.quote.tags.indexOf(tag) === -1 && tag.length) {
         $scope.quote.tags.push(tag);
       }
-      $scope.quote.tag = "";
+      $scope.quote.tag = '';
     };
 
     $scope.pushLink = function(hyperlink) {
-      if ($scope.quote.hyperlinks.indexOf(hyperlink) == -1 && hyperlink.length) {
+      if ($scope.quote.hyperlinks.indexOf(hyperlink) === -1 && hyperlink.length) {
         $scope.quote.hyperlinks.push(hyperlink);
       }
-      $scope.quote.hyperlink = "";
+      $scope.quote.hyperlink = '';
       $scope.updateLinks();
     };
 
     $scope.updateLinks = function() {
-      $scope.links = [];
-      $indexedDB.openStore('quotes', function(store) {
-        store.getAll().then(function(response) {
-          for (var i = 0; i < response.length; i++) {
+      chrome.runtime.sendMessage({
+        'subject': 'getAll'
+      }, function(response) {
+        $scope.$apply(function() {
+          $scope.links = [];
+          // get all quotes (in response.data)
+          for (var i = 0; i < response.data.length; i++) {
             // filter doubles
-            if ($scope.links.indexOf(response[i].currentUrl) === -1 ) {
+            if ($scope.links.indexOf(response.data[i].currentUrl) === -1 ) {
               // filter already added urls
-              if ($scope.quote.hyperlinks.indexOf(response[i].currentUrl) === -1) {
-                // TODO filter url of current quote?
-                // if (response[i].currentUrl != $scope.quote.currentUrl) {
-                $scope.links.push(response[i].currentUrl);
+              if ($scope.quote.hyperlinks.indexOf(response.data[i].currentUrl) === -1) {
+                $scope.links.push(response.data[i].currentUrl);
               }
             }
           }
@@ -171,36 +175,41 @@ gohyper
     // call function
     $scope.updateLinks();
 
-    $scope.saveQuote = function() {
-      $indexedDB.openStore('quotes', function(store) {
-        store.upsert({
-          "id": $scope.quote.id,
-          "title": $scope.quote.title,
-          "currentUrl": $scope.quote.currentUrl,
-          "quote": $scope.quote.quote,
-          "quoteLocation": $scope.quote.quoteLocation,
-          "tags": $scope.quote.tags,
-          "comment": $scope.quote.comment,
-          "hyperlinks": $scope.quote.hyperlinks,
-          "createTimestamp": $scope.quote.createTimestamp,
-          "updateTimestamp": new Date().toISOString()
-        }).then(function(response) {
-          // TODO route to show all
-          $location.path('/notepad');
-        });
+    $scope.updateQuote = function() {
+      chrome.runtime.sendMessage({
+        'subject': 'updateQuote',
+        'quote': {
+          'id': $scope.quote.id,
+          'title': $scope.quote.title,
+          'currentUrl': $scope.quote.currentUrl,
+          'quote': $scope.quote.quote,
+          'quoteLocation': $scope.quote.quoteLocation,
+          'tags': $scope.quote.tags,
+          'comment': $scope.quote.comment,
+          'hyperlinks': $scope.quote.hyperlinks,
+          'createTimestamp': $scope.quote.createTimestamp,
+          'updateTimestamp': new Date().toISOString()
+        }
+      }, function(response) {
+        if (response.status === 'success') {
+          $scope.$apply(function() {
+            $location.path('/notepad');
+          });
+        } else {
+          // TODO
+        }
       });
+    };
+
+    $scope.discard = function() {
+      $location.path('/notepad');
     };
 
   });
 
 
 gohyper
-  .controller('NotepadController', function($scope, $indexedDB) {
-
-    chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
-      var tab = arrayOfTabs[0];
-      $scope.currentUrl = tab.url;
-    });
+  .controller('NotepadController', function($scope, $location) {
 
     $scope.pagination = {
       page: 1,
@@ -209,53 +218,45 @@ gohyper
       maxSize: 3
     };
 
-    // default
-    $scope.filter = {
-      byUrl: true
-    };
-
     $scope.getQuotes = function() {
-      $indexedDB.openStore('quotes', function(store) {
-        if ($scope.currentUrl) {
-          if ($scope.filter.byUrl) {
-            var find = store.query();
-            find = find.$eq($scope.currentUrl);
-            find = find.$index("by_current_url");
-
-            // update scope
-            store.eachWhere(find).then(function(response) {
-
-              $scope.quotes = response;
-              // $scope.pagination.total = $scope.quotes.length;
-            });
-          } else {
-            store.getAll().then(function(quotes) {
-              // update scope
-              $scope.quotes = quotes;
-              // $scope.pagination.total = $scope.quotes.length;
-            });
-          }
+      chrome.runtime.sendMessage({
+        'subject': 'getQuotes'
+      }, function(response) {
+        if (response.status === 'success') {
+          $scope.$apply(function() {
+            $scope.quotes = response.data;
+          });
+        } else {
+          // TODO
         }
       });
     };
 
-    $scope.$watchGroup(['filter.byUrl', 'pagination.page', 'currentUrl'], $scope.getQuotes);
+    $scope.$watchGroup(['pagination.page'], $scope.getQuotes);
 
     // total count
-    $indexedDB.openStore('quotes', function(store) {
-      store.count().then(function(response) {
-        $scope.count = response;
-      });
+    chrome.runtime.sendMessage({
+      'subject': 'count'
     });
 
-    // delete a qoute
-    $scope.deleteQuote = function(id) {
-      $indexedDB.openStore('quotes', function(store) {
-        store.delete(id).then($scope.getQuotes);
-      });
+    // await response: $scope.count = response;
 
-      // get connection to background page and call updateBadge
-      chrome.extension.getBackgroundPage().updateBadge();
+    // delete a quote
+    $scope.deleteQuote = function(id) {
+      chrome.runtime.sendMessage({
+        'subject': 'deleteQuote',
+        'id': id,
+      }, function(response) {
+        if (response.status === 'success') {
+          $scope.$apply(function() {
+            //$scope.getQuotes;
+            // TODO search for better solution (store.delete(id).then($scope.getQuotes);)
+            $scope.quotes = response.data;
+          });
+        } else {
+          // TODO
+        }
+      });
     };
 
   });

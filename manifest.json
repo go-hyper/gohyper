@@ -7,17 +7,10 @@
   "version_name": "GoHyper alpha",
   "homepage_url": "https://github.com/jengeb/gohyper",
 
-   "applications": {
-     "gecko": {
-       "id": "gohyper@mozilla.org"
-     }
-   },
-
   "icons": {
-    "16": "images/gohyper.png",
-    "32": "images/gohyper.png",
-    "48": "images/gohyper.png",
-    "128": "images/gohyper.png"
+    "16": "images/icon.png",
+    "48": "images/icon.png",
+    "128": "images/icon.png"
   },
 
   "permissions": [
@@ -37,17 +30,19 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
+      "css": ["css/content.css"],
       "js": ["bower_components/rangy/rangy-core.js", "bower_components/rangy/rangy-classapplier.js",
-        "bower_components/rangy/rangy-highlighter.js", "bower_components/rangy/rangy-serializer.js", "js/content.js"]
+        "bower_components/rangy/rangy-highlighter.js", "bower_components/rangy/rangy-serializer.js", "js/content.js"],
+      "exclude_globs": ["*.pdf"]
     }
   ],
 
+  "web_accessible_resources": [
+    "iframe.html", "css/content.css", "bower_components/font-awesome/*"
+  ],
+
   "browser_action": {
-    "default_icon": {
-      "19": "images/gohyper.png",
-      "38": "images/gohyper.png"
-    },
-    "default_title": "GoHyper",
-    "default_popup": "popup.html"
+    "default_icon": "images/icon-gray.png",
+    "default_title": "GoHyper"
   }
 }
