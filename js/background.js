@@ -371,3 +371,8 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
     });
   }
 });
+
+chrome.browserAction.onClicked.addListener(function(activeTab) {
+  var newURL = "overview.html";
+  chrome.tabs.create({url: newURL});
+});

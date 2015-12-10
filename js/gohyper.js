@@ -260,3 +260,26 @@ gohyper
     };
 
   });
+
+
+gohyper
+  .controller('OverviewController', function($scope, $location) {
+
+    $scope.getAll = function() {
+      chrome.runtime.sendMessage({
+        'subject': 'getAll'
+      }, function(response) {
+        console.log(response);
+        if (response.status === 'success') {
+          $scope.$apply(function() {
+            $scope.quotes = response.data;
+          });
+        } else {
+          // TODO
+        }
+      });
+    };
+
+    $scope.getAll();
+
+  });
