@@ -75,3 +75,12 @@ blockquote {
 .dropdown-menu > li > a {
   padding: 2px 10px;
 }
+
+.gh-search {
+  margin-bottom: 10px;
+  margin-top: -24px;
+}
+
+.gh-filter {
+  margin-bottom: 8px;
+}

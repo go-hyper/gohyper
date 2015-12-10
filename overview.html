@@ -25,16 +25,13 @@
         <i class="fa fa-circle fa-stack-2x gh-circle-color"></i>
         <i class="fa fa-link fa-stack-1x gh-icon-color"></i>
       </span>
-      GoHyper
+      All quotes
     </h2>
 
     <div class="gh-margin" ng-controller="OverviewController">
 
-      <div class="row">
-        <div class="col-md-8">
-          <h4>All quotes</h4>
-        </div>
-        <div class="col-md-4">
+      <div class="row gh-search">
+        <div class="col-md-offset-8 col-md-4">
           <div class="input-group">
             <div class="input-group-addon">
               <i class="fa fa-search"></i> Search
@@ -44,10 +41,11 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row gh-filter">
         <div class="col-md-offset-8 col-md-4">
           <div class="input-group">
             <div class="input-group-addon">
+              <i class="fa fa-sort"></i>
               Sort by
             </div>
             <select class="form-control" ng-model="sortBy" ng-init="sortBy = 'default'">
