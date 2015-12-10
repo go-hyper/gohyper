@@ -63,34 +63,32 @@
       <table class="table table-striped">
         <thead>
           <tr>
-            <th>Quote
-              <a href="" ng-if="sorted.asc" ng-click="sorted.asc = false">
-                <i class="fa fa-sort-alpha-asc"></i>
-              </a>
-              <a href="" ng-if="!sorted.asc" ng-click="sorted.asc = true" >
-                <i class="fa fa-sort-alpha-desc"></i>
-              </a>
-            </th>
-            <th>URL</th>
+            <th>Quote</th>
             <th>Links</th>
-            <th>Tags</th>
             <th>Comment</th>
             <th></th>
           </tr>
         </thead>
 
         <tbody>
-
           <tr ng-repeat="quote in quotes | orderBy: '-updateTimestamp'">
             <td>
               <!-- http://stackoverflow.com/a/25892456/4419582 -->
-              "{{quote.quote | limitTo: 60}}{{quote.quote.length > 60 ? '...' : ''}}"
-            </td>
+              <p>"{{quote.quote | limitTo: 60}}{{quote.quote.length > 60 ? '...' : ''}}"</p>
 
-            <td>
-              <a target="_blank" href="{{quote.currentUrl}}" title="{{quote.currentUrl}}">
-                {{quote.currentUrl | limitTo: 45}}{{quote.currentUrl.length > 45 ? '...' : ''}}
-              </a>
+              <p>
+                <a target="_blank" href="{{quote.currentUrl}}" title="{{quote.currentUrl}}">
+                  {{quote.currentUrl | limitTo: 45}}{{quote.currentUrl.length > 45 ? '...' : ''}}
+                </a>
+              </p>
+
+              <p>
+                <span ng-repeat="tag in quote.tags">
+                  <span class="label label-default gh-label">
+                    {{tag}}
+                  </span>
+                </span>
+              </p>
             </td>
 
             <td>
@@ -99,14 +97,6 @@
                   {{link | limitTo: 45}}{{link.length > 45 ? '...' : ''}}
                 </a>
               </div>
-            </td>
-
-            <td>
-              <span ng-repeat="tag in quote.tags">
-                <span class="label label-default gh-label">
-                  {{tag}}
-                </span>
-              </span>
             </td>
 
             <td>
