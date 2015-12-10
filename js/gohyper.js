@@ -306,4 +306,8 @@ gohyper
       }
     };
 
+    $scope.sorted = {
+      asc: true
+    };
+
   });
