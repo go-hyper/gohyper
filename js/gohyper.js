@@ -243,20 +243,25 @@ gohyper
 
     // delete a quote
     $scope.deleteQuote = function(id) {
-      chrome.runtime.sendMessage({
-        'subject': 'deleteQuote',
-        'id': id,
-      }, function(response) {
-        if (response.status === 'success') {
-          $scope.$apply(function() {
-            $scope.getQuotes();
-            // TODO search for better solution (store.delete(id).then($scope.getQuotes);)
-            //$scope.quotes = response.data;
-          });
-        } else {
-          // TODO
-        }
-      });
+      var del = confirm("Are you sure you want to delete this quote?");
+      if (del) {
+        chrome.runtime.sendMessage({
+          'subject': 'deleteQuote',
+          'id': id,
+        }, function(response) {
+          if (response.status === 'success') {
+            $scope.$apply(function() {
+              $scope.getQuotes();
+              // TODO search for better solution (store.delete(id).then($scope.getQuotes);)
+              //$scope.quotes = response.data;
+            });
+          } else {
+            // TODO handle error
+          }
+        });
+      } else {
+        // do nothing
+      }
     };
 
   });
@@ -301,7 +306,7 @@ gohyper
           }
         });
       } else {
-        // nothing
+        // do nothing
       }
     };
 
