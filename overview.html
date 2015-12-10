@@ -48,19 +48,19 @@
           <tr ng-repeat="quote in quotes | orderBy: '-updateTimestamp'">
             <td>
               <!-- http://stackoverflow.com/a/25892456/4419582 -->
-              <p>"{{quote.quote | limitTo: 60}}{{quote.quote.length > 60 ? '...' : ''}}"</p>
+              "{{quote.quote | limitTo: 60}}{{quote.quote.length > 60 ? '...' : ''}}"
             </td>
 
             <td>
               <a target="_blank" href="{{quote.currentUrl}}" title="{{quote.currentUrl}}">
-                {{quote.currentUrl}}
+                {{quote.currentUrl | limitTo: 45}}{{quote.currentUrl.length > 45 ? '...' : ''}}
               </a>
             </td>
 
             <td>
               <div ng-repeat="link in quote.hyperlinks">
                 <a target="_blank" href="{{link}}" title="{{link}}">
-                  {{link | limitTo: 35}}{{link.length > 35 ? '...' : ''}}
+                  {{link | limitTo: 45}}{{link.length > 45 ? '...' : ''}}
                 </a>
               </div>
             </td>
@@ -74,7 +74,7 @@
             </td>
 
             <td>
-              <p>{{quote.comment}}</p>
+              {{quote.comment}}
             </td>
 
             <td>
