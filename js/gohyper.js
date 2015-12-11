@@ -271,20 +271,41 @@ gohyper
   .controller('OverviewController', function($scope, $location) {
 
     $scope.getAll = function() {
-      chrome.runtime.sendMessage({
-        'subject': 'getAll'
-      }, function(response) {
-        if (response.status === 'success') {
-          $scope.$apply(function() {
-            $scope.quotes = response.data;
-          });
-        } else {
-          // TODO
-        }
-      });
+      var sortBy = $scope.sortBy;
+
+      if (sortBy === 'timestampOF') {
+        chrome.runtime.sendMessage({
+          'subject': 'getAll',
+          'sortBy': 'timestampOF'
+        }, function(response) {
+          if (response.status === 'success') {
+            console.log(response.data);
+            $scope.$apply(function() {
+              $scope.quotes = response.data;
+            });
+          } else {
+            // TODO
+          }
+        });
+      } else {
+        chrome.runtime.sendMessage({
+          'subject': 'getAll'
+        }, function(response) {
+          if (response.status === 'success') {
+            $scope.$apply(function() {
+              console.log(response.data);
+              $scope.quotes = response.data;
+            });
+          } else {
+            // TODO
+          }
+        });
+      }
     };
 
     $scope.getAll();
+
+    $scope.$watchGroup(['sortBy'], $scope.getAll);
 
     $scope.deleteQuote = function(id) {
       var del = confirm("Are you sure you want to delete this quote?");

@@ -116,37 +116,74 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 // getAll: get all quotes (needed to update links in typeahead input field)
     case 'getAll':
-      // open a read database transaction
-      var transaction = db.transaction('quotes', 'readonly');
 
-      // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
-      // successful transaction
-      transaction.oncomplete = function(event) {
-        // response to sender (gohyper.js)
-        sendResponse({status: 'success', data: quotes});
-      };
+      switch (message.sortBy) {
+        case 'timestampOF':
+          var transaction = db.transaction('quotes', 'readonly');
 
-      // error in transaction
-      transaction.onerror = function(event) {
-        // response to sender (gohyper.js)
-        sendResponse({status: 'error'});
-      };
+          // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
+          // successful transaction
+          transaction.oncomplete = function(event) {
+            // response to sender (gohyper.js)
+            sendResponse({status: 'success', data: quotes});
+          };
 
-      // create an object store on the transaction
-      var store = transaction.objectStore('quotes');
+          // error in transaction
+          transaction.onerror = function(event) {
+            // response to sender (gohyper.js)
+            sendResponse({status: 'error'});
+          };
 
-      var quotes = [];
+          // create an object store on the transaction
+          var store = transaction.objectStore('quotes');
 
-      store.openCursor().onsuccess = function(event) {
-        var cursor = event.target.result;
-        if (cursor) {
-          quotes.push(cursor.value);
-          cursor.continue();
-        } else {
-          // TODO
-        }
-      };
-      return true;
+          var quotes = [];
+
+          store.index('by_update_timestamp').openCursor(null, 'next').onsuccess = function(event) {
+            var cursor = event.target.result;
+            if (cursor) {
+              quotes.push(cursor.value);
+              cursor.continue();
+            } else {
+              // TODO
+            }
+          };
+          return true;
+
+        default:
+
+        // open a read database transaction
+        var transaction = db.transaction('quotes', 'readonly');
+
+        // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
+        // successful transaction
+        transaction.oncomplete = function(event) {
+          // response to sender (gohyper.js)
+          sendResponse({status: 'success', data: quotes});
+        };
+
+        // error in transaction
+        transaction.onerror = function(event) {
+          // response to sender (gohyper.js)
+          sendResponse({status: 'error'});
+        };
+
+        // create an object store on the transaction
+        var store = transaction.objectStore('quotes');
+
+        var quotes = [];
+
+        store.index('by_update_timestamp').openCursor(null, 'prev').onsuccess = function(event) {
+          var cursor = event.target.result;
+          if (cursor) {
+            quotes.push(cursor.value);
+            cursor.continue();
+          } else {
+            // TODO
+          }
+        };
+        return true;
+      }
 
 // findOneById TODO (improve code: better solution?)
     case 'findOneById':

@@ -48,9 +48,9 @@
               <i class="fa fa-sort"></i>
               Sort by
             </div>
-            <select class="form-control" ng-model="sortBy" ng-init="sortBy = 'default'">
+            <select class="form-control" ng-model="sortBy" ng-init="sortBy='default'">
               <option value="default">Time (newest first)</option>
-              <option value="timestamp">Time (oldest first)</option>
+              <option value="timestampOF">Time (oldest first)</option>
               <option value="quoteAZ">Quote (A-Z)</option>
               <option value="quoteZA">Quote (Z-A)</option>
             </select>
@@ -69,7 +69,9 @@
         </thead>
 
         <tbody>
-          <tr ng-repeat="quote in quotes | orderBy: '-updateTimestamp'">
+          <!--tr ng-repeat="quote in quotes | orderBy: '-updateTimestamp'"-->
+          <!-- TODO check what's more efficient (sorting here or in background) + check support for pagination -->
+          <tr ng-repeat="quote in quotes">
             <td>
               <!-- http://stackoverflow.com/a/25892456/4419582 -->
               <p>"{{quote.quote | limitTo: 60}}{{quote.quote.length > 60 ? '...' : ''}}"</p>
