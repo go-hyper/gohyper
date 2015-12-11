@@ -49,11 +49,10 @@
               Sort by
             </div>
             <select class="form-control" ng-model="sortBy" ng-init="sortBy = 'default'">
-              <option value="default">Quote</option>
-              <option value="currentUrl">URL</option>
-              <option value="links">Links</option>
-              <option value="tags">Tags</option>
-              <option value="comment">Comment</option>
+              <option value="default">Time (newest first)</option>
+              <option value="timestamp">Time (oldest first)</option>
+              <option value="quoteAZ">Quote (A-Z)</option>
+              <option value="quoteZA">Quote (Z-A)</option>
             </select>
           </div>
         </div>
@@ -88,6 +87,13 @@
                   </span>
                 </span>
               </p>
+
+              <p>
+                <small>
+                  {{quote.updateTimestamp | date: 'short'}}
+                </small>
+              </p>
+
             </td>
 
             <td>
