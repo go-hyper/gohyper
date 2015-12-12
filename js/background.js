@@ -13,7 +13,7 @@ request.onupgradeneeded = function() {
   db = request.result;
   // create an objectStore for this database
   var objStore = db.createObjectStore('quotes', {keyPath: 'id', autoIncrement: true});
-  objStore.createIndex('by_title', 'title', {unique: false});
+  objStore.createIndex('by_quote', 'quote', {unique: false});
   objStore.createIndex('by_current_url', 'currentUrl', {unique: false});
   objStore.createIndex('by_hyperlinks', 'hyperlinks', {unique: false, multiEntry: true});
   objStore.createIndex('by_create_timestamp', 'createTimestamp', {unique: true});
@@ -140,6 +140,69 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
           var quotes = [];
 
           store.index('by_update_timestamp').openCursor(null, 'next').onsuccess = function(event) {
+            var cursor = event.target.result;
+            if (cursor) {
+              quotes.push(cursor.value);
+              cursor.continue();
+            } else {
+              // TODO
+            }
+          };
+          return true;
+
+        case 'quoteAZ':
+          var transaction = db.transaction('quotes', 'readonly');
+          // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
+          // successful transaction
+          transaction.oncomplete = function(event) {
+            // response to sender (gohyper.js)
+            sendResponse({status: 'success', data: quotes});
+          };
+          // error in transaction
+          transaction.onerror = function(event) {
+            // response to sender (gohyper.js)
+            sendResponse({status: 'error'});
+          };
+          // create an object store on the transaction
+          var store = transaction.objectStore('quotes');
+
+          var quotes = [];
+
+          var index = store.index('by_quote');
+          //var keyRange = IDBKeyRange.lowerBound('A', true);
+
+          index.openCursor(null, 'next').onsuccess = function(event) {
+            var cursor = event.target.result;
+            if (cursor) {
+              quotes.push(cursor.value);
+              cursor.continue();
+            } else {
+              // TODO
+            }
+          };
+          return true;
+
+        case 'quoteZA':
+          var transaction = db.transaction('quotes', 'readonly');
+          // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
+          // successful transaction
+          transaction.oncomplete = function(event) {
+            // response to sender (gohyper.js)
+            sendResponse({status: 'success', data: quotes});
+          };
+          // error in transaction
+          transaction.onerror = function(event) {
+            // response to sender (gohyper.js)
+            sendResponse({status: 'error'});
+          };
+          // create an object store on the transaction
+          var store = transaction.objectStore('quotes');
+
+          var quotes = [];
+
+          var index = store.index('by_quote');
+
+          index.openCursor(null, 'prev').onsuccess = function(event) {
             var cursor = event.target.result;
             if (cursor) {
               quotes.push(cursor.value);

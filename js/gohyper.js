@@ -109,7 +109,17 @@ gohyper
         'updateTimestamp': new Date().toISOString()
       }, function(response) {
         if (response.status === 'success') {
-          $location.path('/notepad');
+          $scope.$apply(function() {
+            // set to default
+            $scope.quote.title = '';
+            $scope.quote.currentUrl = '';
+            $scope.quote.quote = '';
+            $scope.quote.quoteLocation = [];
+            $scope.form.tags = [];
+            $scope.form.comment = '';
+            $scope.form.hyperlinks = [];
+            $location.path('/notepad');
+          });
         // 'error'
         } else {
           // TODO
@@ -243,7 +253,7 @@ gohyper
 
     // delete a quote
     $scope.deleteQuote = function(id) {
-      var del = confirm("Are you sure you want to delete this quote?");
+      var del = confirm('Are you sure you want to delete this quote?');
       if (del) {
         chrome.runtime.sendMessage({
           'subject': 'deleteQuote',
@@ -272,14 +282,38 @@ gohyper
 
     $scope.getAll = function() {
       var sortBy = $scope.sortBy;
-
       if (sortBy === 'timestampOF') {
         chrome.runtime.sendMessage({
           'subject': 'getAll',
           'sortBy': 'timestampOF'
         }, function(response) {
           if (response.status === 'success') {
-            console.log(response.data);
+            $scope.$apply(function() {
+              $scope.quotes = response.data;
+            });
+          } else {
+            // TODO
+          }
+        });
+      } else if (sortBy === 'quoteAZ') {
+        chrome.runtime.sendMessage({
+          'subject': 'getAll',
+          'sortBy': 'quoteAZ'
+        }, function(response) {
+          if (response.status === 'success') {
+            $scope.$apply(function() {
+              $scope.quotes = response.data;
+            });
+          } else {
+            // TODO
+          }
+        });
+      } else if (sortBy === 'quoteZA') {
+        chrome.runtime.sendMessage({
+          'subject': 'getAll',
+          'sortBy': 'quoteZA'
+        }, function(response) {
+          if (response.status === 'success') {
             $scope.$apply(function() {
               $scope.quotes = response.data;
             });
@@ -293,7 +327,6 @@ gohyper
         }, function(response) {
           if (response.status === 'success') {
             $scope.$apply(function() {
-              console.log(response.data);
               $scope.quotes = response.data;
             });
           } else {
@@ -308,13 +341,12 @@ gohyper
     $scope.$watchGroup(['sortBy'], $scope.getAll);
 
     $scope.deleteQuote = function(id) {
-      var del = confirm("Are you sure you want to delete this quote?");
+      var del = confirm('Are you sure you want to delete this quote?');
       if (del) {
         chrome.runtime.sendMessage({
           'subject': 'deleteQuote',
           'id': id,
         }, function(response) {
-          console.log(response);
           if (response.status === 'success') {
             $scope.$apply(function() {
               //$scope.getQuotes;
