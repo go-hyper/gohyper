@@ -338,6 +338,23 @@ gohyper
 
     $scope.getAll();
 
+    // search for tag
+    $scope.searchFor = function(input) {
+      chrome.runtime.sendMessage({
+        'subject': 'search',
+        'input': input
+      }, function(response) {
+        if (response.status === 'success') {
+          $scope.searchInput = '';
+          $scope.$apply(function() {
+            $scope.quotes = response.data;
+          });
+        } else {
+          // TODO
+        }
+      });
+    };
+
     $scope.$watchGroup(['sortBy'], $scope.getAll);
 
     $scope.deleteQuote = function(id) {

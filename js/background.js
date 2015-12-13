@@ -15,7 +15,8 @@ request.onupgradeneeded = function() {
   var objStore = db.createObjectStore('quotes', {keyPath: 'id', autoIncrement: true});
   objStore.createIndex('by_quote', 'quote', {unique: false});
   objStore.createIndex('by_current_url', 'currentUrl', {unique: false});
-  objStore.createIndex('by_hyperlinks', 'hyperlinks', {unique: false, multiEntry: true});
+  objStore.createIndex('by_hyperlink', 'hyperlinks', {unique: false, multiEntry: true});
+  objStore.createIndex('by_tag', 'tags', {unique: false, multiEntry: true});
   objStore.createIndex('by_create_timestamp', 'createTimestamp', {unique: true});
   objStore.createIndex('by_update_timestamp', 'updateTimestamp', {unique: true});
 };
@@ -273,6 +274,33 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         }
       };
       return true;
+
+// search
+    case 'search':
+      var transaction = db.transaction('quotes', 'readonly');
+      transaction.oncomplete = function(event) {
+        // response to sender (gohyper.js)
+        sendResponse({status: 'success', data: quote});
+      };
+      transaction.onerror = function(event) {
+        // response to sender (gohyper.js)
+        sendResponse({status: 'error'});
+      };
+      var store = transaction.objectStore('quotes');
+      var index = store.index('by_tag');
+
+      var singleKeyRange = IDBKeyRange.only(message.input);
+      var quote = [];
+      index.openCursor(singleKeyRange).onsuccess = function(event) {
+        var cursor = event.target.result;
+        if (cursor) {
+          quote.push(cursor.value);
+          cursor.continue();
+        } else {
+        }
+      };
+      return true;
+
 
 // update
     case 'updateQuote':

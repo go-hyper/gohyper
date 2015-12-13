@@ -36,7 +36,7 @@
             <div class="input-group-addon">
               <i class="fa fa-search"></i> Search
             </div>
-            <input type="text" class="form-control" placeholder="e.g. for tag, quote etc.">
+            <input type="text" class="form-control" placeholder="e.g. for tag or" ng-model="searchInput" ng-keyup="$event.keyCode == 13 && searchFor(searchInput)">
           </div>
         </div>
       </div>
@@ -51,8 +51,8 @@
             <select class="form-control" ng-model="sortBy" ng-init="sortBy='default'">
               <option value="default">Time (newest first)</option>
               <option value="timestampOF">Time (oldest first)</option>
-              <option value="quoteAZ">Quote (A-Z)</option>
-              <option value="quoteZA">Quote (Z-A)</option>
+              <option value="quoteAZ">Quote (A-Z, a-z)</option>
+              <option value="quoteZA">Quote (z-a, Z-A)</option>
             </select>
           </div>
         </div>
