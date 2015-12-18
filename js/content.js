@@ -62,8 +62,12 @@ chrome.runtime.sendMessage({
   if (response.status === 'success' && response.data.length) {
     for (var i = 0; i < response.data.length; i++) {
       var quote = response.data[i].quoteLocation;
-      rangy.deserializeRange(quote, document.body).select();
-      makeEditableAndHighlight("yellow");
+
+      var deserializedStartPosition = deserializePosition(quote.start, document.body, 'goHyper');
+      var deserializedEndPosition = deserializePosition(quote.end, document.body, 'goHyper');
+
+      //rangy.deserializeRange(quote, document.body).select();
+      //makeEditableAndHighlight("yellow");
     }
     document.getSelection().removeAllRanges();
   } else {
