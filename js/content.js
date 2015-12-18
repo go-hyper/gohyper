@@ -110,23 +110,19 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     };
 
     var serializedStartPosition = serializePosition(startPosition.node, startPosition.offset, document.body, 'goHyper');
+    var serializedEndPosition = serializePosition(endPosition.node, endPosition.offset, document.body, 'goHyper');
 
-    console.log(serializedStartPosition);
-
-
-    var serializedRanges = sel.getAllRanges().map(
-      function(range) {
-        // 3rd argument: root element
-        return rangy.serializeRange(range, true, document.body);
-      }
-    );
     sendResponse({
       'subject': 'quoteData',
       'title': message.title,
       'currentUrl': message.currentUrl,
       'quote': message.quote,
-      'quoteLocation': serializedRanges
+      'quoteLocation': {
+        start: serializedStartPosition,
+        end: serializedEndPosition
+      }
     });
+
     // if response from gohyper.js then (if all values are set) TODO
     setActive(true);
   } else if (message.subject === 'highlightText') {
