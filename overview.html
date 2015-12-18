@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html ng-app="gohyper" ng-csp>
+<head>
+  <meta charset="utf-8">
+  <title>GoHyper</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="bower_components/angular/angular-csp.css">
+  <link rel="stylesheet" href="css/gohyper.css">
+  <link rel="stylesheet" href="css/iframe.css">
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script src="bower_components/rangy/rangy-core.js"></script>
+  <script src="bower_components/rangy/rangy-classapplier.js"></script>
+  <script src="bower_components/rangy/rangy-highlighter.js"></script>
+  <script src="bower_components/rangy/rangy-serializer.js"></script>
+  <script type="text/javascript" src="js/gohyper.js"></script>
+</head>
+<body>
+  <div class="container">
+
+    <h2 class="text-center">
+      <span class="fa-stack">
+        <i class="fa fa-circle fa-stack-2x gh-circle-color"></i>
+        <i class="fa fa-link fa-stack-1x gh-icon-color"></i>
+      </span>
+      All quotes
+    </h2>
+
+    <div class="gh-margin" ng-controller="OverviewController">
+
+      <div class="row gh-search">
+        <div class="col-md-offset-8 col-md-4">
+
+          <div class="input-group">
+            <div class="input-group-addon">
+              <i class="fa fa-search"></i> Search for tag
+            </div>
+            <input type="text" class="form-control" placeholder="tag name" ng-model="searchInput" ng-keyup="$event.keyCode == 13 && searchFor(searchInput)">
+          </div>
+
+          <span>or</span>
+
+          <div class="input-group">
+            <div class="input-group-addon">
+              <i class="fa fa-sort"></i>
+              Sort by
+            </div>
+            <select class="form-control" ng-model="sortBy" ng-init="sortBy='default'">
+              <option value="default">Time (newest first)</option>
+              <option value="timestampOF">Time (oldest first)</option>
+              <option value="quoteAZ">Quote (A-Z, a-z)</option>
+              <option value="quoteZA">Quote (z-a, Z-A)</option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Quote</th>
+            <th>Links</th>
+            <th>Comment</th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <!--tr ng-repeat="quote in quotes | orderBy: '-quote'"-->
+          <!-- TODO check what's more efficient (sorting here or in background) + check support for pagination -->
+          <tr ng-repeat="quote in quotes">
+            <td>
+              <!-- http://stackoverflow.com/a/25892456/4419582 -->
+              <p>"{{quote.quote | limitTo: 60}}{{quote.quote.length > 60 ? '...' : ''}}"</p>
+
+              <p>{{quote.title}}</p>
+
+              <p>
+                <a target="_blank" href="{{quote.currentUrl}}" title="{{quote.currentUrl}}">
+                  {{quote.currentUrl | limitTo: 45}}{{quote.currentUrl.length > 45 ? '...' : ''}}
+                </a>
+              </p>
+
+              <p>
+                <span ng-repeat="tag in quote.tags">
+                  <span class="label label-default gh-label">
+                    {{tag}}
+                  </span>
+                </span>
+              </p>
+
+              <p>
+                <small>
+                  {{quote.updateTimestamp | date: 'short'}}
+                </small>
+              </p>
+
+            </td>
+
+            <td>
+              <div ng-repeat="link in quote.hyperlinks">
+                <a target="_blank" href="{{link}}" title="{{link}}">
+                  {{link | limitTo: 45}}{{link.length > 45 ? '...' : ''}}
+                </a>
+              </div>
+            </td>
+
+            <td>
+              {{quote.comment}}
+            </td>
+
+            <td>
+              <a href="#/quote/edit/{{quote.id}}">
+                <button type="button" class="btn btn-primary btn-xs gh-small-button">
+                  <i class="fa fa-pencil-square-o"></i> Edit
+                </button>
+              </a>
+              <button type="button" class="btn btn-danger btn-xs gh-small-button" ng-click="deleteQuote(quote.id)">
+                <i class="fa fa-times"></i> Remove
+              </button>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+
+      <!--div class="text-center" ng-if="quotes.length > 5">
+        <uib-pagination boundary-links="true" total-items="pagination.total" ng-model="pagination.page" class="pagination-sm" max-size="pagination.maxSize" boundary-links="true" rotate="false" num-pages="numPages"
+        previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
+      </div-->
+
+    </div>
+
+  </div>
+</body>
+</html>
