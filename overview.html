@@ -32,17 +32,16 @@
 
       <div class="row gh-search">
         <div class="col-md-offset-8 col-md-4">
+
           <div class="input-group">
             <div class="input-group-addon">
-              <i class="fa fa-search"></i> Search
+              <i class="fa fa-search"></i> Search for tag
             </div>
-            <input type="text" class="form-control" placeholder="e.g. for tag or" ng-model="searchInput" ng-keyup="$event.keyCode == 13 && searchFor(searchInput)">
+            <input type="text" class="form-control" placeholder="tag name" ng-model="searchInput" ng-keyup="$event.keyCode == 13 && searchFor(searchInput)">
           </div>
-        </div>
-      </div>
 
-      <div class="row gh-filter">
-        <div class="col-md-offset-8 col-md-4">
+          <span>or</span>
+
           <div class="input-group">
             <div class="input-group-addon">
               <i class="fa fa-sort"></i>
@@ -55,6 +54,7 @@
               <option value="quoteZA">Quote (z-a, Z-A)</option>
             </select>
           </div>
+
         </div>
       </div>
 
@@ -75,6 +75,8 @@
             <td>
               <!-- http://stackoverflow.com/a/25892456/4419582 -->
               <p>"{{quote.quote | limitTo: 60}}{{quote.quote.length > 60 ? '...' : ''}}"</p>
+
+              <p>{{quote.title}}</p>
 
               <p>
                 <a target="_blank" href="{{quote.currentUrl}}" title="{{quote.currentUrl}}">
