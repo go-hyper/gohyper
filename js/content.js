@@ -98,6 +98,22 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   // wait for messages from event/background page belonging to context menu's onclick events
   else if (message.subject === 'initialQuoteData') {
     var sel = rangy.getSelection();
+
+    var startPosition = {
+      node: sel.anchorNode,
+      offset: sel.anchorOffset
+    };
+
+    var endPosition = {
+      node: sel.focusNode,
+      offset: sel.focusOffset
+    };
+
+    var serializedStartPosition = serializePosition(startPosition.node, startPosition.offset, document.body, 'goHyper');
+
+    console.log(serializedStartPosition);
+
+
     var serializedRanges = sel.getAllRanges().map(
       function(range) {
         // 3rd argument: root element
