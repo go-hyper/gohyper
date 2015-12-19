@@ -39,6 +39,9 @@ gohyper.factory('quoteService', function($rootScope, $location) {
     } else if (message.subject === 'buttonOnclick') {
       $location.path('/notepad');
       $rootScope.$apply();
+    } else if (message.subject === 'quoteOnClick') {
+      $location.path('/quote/edit/' + message.data.id);
+      $rootScope.$apply();
     }
   });
   return data;

@@ -78,10 +78,15 @@ function highlight(quote) {
   range.setStart(start.node, start.offset);
   range.setEnd(end.node, end.offset);
 
-  function onclick(e) {
+  function onclick(event) {
     setActive(true);
-    e.stopPropagation();
-    console.log('clicki', quote);
+    event.stopPropagation();
+
+    // send data to background script (sends data to gohyper.js that shows data in iframe)
+    chrome.runtime.sendMessage({
+      'subject': 'quoteOnClick',
+      'data': quote
+    });
   }
 
   var applier = rangy.createClassApplier(

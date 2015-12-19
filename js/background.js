@@ -380,6 +380,13 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         'subject': 'buttonOnclick'
       });
       break;
+
+    case 'quoteOnClick':
+      chrome.tabs.sendMessage(sender.tab.id, {
+        'subject': 'quoteOnClick',
+        'data': message.data
+      });
+      break;
   }
 });
 
