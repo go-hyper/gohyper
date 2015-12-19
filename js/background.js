@@ -69,7 +69,8 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
       // highlight selected text (call function in content.js)
       chrome.tabs.sendMessage(sender.tab.id, {
-        'subject': 'highlightText'
+        'subject': 'highlightText',
+        'data': newQuote
       });
 
       /*

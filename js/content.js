@@ -139,9 +139,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     // if response from gohyper.js then (if all values are set) TODO
     setActive(true);
   } else if (message.subject === 'highlightText') {
-
+    var quote = message.data[0];
+    highlight(quote);
     setActive(false);
-    document.getSelection().removeAllRanges();
+    //document.getSelection().removeAllRanges();
   } else if (message.subject === 'deserializeQuote') {
     console.log('remove highlighted quote');
     // TODO
