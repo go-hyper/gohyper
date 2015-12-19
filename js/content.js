@@ -55,43 +55,47 @@ document.onclick =  function() {
   });
 };
 
+
 // get and highlight all quotes for current url
 chrome.runtime.sendMessage({
   'subject': 'getQuotes'
 }, function(response) {
   if (response.status === 'success' && response.data.length) {
-    for (var i = 0; i < response.data.length; i++) {
-      var quote = response.data[i].quoteLocation;
-
-      var deserializedStartPosition = deserializePosition(quote.start, document.body, 'goHyper');
-      var deserializedEndPosition = deserializePosition(quote.end, document.body, 'goHyper');
-
-      //rangy.deserializeRange(quote, document.body).select();
-      //makeEditableAndHighlight("yellow");
-    }
-    document.getSelection().removeAllRanges();
+    response.data.forEach(function(quote) {
+      highlight(quote);
+    });
   } else {
     // TODO
   }
 });
 
-// http://stackoverflow.com/questions/3223682/change-css-of-selected-text-using-javascript
-function makeEditableAndHighlight(colour) {
-  var range, sel = window.getSelection();
-  if (sel.rangeCount && sel.getRangeAt) {
-    range = sel.getRangeAt(0);
+
+function highlight(quote) {
+  var start = deserializePosition(quote.quoteLocation.start, document.body, 'goHyper');
+  var end = deserializePosition(quote.quoteLocation.end, document.body, 'goHyper');
+
+  var range = rangy.createRange();
+  range.setStart(start.node, start.offset);
+  range.setEnd(end.node, end.offset);
+
+  function onclick(e) {
+    setActive(true);
+    e.stopPropagation();
+    console.log('clicki', quote);
   }
-  document.designMode = 'on';
-  if (range) {
-    sel.removeAllRanges();
-    sel.addRange(range);
-  }
-  // Use HiliteColor since some browsers apply BackColor to the whole block
-  if (!document.execCommand('HiliteColor', false, colour)) {
-    document.execCommand('BackColor', false, colour);
-  }
-  document.designMode = 'off';
+
+  var applier = rangy.createClassApplier(
+    'goHyper',
+    {
+      useExistingElements: false,
+      onElementCreate: function(el) {
+        el.addEventListener('click', onclick);
+      }
+    }
+  );
+  applier.applyToRange(range);
 }
+
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   if (message.subject === 'checkActive') {
@@ -101,7 +105,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   }
   // wait for messages from event/background page belonging to context menu's onclick events
   else if (message.subject === 'initialQuoteData') {
-    var sel = rangy.getSelection();
+    var sel = document.getSelection();
 
     var startPosition = {
       node: sel.anchorNode,
@@ -130,7 +134,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     // if response from gohyper.js then (if all values are set) TODO
     setActive(true);
   } else if (message.subject === 'highlightText') {
-    makeEditableAndHighlight('yellow');
+
     setActive(false);
     document.getSelection().removeAllRanges();
   } else if (message.subject === 'deserializeQuote') {

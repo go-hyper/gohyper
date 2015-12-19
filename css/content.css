@@ -35,3 +35,8 @@
   width: 100%;
   border: none;
 }
+
+.goHyper {
+  background-color: red;
+  cursor: pointer;
+}
