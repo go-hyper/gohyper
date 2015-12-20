@@ -26,22 +26,26 @@ gohyper.factory('quoteService', function($rootScope, $location) {
   var data = {
     quote: {}
   };
-  chrome.runtime.onMessage.addListener(function(message, sender) {
-    if (message.subject === 'quoteData') {
-      angular.copy({
-        quote: message.quote,
-        title: message.title,
-        currentUrl: message.currentUrl,
-        quoteLocation: message.quoteLocation
-      }, data.quote);
-      $location.path('/');
-      $rootScope.$apply();
-    } else if (message.subject === 'buttonOnclick') {
-      $location.path('/notepad');
-      $rootScope.$apply();
-    } else if (message.subject === 'quoteOnClick') {
-      $location.path('/quote/edit/' + message.data.id);
-      $rootScope.$apply();
+  chrome.runtime.onMessage.addListener(function(message) {
+    switch(message.subject) {
+      case 'quoteData':
+        angular.copy({
+          quote: message.quote,
+          title: message.title,
+          currentUrl: message.currentUrl,
+          quoteLocation: message.quoteLocation
+        }, data.quote);
+        $location.path('/');
+        $rootScope.$apply();
+        break;
+      case 'buttonOnclick':
+        $location.path('/notepad');
+        $rootScope.$apply();
+        break;
+      case 'quoteOnClick':
+        $location.path('/quote/edit/' + message.data.id);
+        $rootScope.$apply();
+        break;
     }
   });
   return data;
