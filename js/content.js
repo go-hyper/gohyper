@@ -142,7 +142,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     var quote = message.data[0];
     highlight(quote);
     setActive(false);
-    //document.getSelection().removeAllRanges();
   } else if (message.subject === 'deserializeQuote') {
     console.log('remove highlighted quote');
     // TODO

@@ -31,7 +31,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 // create a new quote
     case 'addQuote':
-      var newQuote = [{
+      var newQuote = {
         title: message.title,
         currentUrl: message.currentUrl,
         quote: message.quote,
@@ -41,7 +41,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         hyperlinks: message.hyperlinks,
         createTimestamp: message.createTimestamp,
         updateTimestamp: message.updateTimestamp
-      }];
+      };
 
       // open a read and write database transaction
       var transaction = db.transaction('quotes', 'readwrite');
@@ -63,15 +63,20 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       var store = transaction.objectStore('quotes');
 
       // add new quote to the object store
-      var addRequest = store.add(newQuote[0]);
+      var addRequest = store.add(newQuote);
 
-      updateBadge();
+      addRequest.onsuccess = function(event) {
 
-      // highlight selected text (call function in content.js)
-      chrome.tabs.sendMessage(sender.tab.id, {
-        'subject': 'highlightText',
-        'data': newQuote
-      });
+        newQuote.id = addRequest.result;
+
+        updateBadge();
+
+        // highlight selected text (call function in content.js)
+        chrome.tabs.sendMessage(sender.tab.id, {
+          'subject': 'highlightText',
+          'data': [newQuote]
+        });
+      }
 
       /*
       The callback "function becomes invalid when the event listener returns, unless you return true from the event listener to indicate
