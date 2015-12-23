@@ -325,9 +325,11 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 // delete
     case 'deleteQuote':
+      var id = message.id;
       var transaction = db.transaction('quotes', 'readwrite');
       var store = transaction.objectStore('quotes');
-      var request = store.delete(message.id);
+
+      var request = store.delete(id);
       updateBadge();
 
       // TODO better solution
@@ -338,6 +340,12 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       transaction.oncomplete = function(event) {
         // response to sender (gohyper.js)
         sendResponse({status: 'success', data: quotes});
+
+        chrome.tabs.sendMessage(sender.tab.id, {
+          'subject': 'deserializeQuote',
+          'quoteId': id
+        });
+
       };
       // error in transaction
       transaction.onerror = function(event) {
@@ -359,10 +367,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
           // TODO
         }
       };
-
-      chrome.tabs.sendMessage(sender.tab.id, {
-        'subject': 'deserializeQuote'
-      });
 
       return true;
   }

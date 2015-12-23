@@ -55,6 +55,8 @@ document.onclick =  function() {
   });
 };
 
+// manage added and deleted quote data and their highlight
+var quoteCollection = {};
 
 // get and highlight all quotes for current url
 chrome.runtime.sendMessage({
@@ -62,6 +64,8 @@ chrome.runtime.sendMessage({
 }, function(response) {
   if (response.status === 'success' && response.data.length) {
     response.data.forEach(function(quote) {
+      // store all quotes in an object (needed for removing quote and highlight)
+      quoteCollection[quote.id] = quote;
       highlight(quote);
     });
   } else {
@@ -89,6 +93,7 @@ function highlight(quote) {
     });
   }
 
+  // see rangy's documentation: https://github.com/timdown/rangy/wiki/Class-Applier-Module
   var applier = rangy.createClassApplier(
     'goHyper',
     {
@@ -98,6 +103,7 @@ function highlight(quote) {
       }
     }
   );
+
   applier.applyToRange(range);
 }
 
@@ -138,13 +144,32 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
     // if response from gohyper.js then (if all values are set) TODO
     setActive(true);
+
+  // highlight just added quote
   } else if (message.subject === 'highlightText') {
     var quote = message.data[0];
+    quoteCollection[message.data[0].id] = quote;
     highlight(quote);
     setActive(false);
+
+  // if quote is deleted remove highlight
   } else if (message.subject === 'deserializeQuote') {
-    console.log('remove highlighted quote');
-    // TODO
+    var id = message.quoteId;
+    // get quote for deserialization
+    var quote = quoteCollection[id];
+    delete quoteCollection[id];
+
+    // deserialize quote position
+    var start = deserializePosition(quote.quoteLocation.start, document.body, 'goHyper');
+    var end = deserializePosition(quote.quoteLocation.end, document.body, 'goHyper');
+
+    // get range for deleted quote
+    var range = rangy.createRange();
+    range.setStart(start.node, start.offset);
+    range.setEnd(end.node, end.offset);
+
+    // remove ClassApplier's 'goHyper' class (highlight) from text within range
+    rangy.createClassApplier('goHyper').undoToRange(range);
   }
 
 });
