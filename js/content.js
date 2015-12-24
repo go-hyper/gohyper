@@ -55,39 +55,58 @@ document.onclick =  function() {
   });
 };
 
+// manage added and deleted quote data and their highlight
+var quoteCollection = {};
+
 // get and highlight all quotes for current url
 chrome.runtime.sendMessage({
   'subject': 'getQuotes'
 }, function(response) {
   if (response.status === 'success' && response.data.length) {
-    for (var i = 0; i < response.data.length; i++) {
-      var quote = response.data[i].quoteLocation;
-      rangy.deserializeRange(quote, document.body).select();
-      makeEditableAndHighlight("yellow");
-    }
-    document.getSelection().removeAllRanges();
+    response.data.forEach(function(quote) {
+      // store all quotes in an object (needed for removing quote and highlight)
+      quoteCollection[quote.id] = quote;
+      highlight(quote);
+    });
   } else {
     // TODO
   }
 });
 
-// http://stackoverflow.com/questions/3223682/change-css-of-selected-text-using-javascript
-function makeEditableAndHighlight(colour) {
-  var range, sel = window.getSelection();
-  if (sel.rangeCount && sel.getRangeAt) {
-    range = sel.getRangeAt(0);
+
+function highlight(quote) {
+  var start = deserializePosition(quote.quoteLocation.start, document.body, 'goHyper');
+  var end = deserializePosition(quote.quoteLocation.end, document.body, 'goHyper');
+
+  var range = rangy.createRange();
+  range.setStart(start.node, start.offset);
+  range.setEnd(end.node, end.offset);
+
+  function onclick(event) {
+    setActive(true);
+    event.stopPropagation();
+
+    // send data to background script (sends data to gohyper.js that shows data in iframe)
+    chrome.runtime.sendMessage({
+      'subject': 'quoteOnClick',
+      'data': quote
+    });
   }
-  document.designMode = 'on';
-  if (range) {
-    sel.removeAllRanges();
-    sel.addRange(range);
-  }
-  // Use HiliteColor since some browsers apply BackColor to the whole block
-  if (!document.execCommand('HiliteColor', false, colour)) {
-    document.execCommand('BackColor', false, colour);
-  }
-  document.designMode = 'off';
+
+  // see rangy's documentation: https://github.com/timdown/rangy/wiki/Class-Applier-Module
+  var applier = rangy.createClassApplier(
+    'goHyper',
+    {
+      useExistingElements: false,
+      onElementCreate: function(el) {
+        el.addEventListener('click', onclick);
+      }
+    }
+  );
+
+  applier.applyToRange(range);
 }
+
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   if (message.subject === 'checkActive') {
@@ -97,29 +116,60 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   }
   // wait for messages from event/background page belonging to context menu's onclick events
   else if (message.subject === 'initialQuoteData') {
-    var sel = rangy.getSelection();
-    var serializedRanges = sel.getAllRanges().map(
-      function(range) {
-        // 3rd argument: root element
-        return rangy.serializeRange(range, true, document.body);
-      }
-    );
+    var sel = document.getSelection();
+
+    var startPosition = {
+      node: sel.anchorNode,
+      offset: sel.anchorOffset
+    };
+
+    var endPosition = {
+      node: sel.focusNode,
+      offset: sel.focusOffset
+    };
+
+    var serializedStartPosition = serializePosition(startPosition.node, startPosition.offset, document.body, 'goHyper');
+    var serializedEndPosition = serializePosition(endPosition.node, endPosition.offset, document.body, 'goHyper');
+
     sendResponse({
       'subject': 'quoteData',
       'title': message.title,
       'currentUrl': message.currentUrl,
       'quote': message.quote,
-      'quoteLocation': serializedRanges
+      'quoteLocation': {
+        start: serializedStartPosition,
+        end: serializedEndPosition
+      }
     });
+
     // if response from gohyper.js then (if all values are set) TODO
     setActive(true);
+
+  // highlight just added quote
   } else if (message.subject === 'highlightText') {
-    makeEditableAndHighlight('yellow');
+    var quote = message.data[0];
+    quoteCollection[message.data[0].id] = quote;
+    highlight(quote);
     setActive(false);
-    document.getSelection().removeAllRanges();
+
+  // if quote is deleted remove highlight
   } else if (message.subject === 'deserializeQuote') {
-    console.log('remove highlighted quote');
-    // TODO
+    var id = message.quoteId;
+    // get quote for deserialization
+    var quote = quoteCollection[id];
+    delete quoteCollection[id];
+
+    // deserialize quote position
+    var start = deserializePosition(quote.quoteLocation.start, document.body, 'goHyper');
+    var end = deserializePosition(quote.quoteLocation.end, document.body, 'goHyper');
+
+    // get range for deleted quote
+    var range = rangy.createRange();
+    range.setStart(start.node, start.offset);
+    range.setEnd(end.node, end.offset);
+
+    // remove ClassApplier's 'goHyper' class (highlight) from text within range
+    rangy.createClassApplier('goHyper').undoToRange(range);
   }
 
 });

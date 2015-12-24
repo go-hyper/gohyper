@@ -26,19 +26,26 @@ gohyper.factory('quoteService', function($rootScope, $location) {
   var data = {
     quote: {}
   };
-  chrome.runtime.onMessage.addListener(function(message, sender) {
-    if (message.subject === 'quoteData') {
-      angular.copy({
-        quote: message.quote,
-        title: message.title,
-        currentUrl: message.currentUrl,
-        quoteLocation: message.quoteLocation
-      }, data.quote);
-      $location.path('/');
-      $rootScope.$apply();
-    } else if (message.subject === 'buttonOnclick') {
-      $location.path('/notepad');
-      $rootScope.$apply();
+  chrome.runtime.onMessage.addListener(function(message) {
+    switch(message.subject) {
+      case 'quoteData':
+        angular.copy({
+          quote: message.quote,
+          title: message.title,
+          currentUrl: message.currentUrl,
+          quoteLocation: message.quoteLocation
+        }, data.quote);
+        $location.path('/');
+        $rootScope.$apply();
+        break;
+      case 'buttonOnclick':
+        $location.path('/notepad');
+        $rootScope.$apply();
+        break;
+      case 'quoteOnClick':
+        $location.path('/quote/edit/' + message.data.id);
+        $rootScope.$apply();
+        break;
     }
   });
   return data;
@@ -214,7 +221,6 @@ gohyper
     $scope.discard = function() {
       $location.path('/notepad');
     };
-
   });
 
 
@@ -277,111 +283,5 @@ gohyper
   });
 
 
-gohyper
-  .controller('OverviewController', function($scope, $location) {
 
-    $scope.getAll = function() {
-      var sortBy = $scope.sortBy;
-      if (sortBy === 'timestampOF') {
-        chrome.runtime.sendMessage({
-          'subject': 'getAll',
-          'sortBy': 'timestampOF'
-        }, function(response) {
-          if (response.status === 'success') {
-            $scope.$apply(function() {
-              $scope.quotes = response.data;
-            });
-          } else {
-            // TODO
-          }
-        });
-      } else if (sortBy === 'quoteAZ') {
-        chrome.runtime.sendMessage({
-          'subject': 'getAll',
-          'sortBy': 'quoteAZ'
-        }, function(response) {
-          if (response.status === 'success') {
-            $scope.$apply(function() {
-              $scope.quotes = response.data;
-            });
-          } else {
-            // TODO
-          }
-        });
-      } else if (sortBy === 'quoteZA') {
-        chrome.runtime.sendMessage({
-          'subject': 'getAll',
-          'sortBy': 'quoteZA'
-        }, function(response) {
-          if (response.status === 'success') {
-            $scope.$apply(function() {
-              $scope.quotes = response.data;
-            });
-          } else {
-            // TODO
-          }
-        });
-      } else {
-        chrome.runtime.sendMessage({
-          'subject': 'getAll'
-        }, function(response) {
-          if (response.status === 'success') {
-            $scope.$apply(function() {
-              $scope.quotes = response.data;
-            });
-          } else {
-            // TODO
-          }
-        });
-      }
-    };
 
-    $scope.getAll();
-
-    // search for tag
-    $scope.searchFor = function(input) {
-      chrome.runtime.sendMessage({
-        'subject': 'search',
-        'input': input
-      }, function(response) {
-        if (response.status === 'success') {
-          $scope.searchInput = '';
-          $scope.$apply(function() {
-            $scope.quotes = response.data;
-          });
-        } else {
-          // TODO
-        }
-      });
-    };
-
-    $scope.$watchGroup(['sortBy'], $scope.getAll);
-
-    $scope.deleteQuote = function(id) {
-      var del = confirm('Are you sure you want to delete this quote?');
-      if (del) {
-        chrome.runtime.sendMessage({
-          'subject': 'deleteQuote',
-          'id': id,
-        }, function(response) {
-          if (response.status === 'success') {
-            $scope.$apply(function() {
-              //$scope.getQuotes;
-              // TODO search for better solution (store.delete(id).then($scope.getQuotes);)
-              //$scope.quotes = response.data;
-              $scope.getAll();
-            });
-          } else {
-            // TODO
-          }
-        });
-      } else {
-        // do nothing
-      }
-    };
-
-    $scope.sorted = {
-      asc: true
-    };
-
-  });
