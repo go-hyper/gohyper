@@ -15,7 +15,7 @@ var outerContainer = document.createElement('div');
 var shadow = outerContainer.createShadowRoot();
 var style = document.createElement('style');
 style.innerHTML =
-  '@import "' + chrome.runtime.getURL('bower_components/font-awesome/css/font-awesome.css') + '";' +
+  '@import "' + chrome.runtime.getURL('bower_components/font-awesome/css/font-awesome.min.css') + '";' +
   '@import "' + chrome.runtime.getURL('css/content.css') + '";';
 var innerContainer = document.createElement('div');
 var button = document.createElement('button');
