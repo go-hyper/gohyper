@@ -2,11 +2,12 @@
   "manifest_version": 2,
 
   "name": "GoHyper",
-  "description": "This is a prototype of GoHyper.",
+  "description": "Annotate, highlight and interlink text selections on web pages.",
   "version": "0.0.0",
   "homepage_url": "https://github.com/jengeb/gohyper",
 
   "icons": {
+    "16": "images/icon-16.png",
     "19": "images/icon-19.png",
     "38": "images/icon-38.png",
     "48": "images/icon-48.png",
