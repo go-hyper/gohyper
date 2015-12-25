@@ -29,7 +29,7 @@ function setActive(_active) {
   if (active) {
     innerContainer.className += ' gohyper-active';
   }
-  button.innerHTML = active ? '<i class="fa fa-chevron-right"></i>' : '<i class="fa fa-chevron-left"></i>';
+  button.innerHTML = active ? '&#x276F;' : '&#x276E;';
 }
 // init
 setActive(false);
