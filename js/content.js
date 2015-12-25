@@ -15,7 +15,7 @@ var outerContainer = document.createElement('div');
 var shadow = outerContainer.createShadowRoot();
 var style = document.createElement('style');
 style.innerHTML =
-  '@import "' + chrome.runtime.getURL('bower_components/font-awesome/css/font-awesome.css') + '";' +
+  '@import "' + chrome.runtime.getURL('bower_components/font-awesome/css/font-awesome.min.css') + '";' +
   '@import "' + chrome.runtime.getURL('css/content.css') + '";';
 var innerContainer = document.createElement('div');
 var button = document.createElement('button');
@@ -29,7 +29,7 @@ function setActive(_active) {
   if (active) {
     innerContainer.className += ' gohyper-active';
   }
-  button.innerHTML = active ? '<i class="fa fa-chevron-right"></i>' : '<i class="fa fa-chevron-left"></i>';
+  button.innerHTML = active ? '&#x276F;' : '&#x276E;';
 }
 // init
 setActive(false);
