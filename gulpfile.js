@@ -8,7 +8,8 @@ var files = ['manifest.json', 'js/*', 'bower_components/angular/angular.min.js',
   'node_modules/dom-position-serializer/index.js', 'bower_components/font-awesome/css/font-awesome.min.css',
   'bower_components/jquery/dist/jquery.min.js', 'bower_components/rangy/rangy-core.min.js',
   'bower_components/rangy/rangy-classapplier.min.js', 'bower_components/rangy/rangy-highlighter.min.js',
-  'bower_components/rangy/rangy-serializer.min.js', 'images/*', 'html/*', 'overview.html', 'iframe.html', 'css/*'];
+  'bower_components/rangy/rangy-serializer.min.js', 'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+  'bower_components/angular/angular-csp.css', 'images/*', 'html/*', 'overview.html', 'iframe.html', 'css/*'];
 
 gulp.task('default', function() {
   return gulp.src(files, {base: './'})
