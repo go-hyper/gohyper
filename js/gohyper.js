@@ -15,7 +15,7 @@ gohyper
       .when('/notepad', {
         templateUrl: 'html/notepad.html'
       })
-      .when('/overview', {
+      .when('/all_quotes', {
         templateUrl: 'html/all_quotes.html'
       });
 
@@ -143,6 +143,8 @@ gohyper
 gohyper
   .controller('EditQuoteController', function($scope, $routeParams, $location) {
 
+    $scope.page = $routeParams.page ? $routeParams.page : undefined;
+
     $scope.quote = {};
 
     // find one quote by id
@@ -213,7 +215,11 @@ gohyper
       }, function(response) {
         if (response.status === 'success') {
           $scope.$apply(function() {
-            $location.path('/notepad');
+            if ($scope.page === 'all_quotes') {
+              $location.path('/all_quotes');
+            } else {
+              $location.path('/notepad');
+            }
           });
         } else {
           // TODO
@@ -221,8 +227,12 @@ gohyper
       });
     };
 
-    $scope.discard = function() {
+    $scope.toNotepad = function() {
       $location.path('/notepad');
+    };
+
+    $scope.backToAllQuotes = function() {
+      $location.path('/all_quotes');
     };
   });
 
