@@ -2,15 +2,18 @@
 
   <div class="text-right">
     <a target="_blank" href="#/overview">
-      <button type="button" class="btn btn-primary">
-        <i class="fa fa-list"></i> Show all quotes
-      </button>
+      Show quotes for all pages
     </a>
   </div>
 
-  <h4 ng-if="quotes.length > 0">Selected quotes on this page</h4>
+  <h4 ng-if="quotes.length > 0">
+    Quotes on this page
+  </h4>
 
-  <h4 ng-if="quotes.length == 0">No quotes selected on this page</h4>
+  <div ng-if="quotes.length == 0">
+    <h4>No quote on this page.</h4>
+    To add one, select a text passage with your mouse, right-click on it and add the quote to GoHyper.
+  </div>
 
   <table class="table table-striped">
     <tbody>
