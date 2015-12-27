@@ -384,13 +384,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         'subject': 'documentOnclick'
       });
       break;
-
-    case 'buttonOnclick':
-      chrome.tabs.sendMessage(sender.tab.id, {
-        'subject': 'buttonOnclick'
-      });
-      break;
-
     case 'quoteOnClick':
       chrome.tabs.sendMessage(sender.tab.id, {
         'subject': 'quoteOnClick',
@@ -521,6 +514,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
 });
 
 chrome.browserAction.onClicked.addListener(function(activeTab) {
-  var newURL = "overview.html";
-  chrome.tabs.create({url: newURL});
+  chrome.tabs.sendMessage(activeTab.id, {
+    'subject': 'iconOnclick'
+  });
 });

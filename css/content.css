@@ -19,23 +19,6 @@
   right: 0;
 }
 
-.gohyper-container > button {
-  position: absolute;
-  left: -30px;
-  width: 30px;
-  top: 0;
-  height: 30px;
-  background-color: #9E9E9E;
-  border: none;
-  transition: left ease 0.5s;
-  cursor: pointer;
-  opacity: 0.8;
-}
-
-.gohyper-container.gohyper-active > button {
-  left: 0;
-}
-
 .gohyper-container > iframe {
   height: 100%;
   width: 100%;

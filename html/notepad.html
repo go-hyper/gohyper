@@ -1,8 +1,19 @@
 <div class="gh-margin" ng-controller="NotepadController">
 
-  <h4 ng-if="quotes.length > 0">Selected quotes</h4>
+  <div class="text-right">
+    <a target="_blank" href="#/all_quotes">
+      Show quotes for all pages
+    </a>
+  </div>
 
-  <h4 ng-if="quotes.length == 0">No quotes selected</h4>
+  <h4 ng-if="quotes.length > 0">
+    Quotes on this page
+  </h4>
+
+  <div ng-if="quotes.length == 0">
+    <h4>No quote on this page.</h4>
+    To add one, select a text passage with your mouse, right-click on it and add the quote to GoHyper.
+  </div>
 
   <table class="table table-striped">
     <tbody>
@@ -29,7 +40,7 @@
 
         </td>
         <td>
-          <a href="#/quote/edit/{{quote.id}}">
+          <a href="#/quote/edit/{{quote.id}}?page=notepad">
             <button type="button" class="btn btn-primary btn-xs gh-small-button">
               <i class="fa fa-pencil-square-o"></i> Edit
             </button>
@@ -42,9 +53,9 @@
     </tbody>
   </table>
 
-  <div class="text-center" ng-if="quotes.length > 5">
+  <!--div class="text-center" ng-if="quotes.length > 10">
     <uib-pagination boundary-links="true" total-items="pagination.total" ng-model="pagination.page" class="pagination-sm" max-size="pagination.maxSize" boundary-links="true" rotate="false" num-pages="numPages"
     previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
-  </div>
+  </div-->
 
 </div>

@@ -1,6 +1,6 @@
 <div class="gh-margin" ng-controller="OverviewController">
 
-  <h2>All quotes</h2>
+  <h3>All quotes</h3>
 
   <div class="row gh-search">
     <div class="col-md-offset-8 col-md-4">
@@ -85,8 +85,8 @@
         </td>
 
         <td>
-          <a href="#/quote/edit/{{quote.id}}">
-            <button type="button" class="btn btn-primary btn-xs gh-small-button" ng-click="editQuote(quote.id)">
+          <a href="#/quote/edit/{{quote.id}}?page=all_quotes">
+            <button type="button" class="btn btn-primary btn-xs gh-small-button">
               <i class="fa fa-pencil-square-o"></i> Edit
             </button>
           </a>
@@ -99,7 +99,7 @@
     </tbody>
   </table>
 
-  <!--div class="text-center" ng-if="quotes.length > 5">
+  <!--div class="text-center" ng-if="quotes.length > 50">
     <uib-pagination boundary-links="true" total-items="pagination.total" ng-model="pagination.page" class="pagination-sm" max-size="pagination.maxSize" boundary-links="true" rotate="false" num-pages="numPages"
     previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></uib-pagination>
   </div-->
