@@ -10,7 +10,7 @@ if (elem) {
   elem.focus();
 }
 
-// inject container with button and iframe
+// inject container with iframe
 var outerContainer = document.createElement('div');
 var shadow = outerContainer.createShadowRoot();
 var style = document.createElement('style');
@@ -18,7 +18,6 @@ style.innerHTML =
   '@import "' + chrome.runtime.getURL('bower_components/font-awesome/css/font-awesome.min.css') + '";' +
   '@import "' + chrome.runtime.getURL('css/content.css') + '";';
 var innerContainer = document.createElement('div');
-var button = document.createElement('button');
 var iframe = document.createElement('iframe');
 iframe.src = chrome.runtime.getURL('iframe.html');
 
@@ -29,24 +28,20 @@ function setActive(_active) {
   if (active) {
     innerContainer.className += ' gohyper-active';
   }
-  button.innerHTML = active ? '&#x276F;' : '&#x276E;';
 }
 // init
 setActive(false);
 
-innerContainer.appendChild(button);
 innerContainer.appendChild(iframe);
 shadow.appendChild(style);
 shadow.appendChild(innerContainer);
 document.body.appendChild(outerContainer);
 
-button.onclick = function(event) {
-  setActive(!active);
-  event.stopPropagation();
-  chrome.runtime.sendMessage({
-    'subject': 'buttonOnclick'
-  });
-};
+chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
+  if (message.subject === 'iconOnclick') {
+    setActive(!active);
+  }
+});
 
 document.onclick =  function() {
   setActive(false);
