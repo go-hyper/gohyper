@@ -1,8 +1,16 @@
 <div class="gh-margin" ng-controller="NotepadController">
 
-  <h4 ng-if="quotes.length > 0">Selected quotes</h4>
+  <div class="text-right">
+    <a target="_blank" href="#/overview">
+      <button type="button" class="btn btn-primary">
+        <i class="fa fa-list"></i> Show all quotes
+      </button>
+    </a>
+  </div>
 
-  <h4 ng-if="quotes.length == 0">No quotes selected</h4>
+  <h4 ng-if="quotes.length > 0">Selected quotes on this page</h4>
+
+  <h4 ng-if="quotes.length == 0">No quotes selected on this page</h4>
 
   <table class="table table-striped">
     <tbody>
