@@ -46,13 +46,13 @@
       <tr ng-repeat="quote in quotes">
         <td>
           <!-- http://stackoverflow.com/a/25892456/4419582 -->
-          <p>"{{quote.quote | limitTo: 60}}{{quote.quote.length > 60 ? '...' : ''}}"</p>
+          <p>"{{quote.quote | limitTo: 120}}{{quote.quote.length > 120 ? '...' : ''}}"</p>
 
-          <p>{{quote.title}}</p>
+          <p>{{quote.title | limitTo: 60}}{{quote.title.length > 60 ? '...' : ''}}</p>
 
           <p>
             <a target="_blank" href="{{quote.currentUrl}}" title="{{quote.currentUrl}}">
-              {{quote.currentUrl | limitTo: 45}}{{quote.currentUrl.length > 45 ? '...' : ''}}
+              {{quote.currentUrl | limitTo: 50}}{{quote.currentUrl.length > 50 ? '...' : ''}}
             </a>
           </p>
 
@@ -75,13 +75,13 @@
         <td>
           <div ng-repeat="link in quote.hyperlinks">
             <a target="_blank" href="{{link}}" title="{{link}}">
-              {{link | limitTo: 45}}{{link.length > 45 ? '...' : ''}}
+              {{link | limitTo: 50}}{{link.length > 50 ? '...' : ''}}
             </a>
           </div>
         </td>
 
         <td>
-          {{quote.comment}}
+          {{quote.comment | limitTo: 240}}{{quote.comment.length > 240 ? '...' : ''}}
         </td>
 
         <td>
