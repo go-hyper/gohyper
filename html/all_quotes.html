@@ -73,10 +73,22 @@
         </td>
 
         <td>
-          <div ng-repeat="link in quote.hyperlinks">
+          <div ng-repeat="link in quote.hyperlinks.slice(0, 10)">
             <a target="_blank" href="{{link}}" title="{{link}}">
               {{link | limitTo: 50}}{{link.length > 50 ? '...' : ''}}
             </a>
+          </div>
+
+          <div ng-if="quote.hyperlinks.length > 10">
+            <a ng-show="!showMore" ng-click="showMore = !showMore" href="">Show more</a>
+
+            <div ng-if="showMore" ng-repeat="link in quote.hyperlinks.slice(10, quote.hyperlinks.length)">
+              <a target="_blank" href="{{link}}" title="{{link}}">
+                {{link | limitTo: 50}}{{link.length > 50 ? '...' : ''}}
+              </a>
+            </div>
+
+            <a ng-show="showMore" ng-click="showMore = !showMore" href="">Show less</a>
           </div>
         </td>
 
