@@ -4,7 +4,7 @@
     <blockquote>
       <p>
         <i class="fa fa-quote-left gh-quote-icon"></i>
-        {{quote.quote}}
+        {{quote.quote | limitTo: 300}} {{quote.quote.length > 300 ? '...' : ''}}
       </p>
     </blockquote>
   </div>
