@@ -31,10 +31,22 @@
           </p>
 
           <p>
-            <div ng-repeat="link in quote.hyperlinks">
+            <div ng-repeat="link in quote.hyperlinks.slice(0, 8)">
               <a target="_blank" href="{{link}}" title="{{link}}">
                 {{link | limitTo: 35}}{{link.length > 35 ? '...' : ''}}
               </a>
+            </div>
+            <div ng-if="quote.hyperlinks.length > 8">
+              <a ng-show="!showMore" ng-click="showMore = !showMore" href="">Show more</a>
+
+              <div ng-if="showMore" ng-repeat="link in quote.hyperlinks.slice(8, quote.hyperlinks.length)">
+                <a target="_blank" href="{{link}}" title="{{link}}">
+                  {{link | limitTo: 35}}{{link.length > 35 ? '...' : ''}}
+                </a>
+              </div>
+
+              <a ng-show="showMore" ng-click="showMore = !showMore" href="">Show less</a>
+
             </div>
           </p>
 
