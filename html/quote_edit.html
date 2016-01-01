@@ -1,10 +1,27 @@
 <form class="gh-form" role="form" name="quoteForm" ng-controller="EditQuoteController">
 
-  <div class="form-group text-muted">
+  <div class="form-group text-muted" ng-if="quote.quote.length > 300">
     <blockquote>
-      <p>
+      <p ng-if ="!showMore">
         <i class="fa fa-quote-left gh-quote-icon"></i>
         {{quote.quote | limitTo: 300}} {{quote.quote.length > 300 ? '...' : ''}}
+      </p>
+
+      <p ng-if ="showMore">
+        <i class="fa fa-quote-left gh-quote-icon"></i>
+        {{quote.quote}}
+      </p>
+
+      <a ng-show="!showMore" ng-click="showMore = !showMore" href="">Show more</a>
+      <a ng-show="showMore" ng-click="showMore = !showMore" href="">Show less</a>
+    </blockquote>
+  </div>
+
+  <div class="form-group text-muted" ng-if="quote.quote.length <= 300">
+    <blockquote>
+      <p >
+        <i class="fa fa-quote-left gh-quote-icon"></i>
+        {{quote.quote}}
       </p>
     </blockquote>
   </div>

@@ -58,8 +58,8 @@
 
           <p>
             <span ng-repeat="tag in quote.tags">
-              <span class="label label-default gh-label">
-                {{tag}}
+              <span class="label label-default gh-label" uib-tooltip="{{tag}}">
+                {{tag | limitTo: 60}}{{tag.length > 60 ? '...' : ''}}
               </span>
             </span>
           </p>
