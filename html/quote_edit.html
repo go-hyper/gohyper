@@ -41,7 +41,7 @@
     </div>
     <div class="input-group">
       <input class="form-control" type="text" name="hyperlinks" ng-model="quote.hyperlink" uib-typeahead="link for link in links | filter:$viewValue"
-        placeholder="URL" ng-keypress="($event.which === 13) && pushLink(quote.hyperlink)">
+        placeholder="Search for quote links or paste a link" ng-keypress="($event.which === 13) && pushLink(quote.hyperlink)">
       <span class="input-group-btn">
         <button class="btn btn-default" type="button" ng-click="pushLink(quote.hyperlink);">
           <i class="fa fa-plus-circle"></i> Add
@@ -63,7 +63,7 @@
       </span>
     </div>
     <div class="input-group">
-      <input class="form-control" type="text" name="tags" ng-model="quote.tag" placeholder="Tags" ng-keypress="($event.which === 13) && pushTag(quote.tag)">
+      <input class="form-control" type="text" name="tags" ng-model="quote.tag" placeholder="Tag name" ng-keypress="($event.which === 13) && pushTag(quote.tag)">
       <span class="input-group-btn">
         <button class="btn btn-default" type="button" ng-click="pushTag(quote.tag);">
           <i class="fa fa-plus-circle"></i> Add
@@ -74,7 +74,7 @@
 
   <div class="form-group">
     <label for="comment">Comment</label>
-    <textarea class="form-control gh-input" name="comment" rows="2" ng-model="quote.comment" placeholder="Comment"></textarea>
+    <textarea class="form-control gh-input" name="comment" rows="2" ng-model="quote.comment" placeholder="Place your comment here"></textarea>
   </div>
 
   <div class="form-group">
