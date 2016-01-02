@@ -25,7 +25,7 @@
           <p>
             <span ng-repeat="tag in quote.tags">
               <span ng-if="tag.length > 40" class="label label-default gh-label" uib-tooltip="{{tag}}" tooltip-placement="right">
-                {{tag | limitTo: 40}}{{tag.length > 40 ? '...' : ''}}
+                {{tag | limitTo: 40}}...
               </span>
 
               <span ng-if="tag.length <= 40" class="label label-default gh-label">
