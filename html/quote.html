@@ -24,9 +24,9 @@
     </div>
     <div class="input-group">
       <input class="form-control" type="text" name="hyperlinks" ng-model="form.hyperlink" uib-typeahead="link for link in links | filter:$viewValue"
-        placeholder="URL" ng-keypress="($event.which === 13) && pushLink(form.hyperlink)">
+        placeholder="Search for quote links or paste a link" ng-keypress="($event.which === 13) && pushLink(form.hyperlink)">
       <span class="input-group-btn">
-        <button class="btn btn-default" type="button" ng-click="pushLink(form.hyperlink);">
+        <button class="btn btn-default" ng-class="{'gh-emphasized-button': form.hyperlink.length > 0}" ng-click="pushLink(form.hyperlink);">
           <i class="fa fa-plus-circle"></i> Add
         </button>
       </span>
@@ -46,9 +46,9 @@
       </span>
     </div>
     <div class="input-group">
-      <input class="form-control" type="text" name="tags" ng-model="form.tag" placeholder="Tags" ng-keypress="($event.which === 13) && pushTag(form.tag)">
+      <input class="form-control" type="text" name="tags" ng-model="form.tag" placeholder="Tag name" ng-keypress="($event.which === 13) && pushTag(form.tag)">
       <span class="input-group-btn">
-        <button class="btn btn-default" type="button" ng-click="pushTag(form.tag);">
+        <button class="btn btn-default" type="button" ng-class="{'gh-emphasized-button': form.tag.length > 0}" ng-click="pushTag(form.tag);">
           <i class="fa fa-plus-circle"></i> Add
         </button>
       </span>
@@ -57,7 +57,7 @@
 
   <div class="form-group">
     <label for="comment">Comment</label>
-    <textarea class="form-control gh-input" name="comment" rows="2" ng-model="form.comment" placeholder="Comment"></textarea>
+    <textarea class="form-control gh-input" name="comment" rows="2" ng-model="form.comment" placeholder="Place your comment here"></textarea>
   </div>
 
   <div class="form-group">

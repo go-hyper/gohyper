@@ -1,8 +1,25 @@
 <form class="gh-form" role="form" name="quoteForm" ng-controller="EditQuoteController">
 
-  <div class="form-group text-muted">
+  <div class="form-group text-muted" ng-if="quote.quote.length > 300">
     <blockquote>
-      <p>
+      <p ng-if ="!showMore">
+        <i class="fa fa-quote-left gh-quote-icon"></i>
+        {{quote.quote | limitTo: 300}} {{quote.quote.length > 300 ? '...' : ''}}
+      </p>
+
+      <p ng-if ="showMore">
+        <i class="fa fa-quote-left gh-quote-icon"></i>
+        {{quote.quote}}
+      </p>
+
+      <a ng-show="!showMore" ng-click="showMore = !showMore" href="">Show more</a>
+      <a ng-show="showMore" ng-click="showMore = !showMore" href="">Show less</a>
+    </blockquote>
+  </div>
+
+  <div class="form-group text-muted" ng-if="quote.quote.length <= 300">
+    <blockquote>
+      <p >
         <i class="fa fa-quote-left gh-quote-icon"></i>
         {{quote.quote}}
       </p>
@@ -24,9 +41,9 @@
     </div>
     <div class="input-group">
       <input class="form-control" type="text" name="hyperlinks" ng-model="quote.hyperlink" uib-typeahead="link for link in links | filter:$viewValue"
-        placeholder="URL" ng-keypress="($event.which === 13) && pushLink(quote.hyperlink)">
+        placeholder="Search for quote links or paste a link" ng-keypress="($event.which === 13) && pushLink(quote.hyperlink)">
       <span class="input-group-btn">
-        <button class="btn btn-default" type="button" ng-click="pushLink(quote.hyperlink);">
+        <button class="btn btn-default" type="button" ng-class="{'gh-emphasized-button': quote.hyperlink.length > 0}" ng-click="pushLink(quote.hyperlink);">
           <i class="fa fa-plus-circle"></i> Add
         </button>
       </span>
@@ -37,8 +54,8 @@
     <label for="tags">Tags</label>
     <div class="gh-label-group" ng-if="quote.tags.length">
       <span ng-repeat="tag in quote.tags">
-        <span class="label label-default gh-label">
-          {{tag}}
+        <span class="label label-default gh-label" uib-tooltip="{{tag}}">
+          {{tag | limitTo: 60}}{{tag.length > 60 ? '...' : ''}}
           <a href="" ng-click="quote.tags.splice($index, 1)">
             <i class="remove glyphicon glyphicon-remove-circle gh-remove"></i>
           </a>
@@ -46,9 +63,9 @@
       </span>
     </div>
     <div class="input-group">
-      <input class="form-control" type="text" name="tags" ng-model="quote.tag" placeholder="Tags" ng-keypress="($event.which === 13) && pushTag(quote.tag)">
+      <input class="form-control" type="text" name="tags" ng-model="quote.tag" placeholder="Tag name" ng-keypress="($event.which === 13) && pushTag(quote.tag)">
       <span class="input-group-btn">
-        <button class="btn btn-default" type="button" ng-click="pushTag(quote.tag);">
+        <button class="btn btn-default" type="button" ng-class="{'gh-emphasized-button': quote.tag.length > 0}" ng-click="pushTag(quote.tag);">
           <i class="fa fa-plus-circle"></i> Add
         </button>
       </span>
@@ -57,7 +74,7 @@
 
   <div class="form-group">
     <label for="comment">Comment</label>
-    <textarea class="form-control gh-input" name="comment" rows="2" ng-model="quote.comment" placeholder="Comment"></textarea>
+    <textarea class="form-control gh-input" name="comment" rows="2" ng-model="quote.comment" placeholder="Place your comment here"></textarea>
   </div>
 
   <div class="form-group">

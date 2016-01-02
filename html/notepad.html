@@ -24,17 +24,32 @@
 
           <p>
             <span ng-repeat="tag in quote.tags">
-              <span class="label label-default gh-label">
+              <span ng-if="tag.length > 40" class="label label-default gh-label" uib-tooltip="{{tag}}" tooltip-placement="right">
+                {{tag | limitTo: 40}}...
+              </span>
+
+              <span ng-if="tag.length <= 40" class="label label-default gh-label">
                 {{tag}}
               </span>
             </span>
           </p>
 
           <p>
-            <div ng-repeat="link in quote.hyperlinks">
+            <div ng-repeat="link in quote.hyperlinks.slice(0, 8)">
               <a target="_blank" href="{{link}}" title="{{link}}">
                 {{link | limitTo: 35}}{{link.length > 35 ? '...' : ''}}
               </a>
+            </div>
+            <div ng-if="quote.hyperlinks.length > 8">
+              <a ng-show="!showMore" ng-click="showMore = !showMore" href="">Show more</a>
+
+              <div ng-if="showMore" ng-repeat="link in quote.hyperlinks.slice(8, quote.hyperlinks.length)">
+                <a target="_blank" href="{{link}}" title="{{link}}">
+                  {{link | limitTo: 35}}{{link.length > 35 ? '...' : ''}}
+                </a>
+              </div>
+
+              <a ng-show="showMore" ng-click="showMore = !showMore" href="">Show less</a>
             </div>
           </p>
 

@@ -46,19 +46,22 @@
       <tr ng-repeat="quote in quotes">
         <td>
           <!-- http://stackoverflow.com/a/25892456/4419582 -->
-          <p>"{{quote.quote | limitTo: 60}}{{quote.quote.length > 60 ? '...' : ''}}"</p>
+          <p>"{{quote.quote | limitTo: 120}}{{quote.quote.length > 120 ? '...' : ''}}"</p>
 
-          <p>{{quote.title}}</p>
+          <p>{{quote.title | limitTo: 60}}{{quote.title.length > 60 ? '...' : ''}}</p>
 
           <p>
             <a target="_blank" href="{{quote.currentUrl}}" title="{{quote.currentUrl}}">
-              {{quote.currentUrl | limitTo: 45}}{{quote.currentUrl.length > 45 ? '...' : ''}}
+              {{quote.currentUrl | limitTo: 50}}{{quote.currentUrl.length > 50 ? '...' : ''}}
             </a>
           </p>
 
           <p>
             <span ng-repeat="tag in quote.tags">
-              <span class="label label-default gh-label">
+              <span ng-if="tag.length > 60" class="label label-default gh-label" uib-tooltip="{{tag}}">
+                {{tag | limitTo: 60}}...
+              </span>
+              <span ng-if="tag.length <= 60" class="label label-default gh-label">
                 {{tag}}
               </span>
             </span>
@@ -73,15 +76,27 @@
         </td>
 
         <td>
-          <div ng-repeat="link in quote.hyperlinks">
+          <div ng-repeat="link in quote.hyperlinks.slice(0, 10)">
             <a target="_blank" href="{{link}}" title="{{link}}">
-              {{link | limitTo: 45}}{{link.length > 45 ? '...' : ''}}
+              {{link | limitTo: 50}}{{link.length > 50 ? '...' : ''}}
             </a>
+          </div>
+
+          <div ng-if="quote.hyperlinks.length > 10">
+            <a ng-show="!showMore" ng-click="showMore = !showMore" href="">Show more</a>
+
+            <div ng-if="showMore" ng-repeat="link in quote.hyperlinks.slice(10, quote.hyperlinks.length)">
+              <a target="_blank" href="{{link}}" title="{{link}}">
+                {{link | limitTo: 50}}{{link.length > 50 ? '...' : ''}}
+              </a>
+            </div>
+
+            <a ng-show="showMore" ng-click="showMore = !showMore" href="">Show less</a>
           </div>
         </td>
 
         <td>
-          {{quote.comment}}
+          {{quote.comment | limitTo: 240}}{{quote.comment.length > 240 ? '...' : ''}}
         </td>
 
         <td>
