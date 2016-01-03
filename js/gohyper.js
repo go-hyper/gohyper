@@ -235,12 +235,16 @@ gohyper
           'subject': 'deleteQuote',
           'id': id,
         }, function(response) {
+          // TODO search for better solution (store.delete(id).then($scope.getQuotes);)
+          //$scope.quotes = response.data;
           if (response.status === 'success') {
             $scope.$apply(function() {
-              $location.path('/notepad');
+              if ($scope.page === 'all_quotes') {
+                $location.path('/all_quotes');
+              } else {
+                $location.path('/notepad');
+              }
             });
-            // TODO search for better solution (store.delete(id).then($scope.getQuotes);)
-            //$scope.quotes = response.data;
           } else {
             // TODO handle error
           }
