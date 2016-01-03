@@ -51,6 +51,8 @@
           <p>"{{quote.quote | limitTo: 120}}{{quote.quote.length > 120 ? '...' : ''}}"</p>
 
           <p>
+            <!-- http://www.aheil.de/2012/10/19/how-to-get-the-favicon-ico-from-any-page/ -->
+            <img src="http://www.google.com/s2/favicons?domain={{quote.currentUrl}}">
             <a target="_blank" href="{{quote.currentUrl}}" title="{{quote.currentUrl}}">
               {{quote.currentUrl | limitTo: 50}}{{quote.currentUrl.length > 50 ? '...' : ''}}
             </a>
@@ -77,6 +79,7 @@
 
         <td>
           <div ng-repeat="link in quote.hyperlinks.slice(0, 10)">
+            <img src="http://www.google.com/s2/favicons?domain={{link}}">
             <a target="_blank" href="{{link}}" title="{{link}}">
               {{link | limitTo: 50}}{{link.length > 50 ? '...' : ''}}
             </a>
@@ -86,6 +89,7 @@
             <a ng-show="!showMore" ng-click="showMore = !showMore" href="">Show more</a>
 
             <div ng-if="showMore" ng-repeat="link in quote.hyperlinks.slice(10, quote.hyperlinks.length)">
+              <img src="http://www.google.com/s2/favicons?domain={{link}}">
               <a target="_blank" href="{{link}}" title="{{link}}">
                 {{link | limitTo: 50}}{{link.length > 50 ? '...' : ''}}
               </a>
