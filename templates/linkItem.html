@@ -1,0 +1,8 @@
+<a>
+  <div>
+    <span>
+      <img src="http://www.google.com/s2/favicons?domain={{match.model}}">
+    </span>
+    <span ng-bind-html="match.model | typeaheadHighlight:query">{{match.model}}</span>
+  </div>
+</a>

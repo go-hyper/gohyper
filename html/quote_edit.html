@@ -30,6 +30,7 @@
     <label for="hyperlink">Hyperlink to</label>
     <div class="gh-link" ng-if="quote.hyperlinks.length">
       <span ng-repeat="link in quote.hyperlinks">
+        <img src="http://www.google.com/s2/favicons?domain={{link}}">
         <a target="_blank" href="{{link}}" title="{{link}}">
           {{link | limitTo: 45}}{{link.length > 45 ? '...' : ''}}
         </a>
@@ -40,7 +41,8 @@
       </span>
     </div>
     <div class="input-group">
-      <input class="form-control" type="text" name="hyperlinks" ng-model="quote.hyperlink" uib-typeahead="link for link in links | filter:$viewValue"
+      <input class="form-control" type="text" name="hyperlinks" ng-model="quote.hyperlink"
+        uib-typeahead="link for link in links | filter:$viewValue" typeahead-template-url="templates/linkItem.html"
         placeholder="Search for quote links or paste a link" ng-keypress="($event.which === 13) && pushLink(quote.hyperlink)">
       <span class="input-group-btn">
         <button class="btn btn-default" type="button" ng-class="{'gh-emphasized-button': quote.hyperlink.length > 0}" ng-click="pushLink(quote.hyperlink);">
