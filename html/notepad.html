@@ -57,14 +57,18 @@
 
         </td>
         <td>
-          <a href="#/quote/edit/{{quote.id}}?page=notepad">
-            <button type="button" class="btn btn-primary btn-xs gh-small-button">
-              <i class="fa fa-pencil-square-o"></i> Edit
+          <div class="text-right">
+            <a href="#/quote/edit/{{quote.id}}?page=notepad">
+              <button type="button" class="btn btn-primary btn-xs gh-small-button">
+                <i class="fa fa-pencil-square-o"></i> Edit
+              </button>
+            </a>
+          </div>
+          <div class="text-right">
+            <button type="button" class="btn btn-danger btn-xs gh-small-button" ng-click="deleteQuote(quote.id)">
+              <i class="fa fa-times"></i> Delete
             </button>
-          </a>
-          <button type="button" class="btn btn-danger btn-xs gh-small-button" ng-click="deleteQuote(quote.id)">
-            <i class="fa fa-times"></i> Delete
-          </button>
+          </div>
         </td>
       </tr>
     </tbody>
