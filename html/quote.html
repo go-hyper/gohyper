@@ -13,7 +13,7 @@
     <label for="hyperlink">Hyperlink to</label>
     <div class="gh-link" ng-if="form.hyperlinks.length">
       <span ng-repeat="link in form.hyperlinks">
-        <img src="http://www.google.com/s2/favicons?domain={{link}}">
+        <img src="https://www.google.com/s2/favicons?domain={{link}}">
         <a target="_blank" href="{{link}}" title="{{link}}">
           {{link | limitTo: 45}}{{link.length > 45 ? '...' : ''}}
         </a>
@@ -71,7 +71,7 @@
 
   <div class="form-group">
     <div class="text-right">
-      <button type="button" class="btn btn-primary gh-save-button" ng-click="clicked = true; addQuote();" ng-disabled="clicked || form.tag.length > 0 || form.hyperlink.length > 0">
+      <button type="button" class="btn btn-primary gh-button" ng-click="clicked = true; addQuote();" ng-disabled="clicked || form.tag.length > 0 || form.hyperlink.length > 0">
         <i class="fa fa-check-circle"></i> Save
       </button>
     </div>

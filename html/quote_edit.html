@@ -30,7 +30,7 @@
     <label for="hyperlink">Hyperlink to</label>
     <div class="gh-link" ng-if="quote.hyperlinks.length">
       <span ng-repeat="link in quote.hyperlinks">
-        <img src="http://www.google.com/s2/favicons?domain={{link}}">
+        <img src="https://www.google.com/s2/favicons?domain={{link}}">
         <a target="_blank" href="{{link}}" title="{{link}}">
           {{link | limitTo: 45}}{{link.length > 45 ? '...' : ''}}
         </a>
@@ -88,15 +88,23 @@
 
   <div class="form-group">
     <div class="text-right">
-      <button type="button" ng-if="page !== 'all_quotes'" class="btn btn-default gh-save-button" ng-click="clicked = true; toNotepad();">
+      <button type="button" ng-if="page !== 'all_quotes'" class="btn btn-default gh-button" ng-click="clicked = true; toNotepad();">
         <i class="fa fa-list"></i> Overview
       </button>
+    </div>
 
-      <button type="button" ng-if="page === 'all_quotes'" class="btn btn-default gh-save-button" ng-click="clicked = true; backToAllQuotes();">
+    <div class="text-right">
+      <button type="button" ng-if="page === 'all_quotes'" class="btn btn-default gh-button" ng-click="clicked = true; backToAllQuotes();">
         <i class="fa fa-list"></i> Show all quotes
       </button>
+    </div>
 
-      <button type="button" class="btn btn-primary gh-save-button" ng-click="clicked = true; updateQuote();" ng-disabled="clicked || quote.tag.length > 0 || quote.hyperlink.length > 0">
+    <div class="text-right">
+      <button type="button" class="btn btn-danger gh-button" ng-click="deleteQuote(quote.id)">
+        <i class="fa fa-times"></i> Delete
+      </button>
+
+      <button type="button" class="btn btn-primary gh-button" ng-click="clicked = true; updateQuote();" ng-disabled="clicked || quote.tag.length > 0 || quote.hyperlink.length > 0">
         <i class="fa fa-check-circle"></i> Save
       </button>
     </div>

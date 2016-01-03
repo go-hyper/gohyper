@@ -36,7 +36,7 @@
 
           <p>
             <div ng-repeat="link in quote.hyperlinks.slice(0, 8)">
-              <img src="http://www.google.com/s2/favicons?domain={{link}}">
+              <img src="https://www.google.com/s2/favicons?domain={{link}}">
               <a target="_blank" href="{{link}}" title="{{link}}">
                 {{link | limitTo: 35}}{{link.length > 35 ? '...' : ''}}
               </a>
@@ -45,7 +45,7 @@
               <a ng-show="!showMore" ng-click="showMore = !showMore" href="">Show more</a>
 
               <div ng-if="showMore" ng-repeat="link in quote.hyperlinks.slice(8, quote.hyperlinks.length)">
-                <img src="http://www.google.com/s2/favicons?domain={{link}}">
+                <img src="https://www.google.com/s2/favicons?domain={{link}}">
                 <a target="_blank" href="{{link}}" title="{{link}}">
                   {{link | limitTo: 35}}{{link.length > 35 ? '...' : ''}}
                 </a>
