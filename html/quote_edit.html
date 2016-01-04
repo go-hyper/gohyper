@@ -2,18 +2,18 @@
 
   <div class="form-group text-muted" ng-if="quote.quote.length > 300">
     <blockquote>
-      <p ng-if ="!showMore">
+      <p ng-if ="!showMoreText">
         <i class="fa fa-quote-left gh-quote-icon"></i>
         {{quote.quote | limitTo: 300}} {{quote.quote.length > 300 ? '...' : ''}}
       </p>
 
-      <p ng-if ="showMore">
+      <p ng-if ="showMoreText">
         <i class="fa fa-quote-left gh-quote-icon"></i>
         {{quote.quote}}
       </p>
 
-      <a ng-show="!showMore" ng-click="showMore = !showMore" href="">Show more</a>
-      <a ng-show="showMore" ng-click="showMore = !showMore" href="">Show less</a>
+      <a ng-show="!showMoreText" ng-click="showMoreText = !showMoreText" href="">Show more</a>
+      <a ng-show="showMoreText" ng-click="showMoreText = !showMoreText" href="">Show less</a>
     </blockquote>
   </div>
 
@@ -29,7 +29,7 @@
   <div class="form-group">
     <label for="hyperlink">Hyperlink to</label>
     <div class="gh-link" ng-if="quote.hyperlinks.length">
-      <span ng-repeat="link in quote.hyperlinks">
+      <span ng-repeat="link in quote.hyperlinks.slice(0, 15)">
         <img src="https://www.google.com/s2/favicons?domain={{link}}">
         <a target="_blank" href="{{link}}" title="{{link}}">
           {{link | limitTo: 45}}{{link.length > 45 ? '...' : ''}}
@@ -39,6 +39,23 @@
         </a>
         <br>
       </span>
+
+      <span ng-if="quote.hyperlinks.length > 15">
+        <a ng-show="!showMore" ng-click="showMore = !showMore" href="">Show {{quote.hyperlinks.length - 15}} more</a>
+
+        <div ng-if="showMore" ng-repeat="link in quote.hyperlinks.slice(15, quote.hyperlinks.length)">
+          <img src="https://www.google.com/s2/favicons?domain={{link}}">
+          <a target="_blank" href="{{link}}" title="{{link}}">
+            {{link | limitTo: 45}}{{link.length > 45 ? '...' : ''}}
+          </a>
+          <a href="" ng-click="quote.hyperlinks.splice($index, 1); updateLinks()">
+            <i class="remove glyphicon glyphicon-remove-circle gh-remove"></i>
+          </a>
+        </div>
+
+        <a ng-show="showMore" ng-click="showMore = !showMore" href="">Show less</a>
+      </span>
+
     </div>
     <div class="input-group">
       <input class="form-control" type="text" name="hyperlinks" ng-model="quote.hyperlink"
