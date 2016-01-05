@@ -2,18 +2,18 @@
 
   <div class="form-group text-muted" ng-if="quote.quote.length > 300">
     <blockquote>
-      <p ng-if ="!showMore">
+      <p ng-if ="!showMoreText">
         <i class="fa fa-quote-left gh-quote-icon"></i>
         {{quote.quote | limitTo: 300}} {{quote.quote.length > 300 ? '...' : ''}}
       </p>
 
-      <p ng-if ="showMore">
+      <p ng-if ="showMoreText">
         <i class="fa fa-quote-left gh-quote-icon"></i>
         {{quote.quote}}
       </p>
 
-      <a ng-show="!showMore" ng-click="showMore = !showMore" href="">Show more</a>
-      <a ng-show="showMore" ng-click="showMore = !showMore" href="">Show less</a>
+      <a ng-show="!showMoreText" ng-click="showMoreText = !showMoreText" href="">Show more</a>
+      <a ng-show="showMoreText" ng-click="showMoreText = !showMoreText" href="">Show less</a>
     </blockquote>
   </div>
 
@@ -29,7 +29,8 @@
   <div class="form-group">
     <label for="hyperlink">Hyperlink to</label>
     <div class="gh-link" ng-if="quote.hyperlinks.length">
-      <span ng-repeat="link in quote.hyperlinks">
+      <span ng-repeat="link in quote.hyperlinks.slice(0, 15)">
+        <img src="https://www.google.com/s2/favicons?domain={{link}}">
         <a target="_blank" href="{{link}}" title="{{link}}">
           {{link | limitTo: 45}}{{link.length > 45 ? '...' : ''}}
         </a>
@@ -38,9 +39,27 @@
         </a>
         <br>
       </span>
+
+      <span ng-if="quote.hyperlinks.length > 15">
+        <a ng-show="!showMore" ng-click="showMore = !showMore" href="">Show {{quote.hyperlinks.length - 15}} more</a>
+
+        <div ng-if="showMore" ng-repeat="link in quote.hyperlinks.slice(15, quote.hyperlinks.length)">
+          <img src="https://www.google.com/s2/favicons?domain={{link}}">
+          <a target="_blank" href="{{link}}" title="{{link}}">
+            {{link | limitTo: 45}}{{link.length > 45 ? '...' : ''}}
+          </a>
+          <a href="" ng-click="quote.hyperlinks.splice($index, 1); updateLinks()">
+            <i class="remove glyphicon glyphicon-remove-circle gh-remove"></i>
+          </a>
+        </div>
+
+        <a ng-show="showMore" ng-click="showMore = !showMore" href="">Show less</a>
+      </span>
+
     </div>
     <div class="input-group">
-      <input class="form-control" type="text" name="hyperlinks" ng-model="quote.hyperlink" uib-typeahead="link for link in links | filter:$viewValue"
+      <input class="form-control" type="text" name="hyperlinks" ng-model="quote.hyperlink"
+        uib-typeahead="link for link in links | filter:$viewValue" typeahead-template-url="templates/linkItem.html"
         placeholder="Search for quote links or paste a link" ng-keypress="($event.which === 13) && pushLink(quote.hyperlink)">
       <span class="input-group-btn">
         <button class="btn btn-default" type="button" ng-class="{'gh-emphasized-button': quote.hyperlink.length > 0}" ng-click="pushLink(quote.hyperlink);">
@@ -54,8 +73,15 @@
     <label for="tags">Tags</label>
     <div class="gh-label-group" ng-if="quote.tags.length">
       <span ng-repeat="tag in quote.tags">
-        <span class="label label-default gh-label" uib-tooltip="{{tag}}">
-          {{tag | limitTo: 60}}{{tag.length > 60 ? '...' : ''}}
+        <span ng-if="tag.length > 60" class="label label-default gh-label" uib-tooltip="{{tag}}">
+          {{tag | limitTo: 60}}...
+          <a href="" ng-click="quote.tags.splice($index, 1)">
+            <i class="remove glyphicon glyphicon-remove-circle gh-remove"></i>
+          </a>
+        </span>
+
+        <span ng-if="tag.length <= 60" class="label label-default gh-label">
+          {{tag}}
           <a href="" ng-click="quote.tags.splice($index, 1)">
             <i class="remove glyphicon glyphicon-remove-circle gh-remove"></i>
           </a>
@@ -79,15 +105,23 @@
 
   <div class="form-group">
     <div class="text-right">
-      <button type="button" ng-if="page !== 'all_quotes'" class="btn btn-default gh-save-button" ng-click="clicked = true; toNotepad();">
+      <button type="button" ng-if="page !== 'all_quotes'" class="btn btn-default gh-button" ng-click="clicked = true; toNotepad();">
         <i class="fa fa-list"></i> Overview
       </button>
+    </div>
 
-      <button type="button" ng-if="page === 'all_quotes'" class="btn btn-default gh-save-button" ng-click="clicked = true; backToAllQuotes();">
+    <div class="text-right">
+      <button type="button" ng-if="page === 'all_quotes'" class="btn btn-default gh-button" ng-click="clicked = true; backToAllQuotes();">
         <i class="fa fa-list"></i> Show all quotes
       </button>
+    </div>
 
-      <button type="button" class="btn btn-primary gh-save-button" ng-click="clicked = true; updateQuote();" ng-disabled="clicked || quote.tag.length > 0 || quote.hyperlink.length > 0">
+    <div class="text-right">
+      <button type="button" class="btn btn-danger gh-button" ng-click="deleteQuote(quote.id)">
+        <i class="fa fa-times"></i> Delete
+      </button>
+
+      <button type="button" class="btn btn-primary gh-button" ng-click="clicked = true; updateQuote();" ng-disabled="clicked || quote.tag.length > 0 || quote.hyperlink.length > 0">
         <i class="fa fa-check-circle"></i> Save
       </button>
     </div>

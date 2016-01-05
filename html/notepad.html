@@ -24,7 +24,7 @@
 
           <p>
             <span ng-repeat="tag in quote.tags">
-              <span ng-if="tag.length > 40" class="label label-default gh-label" uib-tooltip="{{tag}}" tooltip-placement="right">
+              <span ng-if="tag.length > 40" class="label label-default gh-label" uib-tooltip="{{tag}}">
                 {{tag | limitTo: 40}}...
               </span>
 
@@ -36,6 +36,7 @@
 
           <p>
             <div ng-repeat="link in quote.hyperlinks.slice(0, 8)">
+              <img src="https://www.google.com/s2/favicons?domain={{link}}">
               <a target="_blank" href="{{link}}" title="{{link}}">
                 {{link | limitTo: 35}}{{link.length > 35 ? '...' : ''}}
               </a>
@@ -44,6 +45,7 @@
               <a ng-show="!showMore" ng-click="showMore = !showMore" href="">Show more</a>
 
               <div ng-if="showMore" ng-repeat="link in quote.hyperlinks.slice(8, quote.hyperlinks.length)">
+                <img src="https://www.google.com/s2/favicons?domain={{link}}">
                 <a target="_blank" href="{{link}}" title="{{link}}">
                   {{link | limitTo: 35}}{{link.length > 35 ? '...' : ''}}
                 </a>
@@ -55,14 +57,18 @@
 
         </td>
         <td>
-          <a href="#/quote/edit/{{quote.id}}?page=notepad">
-            <button type="button" class="btn btn-primary btn-xs gh-small-button">
-              <i class="fa fa-pencil-square-o"></i> Edit
+          <div class="text-right">
+            <a href="#/quote/edit/{{quote.id}}?page=notepad">
+              <button type="button" class="btn btn-primary btn-xs gh-small-button">
+                <i class="fa fa-pencil-square-o"></i> Edit
+              </button>
+            </a>
+          </div>
+          <div class="text-right">
+            <button type="button" class="btn btn-danger btn-xs gh-small-button" ng-click="deleteQuote(quote.id)">
+              <i class="fa fa-times"></i> Delete
             </button>
-          </a>
-          <button type="button" class="btn btn-danger btn-xs gh-small-button" ng-click="deleteQuote(quote.id)">
-            <i class="fa fa-times"></i> Remove
-          </button>
+          </div>
         </td>
       </tr>
     </tbody>

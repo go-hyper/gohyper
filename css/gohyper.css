@@ -10,7 +10,8 @@ body {
   margin-bottom: 0.8em;
 }
 
-.gh-save-button {
+.gh-button {
+  margin-left: 0.5em;
   margin-top: 0.5em;
 }
 

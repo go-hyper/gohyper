@@ -227,6 +227,33 @@ gohyper
       });
     };
 
+    // delete a quote
+    $scope.deleteQuote = function(id) {
+      var del = confirm('Are you sure you want to delete this quote?');
+      if (del) {
+        chrome.runtime.sendMessage({
+          'subject': 'deleteQuote',
+          'id': id,
+        }, function(response) {
+          // TODO search for better solution (store.delete(id).then($scope.getQuotes);)
+          //$scope.quotes = response.data;
+          if (response.status === 'success') {
+            $scope.$apply(function() {
+              if ($scope.page === 'all_quotes') {
+                $location.path('/all_quotes');
+              } else {
+                $location.path('/notepad');
+              }
+            });
+          } else {
+            // TODO handle error
+          }
+        });
+      } else {
+        // do nothing
+      }
+    };
+
     $scope.toNotepad = function() {
       $location.path('/notepad');
     };
