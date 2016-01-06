@@ -137,6 +137,10 @@ gohyper
       });
     };
 
+    $scope.toNotepad = function() {
+      $location.path('/notepad');
+    };
+
   });
 
 
