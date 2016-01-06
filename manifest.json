@@ -3,7 +3,7 @@
 
   "name": "GoHyper",
   "description": "Annotate, highlight and interlink text selections on web pages.",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "homepage_url": "https://github.com/jengeb/gohyper",
 
   "icons": {
