@@ -59,9 +59,11 @@
           <p>
             <span ng-repeat="tag in quote.tags">
               <span ng-if="tag.length > 60" class="label label-default gh-label" uib-tooltip="{{tag}}">
+                <i class="fa fa-tag"></i>
                 {{tag | limitTo: 60}}...
               </span>
               <span ng-if="tag.length <= 60" class="label label-default gh-label">
+                <i class="fa fa-tag"></i>
                 {{tag}}
               </span>
             </span>
@@ -104,7 +106,8 @@
         <td>
           <a href="#/quote/edit/{{quote.id}}?page=all_quotes">
             <button type="button" class="btn btn-primary btn-xs gh-small-button">
-              <i class="fa fa-pencil-square-o"></i> Edit
+              <i class="fa fa-pencil"></i>
+              Edit
             </button>
           </a>
           <button type="button" class="btn btn-danger btn-xs gh-small-button" ng-click="deleteQuote(quote.id)">
