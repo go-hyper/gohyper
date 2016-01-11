@@ -71,6 +71,12 @@
 
   <div class="form-group">
     <div class="text-right">
+      <button type="button" class="btn btn-default gh-button" ng-click="clicked = true; toNotepad();">
+        <i class="fa fa-list"></i> Overview
+      </button>
+    </div>
+
+    <div class="text-right">
       <button type="button" class="btn btn-primary gh-button" ng-click="clicked = true; addQuote();" ng-disabled="clicked || form.tag.length > 0 || form.hyperlink.length > 0">
         <i class="fa fa-check-circle"></i> Save
       </button>

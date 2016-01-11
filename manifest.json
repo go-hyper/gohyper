@@ -3,7 +3,7 @@
 
   "name": "GoHyper",
   "description": "Annotate, highlight and interlink text selections on web pages.",
-  "version": "0.0.5",
+  "version": "0.0.7",
   "homepage_url": "https://github.com/jengeb/gohyper",
 
   "icons": {
@@ -34,8 +34,7 @@
       "css": ["css/content.css"],
       "js": ["bower_components/rangy/rangy-core.min.js", "bower_components/rangy/rangy-classapplier.min.js",
         "bower_components/rangy/rangy-highlighter.min.js", "bower_components/rangy/rangy-serializer.min.js",
-        "bower_components/jquery/dist/jquery.min.js", "node_modules/dom-position-serializer/index.js",
-        "js/content.js"],
+        "node_modules/dom-position-serializer/index.js", "js/content.js"],
       "exclude_globs": ["*.pdf"]
     }
   ],

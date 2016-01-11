@@ -45,25 +45,25 @@
       <!-- TODO check what's more efficient (sorting here or in background) + check support for pagination -->
       <tr ng-repeat="quote in quotes">
         <td>
-          <!-- http://stackoverflow.com/a/25892456/4419582 -->
-          <p>{{quote.title | limitTo: 60}}{{quote.title.length > 60 ? '...' : ''}}</p>
-
-          <p>"{{quote.quote | limitTo: 120}}{{quote.quote.length > 120 ? '...' : ''}}"</p>
-
           <p>
             <!-- http://www.aheil.de/2012/10/19/how-to-get-the-favicon-ico-from-any-page/ -->
             <img src="https://www.google.com/s2/favicons?domain={{quote.currentUrl}}">
             <a target="_blank" href="{{quote.currentUrl}}" title="{{quote.currentUrl}}">
-              {{quote.currentUrl | limitTo: 50}}{{quote.currentUrl.length > 50 ? '...' : ''}}
+              <!-- http://stackoverflow.com/a/25892456/4419582 -->
+              {{quote.title | limitTo: 65}}{{quote.title.length > 65 ? '...' : ''}}
             </a>
           </p>
+
+          <p>"{{quote.quote | limitTo: 120}}{{quote.quote.length > 120 ? '...' : ''}}"</p>
 
           <p>
             <span ng-repeat="tag in quote.tags">
               <span ng-if="tag.length > 60" class="label label-default gh-label" uib-tooltip="{{tag}}">
+                <i class="fa fa-tag"></i>
                 {{tag | limitTo: 60}}...
               </span>
               <span ng-if="tag.length <= 60" class="label label-default gh-label">
+                <i class="fa fa-tag"></i>
                 {{tag}}
               </span>
             </span>
@@ -106,11 +106,12 @@
         <td>
           <a href="#/quote/edit/{{quote.id}}?page=all_quotes">
             <button type="button" class="btn btn-primary btn-xs gh-small-button">
-              <i class="fa fa-pencil-square-o"></i> Edit
+              <i class="fa fa-pencil"></i>
+              Edit
             </button>
           </a>
           <button type="button" class="btn btn-danger btn-xs gh-small-button" ng-click="deleteQuote(quote.id)">
-            <i class="fa fa-times"></i> Remove
+            <i class="fa fa-times"></i> Delete
           </button>
         </td>
 

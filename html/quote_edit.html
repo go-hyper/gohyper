@@ -74,6 +74,7 @@
     <div class="gh-label-group" ng-if="quote.tags.length">
       <span ng-repeat="tag in quote.tags">
         <span ng-if="tag.length > 60" class="label label-default gh-label" uib-tooltip="{{tag}}">
+          <i class="fa fa-tag"></i>
           {{tag | limitTo: 60}}...
           <a href="" ng-click="quote.tags.splice($index, 1)">
             <i class="remove glyphicon glyphicon-remove-circle gh-remove"></i>
@@ -81,6 +82,7 @@
         </span>
 
         <span ng-if="tag.length <= 60" class="label label-default gh-label">
+          <i class="fa fa-tag"></i>
           {{tag}}
           <a href="" ng-click="quote.tags.splice($index, 1)">
             <i class="remove glyphicon glyphicon-remove-circle gh-remove"></i>
