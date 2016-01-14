@@ -6,7 +6,7 @@
 
 .gohyper-container {
   position: fixed;
-  z-index: 9999;
+  z-index: 2000000000;
   right: -30%;
   top: 0;
   bottom: 0;
