@@ -2,17 +2,15 @@
 
 rangy.init();
 
-// TODO (check if fixed)
-// workaround, see https://github.com/timdown/rangy/issues/146#issuecomment-38368638
+// workaround to set focus, see https://github.com/timdown/rangy/issues/146#issuecomment-38368638
 var elem = document.querySelector(':focus');
 if (elem) {
   elem.blur();
   elem.focus();
 }
 
-// inject container with iframe
+// create container with iframe
 var outerContainer = document.createElement('div');
-var shadow = outerContainer.createShadowRoot();
 var style = document.createElement('style');
 style.innerHTML =
   '@import "' + chrome.runtime.getURL('bower_components/font-awesome/css/font-awesome.min.css') + '";' +
@@ -21,6 +19,13 @@ var innerContainer = document.createElement('div');
 var iframe = document.createElement('iframe');
 iframe.src = chrome.runtime.getURL('iframe.html');
 
+// inject GoHyper interface in current document
+innerContainer.appendChild(iframe);
+outerContainer.appendChild(style);
+outerContainer.appendChild(innerContainer);
+document.body.appendChild(outerContainer);
+
+// function to open GoHyper interface
 var active = false;
 function setActive(_active) {
   active = _active;
@@ -31,17 +36,6 @@ function setActive(_active) {
 }
 // init
 setActive(false);
-
-innerContainer.appendChild(iframe);
-shadow.appendChild(style);
-shadow.appendChild(innerContainer);
-document.body.appendChild(outerContainer);
-
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  if (message.subject === 'iconOnclick') {
-    setActive(!active);
-  }
-});
 
 document.onclick =  function() {
   setActive(false);
@@ -63,8 +57,6 @@ chrome.runtime.sendMessage({
       quoteCollection[quote.id] = quote;
       highlight(quote);
     });
-  } else {
-    // TODO
   }
 });
 
@@ -103,11 +95,16 @@ function highlight(quote) {
 }
 
 
+// Event Listener
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   if (message.subject === 'checkActive') {
     sendResponse({
       'status': 'success'
     });
+  }
+  // detects click on GoHyper Icon
+  else if (message.subject === 'iconOnclick') {
+    setActive(!active);
   }
   // wait for messages from event/background page belonging to context menu's onclick events
   else if (message.subject === 'initialQuoteData') {
@@ -137,7 +134,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       }
     });
 
-    // if response from gohyper.js then (if all values are set) TODO
+    // if response from gohyper.js (if all values are set) then open GoHyper interface
     setActive(true);
 
   // highlight just added quote
