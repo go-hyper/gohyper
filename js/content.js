@@ -37,6 +37,8 @@ function setActive(_active) {
 // init
 setActive(false);
 
+
+// detect click on current document (if clicked, close GoHyper interface)
 document.onclick =  function() {
   setActive(false);
   chrome.runtime.sendMessage({
@@ -61,6 +63,7 @@ chrome.runtime.sendMessage({
 });
 
 
+// highlight selected text and make it clickable
 function highlight(quote) {
   var start = deserializePosition(quote.quoteLocation.start, document.body, 'goHyper');
   var end = deserializePosition(quote.quoteLocation.end, document.body, 'goHyper');
