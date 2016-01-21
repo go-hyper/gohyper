@@ -130,9 +130,8 @@ gohyper
             $scope.form.hyperlinks = [];
             $location.path('/notepad');
           });
-        // 'error'
         } else {
-          // TODO handle error
+          // TODO handle error resp. no response or other response.status
         }
       });
     };
@@ -224,7 +223,7 @@ gohyper
             }
           });
         } else {
-          // TODO handle error
+          // TODO handle error resp. no response or other response.status
         }
       });
     };
@@ -265,6 +264,13 @@ gohyper
 gohyper
   .controller('NotepadController', function($scope, $location) {
 
+    $scope.pagination = {
+      page: 1,
+      maxPerPage: 5,
+      total: undefined,
+      maxSize: 3
+    };
+
     $scope.getQuotes = function() {
       chrome.runtime.sendMessage({
         'subject': 'getQuotes'
@@ -278,6 +284,8 @@ gohyper
         }
       });
     };
+
+    $scope.$watchGroup(['pagination.page'], $scope.getQuotes);
 
     // delete a quote
     $scope.deleteQuote = function(id) {
