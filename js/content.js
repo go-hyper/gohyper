@@ -2,7 +2,7 @@
 
 rangy.init();
 
-// workaround to set focus, see https://github.com/timdown/rangy/issues/146#issuecomment-38368638
+// workaround to reset focus, see https://github.com/timdown/rangy/issues/146#issuecomment-38368638
 var elem = document.querySelector(':focus');
 if (elem) {
   elem.blur();
@@ -97,71 +97,68 @@ function highlight(quote) {
 
 // Event Listener
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  if (message.subject === 'checkActive') {
-    sendResponse({
-      'status': 'success'
-    });
+  switch(message.subject) {
+    case 'checkActive':
+      sendResponse({
+        'status': 'success'
+      });
+      break;
+
+    // detects click on GoHyper Icon
+    case 'iconOnclick':
+      setActive(!active);
+      break;
+
+    // wait for messages from event/background page belonging to context menu's onclick events
+    case 'initialQuoteData':
+      var sel = document.getSelection();
+      var startPosition = {
+        node: sel.anchorNode,
+        offset: sel.anchorOffset
+      };
+      var endPosition = {
+        node: sel.focusNode,
+        offset: sel.focusOffset
+      };
+      var serializedStartPosition = serializePosition(startPosition.node, startPosition.offset, document.body, 'goHyper');
+      var serializedEndPosition = serializePosition(endPosition.node, endPosition.offset, document.body, 'goHyper');
+      sendResponse({
+        'subject': 'quoteData',
+        'title': message.title,
+        'currentUrl': message.currentUrl,
+        'quote': message.quote,
+        'quoteLocation': {
+          start: serializedStartPosition,
+          end: serializedEndPosition
+        }
+      });
+      // if response from gohyper.js (if all values are set) then open GoHyper interface
+      setActive(true);
+      break;
+
+    // highlight just added quote
+    case 'highlightText':
+      var quote = message.data[0];
+      quoteCollection[message.data[0].id] = quote;
+      highlight(quote);
+      setActive(false);
+      break;
+
+    // if quote is deleted remove highlight
+    case 'deserializeQuote':
+      var id = message.quoteId;
+      // get quote for deserialization
+      var quote = quoteCollection[id];
+      delete quoteCollection[id];
+      // deserialize quote position
+      var start = deserializePosition(quote.quoteLocation.start, document.body, 'goHyper');
+      var end = deserializePosition(quote.quoteLocation.end, document.body, 'goHyper');
+      // get range for deleted quote
+      var range = rangy.createRange();
+      range.setStart(start.node, start.offset);
+      range.setEnd(end.node, end.offset);
+      // remove ClassApplier's 'goHyper' class (highlight) from text within range
+      rangy.createClassApplier('goHyper').undoToRange(range);
+      break;
   }
-  // detects click on GoHyper Icon
-  else if (message.subject === 'iconOnclick') {
-    setActive(!active);
-  }
-  // wait for messages from event/background page belonging to context menu's onclick events
-  else if (message.subject === 'initialQuoteData') {
-    var sel = document.getSelection();
-
-    var startPosition = {
-      node: sel.anchorNode,
-      offset: sel.anchorOffset
-    };
-
-    var endPosition = {
-      node: sel.focusNode,
-      offset: sel.focusOffset
-    };
-
-    var serializedStartPosition = serializePosition(startPosition.node, startPosition.offset, document.body, 'goHyper');
-    var serializedEndPosition = serializePosition(endPosition.node, endPosition.offset, document.body, 'goHyper');
-
-    sendResponse({
-      'subject': 'quoteData',
-      'title': message.title,
-      'currentUrl': message.currentUrl,
-      'quote': message.quote,
-      'quoteLocation': {
-        start: serializedStartPosition,
-        end: serializedEndPosition
-      }
-    });
-
-    // if response from gohyper.js (if all values are set) then open GoHyper interface
-    setActive(true);
-
-  // highlight just added quote
-  } else if (message.subject === 'highlightText') {
-    var quote = message.data[0];
-    quoteCollection[message.data[0].id] = quote;
-    highlight(quote);
-    setActive(false);
-
-  // if quote is deleted remove highlight
-  } else if (message.subject === 'deserializeQuote') {
-    var id = message.quoteId;
-    // get quote for deserialization
-    var quote = quoteCollection[id];
-    delete quoteCollection[id];
-
-    // deserialize quote position
-    var start = deserializePosition(quote.quoteLocation.start, document.body, 'goHyper');
-    var end = deserializePosition(quote.quoteLocation.end, document.body, 'goHyper');
-
-    // get range for deleted quote
-    var range = rangy.createRange();
-    range.setStart(start.node, start.offset);
-    range.setEnd(end.node, end.offset);
-
-    // remove ClassApplier's 'goHyper' class (highlight) from text within range
-    rangy.createClassApplier('goHyper').undoToRange(range);
-  }
-
 });
