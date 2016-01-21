@@ -9,8 +9,8 @@
 * gulp-zip
 
 ## Build instructions
-* Run `gulp`. This will build the extension in `./dist`.
-* Open Chrome or Chromium on [chrome://extensions/](chrome://extensions/) and "Load unpacked extension" from the `./dist` directory.
+* Run `npm install` and `bower install`. This will set up all dependencies.
+* Open Chrome or Chromium on [chrome://extensions/](chrome://extensions/) and "Load unpacked extension" from the `gohyper` directory.
 
 ## License
 The GoHyper Chrome Extension is licensed under the [GNU GPLv3](https://www.gnu.org/licenses/gpl.html) license.
