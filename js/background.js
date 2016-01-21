@@ -115,8 +115,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         if (cursor) {
           quotes.push(cursor.value);
           cursor.continue();
-        } else {
-          // TODO
         }
       };
       return true;
@@ -151,8 +149,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             if (cursor) {
               quotes.push(cursor.value);
               cursor.continue();
-            } else {
-              // TODO
             }
           };
           return true;
@@ -183,8 +179,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             if (cursor) {
               quotes.push(cursor.value);
               cursor.continue();
-            } else {
-              // TODO
             }
           };
           return true;
@@ -214,8 +208,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             if (cursor) {
               quotes.push(cursor.value);
               cursor.continue();
-            } else {
-              // TODO
             }
           };
           return true;
@@ -248,8 +240,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
           if (cursor) {
             quotes.push(cursor.value);
             cursor.continue();
-          } else {
-            // TODO
           }
         };
         return true;
@@ -363,8 +353,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             quotes.push(cursor.value);
           }
           cursor.continue();
-        } else {
-          // TODO
         }
       };
 
@@ -458,7 +446,7 @@ chrome.tabs.onUpdated.addListener(function(sender) {
       setBlueIcon(sender);
       updateBadge();
     } else {
-      // TODO
+      // TODO handle no response or other response.status
     }
   });
 });
@@ -473,7 +461,7 @@ chrome.tabs.onActivated.addListener(function(sender) {
     if (response !== undefined && response.status === 'success') {
       setBlueIcon(tabId);
     } else {
-      // TODO
+      // TODO handle no response or other response.status
     }
     updateBadge();
   });
