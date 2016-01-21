@@ -130,9 +130,8 @@ gohyper
             $scope.form.hyperlinks = [];
             $location.path('/notepad');
           });
-        // 'error'
         } else {
-          // TODO
+          // TODO handle error resp. no response or other response.status
         }
       });
     };
@@ -160,8 +159,6 @@ gohyper
         $scope.quote = response.data[0];
       }
     });
-
-    // angular.copy(response, $scope.quote);
 
     $scope.pushTag = function(tag) {
       if ($scope.quote.tags.indexOf(tag) === -1 && tag.length) {
@@ -226,7 +223,7 @@ gohyper
             }
           });
         } else {
-          // TODO
+          // TODO handle error resp. no response or other response.status
         }
       });
     };
@@ -239,8 +236,6 @@ gohyper
           'subject': 'deleteQuote',
           'id': id,
         }, function(response) {
-          // TODO search for better solution (store.delete(id).then($scope.getQuotes);)
-          //$scope.quotes = response.data;
           if (response.status === 'success') {
             $scope.$apply(function() {
               if ($scope.page === 'all_quotes') {
@@ -253,8 +248,6 @@ gohyper
             // TODO handle error
           }
         });
-      } else {
-        // do nothing
       }
     };
 
@@ -271,13 +264,6 @@ gohyper
 gohyper
   .controller('NotepadController', function($scope, $location) {
 
-    $scope.pagination = {
-      page: 1,
-      maxPerPage: 5,
-      total: undefined,
-      maxSize: 3
-    };
-
     $scope.getQuotes = function() {
       chrome.runtime.sendMessage({
         'subject': 'getQuotes'
@@ -287,19 +273,12 @@ gohyper
             $scope.quotes = response.data;
           });
         } else {
-          // TODO
+          // TODO handle error
         }
       });
     };
 
-    $scope.$watchGroup(['pagination.page'], $scope.getQuotes);
-
-    // total count
-    chrome.runtime.sendMessage({
-      'subject': 'count'
-    });
-
-    // await response: $scope.count = response;
+    $scope.getQuotes();
 
     // delete a quote
     $scope.deleteQuote = function(id) {
@@ -312,15 +291,11 @@ gohyper
           if (response.status === 'success') {
             $scope.$apply(function() {
               $scope.getQuotes();
-              // TODO search for better solution (store.delete(id).then($scope.getQuotes);)
-              //$scope.quotes = response.data;
             });
           } else {
             // TODO handle error
           }
         });
-      } else {
-        // do nothing
       }
     };
 
@@ -342,7 +317,7 @@ gohyper
               $scope.quotes = response.data;
             });
           } else {
-            // TODO
+            // TODO handle error
           }
         });
       } else if (sortBy === 'quoteAZ') {
@@ -355,7 +330,7 @@ gohyper
               $scope.quotes = response.data;
             });
           } else {
-            // TODO
+            // TODO handle error
           }
         });
       } else if (sortBy === 'quoteZA') {
@@ -368,7 +343,7 @@ gohyper
               $scope.quotes = response.data;
             });
           } else {
-            // TODO
+            // TODO handle error
           }
         });
       } else {
@@ -380,7 +355,7 @@ gohyper
               $scope.quotes = response.data;
             });
           } else {
-            // TODO
+            // TODO handle error
           }
         });
       }
@@ -400,7 +375,7 @@ gohyper
             $scope.quotes = response.data;
           });
         } else {
-          // TODO
+          // TODO handle error
         }
       });
     };
@@ -416,17 +391,12 @@ gohyper
         }, function(response) {
           if (response.status === 'success') {
             $scope.$apply(function() {
-              //$scope.getQuotes;
-              // TODO search for better solution (store.delete(id).then($scope.getQuotes);)
-              //$scope.quotes = response.data;
               $scope.getAll();
             });
           } else {
-            // TODO
+            // TODO handle error
           }
         });
-      } else {
-        // do nothing
       }
     };
 

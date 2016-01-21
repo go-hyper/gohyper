@@ -115,8 +115,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         if (cursor) {
           quotes.push(cursor.value);
           cursor.continue();
-        } else {
-          // TODO
         }
       };
       return true;
@@ -151,8 +149,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             if (cursor) {
               quotes.push(cursor.value);
               cursor.continue();
-            } else {
-              // TODO
             }
           };
           return true;
@@ -183,8 +179,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             if (cursor) {
               quotes.push(cursor.value);
               cursor.continue();
-            } else {
-              // TODO
             }
           };
           return true;
@@ -214,14 +208,11 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             if (cursor) {
               quotes.push(cursor.value);
               cursor.continue();
-            } else {
-              // TODO
             }
           };
           return true;
 
         default:
-
         // open a read database transaction
         var transaction = db.transaction('quotes', 'readonly');
 
@@ -248,8 +239,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
           if (cursor) {
             quotes.push(cursor.value);
             cursor.continue();
-          } else {
-            // TODO
           }
         };
         return true;
@@ -363,8 +352,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
             quotes.push(cursor.value);
           }
           cursor.continue();
-        } else {
-          // TODO
         }
       };
 
@@ -437,7 +424,7 @@ function updateBadge() {
   });
 }
 
-// set extension 'active'
+// set extension 'active': use blue instead of gray icon
 function setBlueIcon(tabId) {
   chrome.browserAction.setIcon({
     path: {
@@ -458,7 +445,7 @@ chrome.tabs.onUpdated.addListener(function(sender) {
       setBlueIcon(sender);
       updateBadge();
     } else {
-      // TODO
+      // TODO handle no response or other response.status
     }
   });
 });
@@ -473,7 +460,7 @@ chrome.tabs.onActivated.addListener(function(sender) {
     if (response !== undefined && response.status === 'success') {
       setBlueIcon(tabId);
     } else {
-      // TODO
+      // TODO handle no response or other response.status
     }
     updateBadge();
   });
@@ -493,6 +480,7 @@ chrome.runtime.onInstalled.addListener(function(sender) {
   });
 });
 
+// detect click on context menu item
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
   if (info.menuItemId === 'GoHyper1') {
     // send message to content script
@@ -513,6 +501,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
   }
 });
 
+// detect click on GoHyper icon in toolbar
 chrome.browserAction.onClicked.addListener(function(activeTab) {
   chrome.tabs.sendMessage(activeTab.id, {
     'subject': 'iconOnclick'
