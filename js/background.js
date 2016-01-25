@@ -253,18 +253,13 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 */
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  switch(message.subject) {
-    case 'documentOnclick':
-      chrome.tabs.sendMessage(sender.tab.id, {
-        'subject': 'documentOnclick'
-      });
-      break;
-    case 'quoteOnClick':
-      chrome.tabs.sendMessage(sender.tab.id, {
-        'subject': 'quoteOnClick',
-        'data': message.data
-      });
-      break;
+  // receice message from content script
+  if (message.subject === 'quoteOnClick') {
+    // send message to gohyper script (iframe)
+    chrome.tabs.sendMessage(sender.tab.id, {
+      'subject': 'quoteOnClick',
+      'data': message.data
+    });
   }
 });
 
