@@ -177,11 +177,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       return true;
 
 
-// findOneById TODO (improve code: better solution?)
+// findOneById
     case 'findOneById':
       var id = message.id;
       var transaction = db.transaction(['quotes'], 'readonly');
-      // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
       transaction.oncomplete = function(event) {
         // response to sender (gohyper.js)
         sendResponse({status: 'success', data: quote});
@@ -191,15 +190,11 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         sendResponse({status: 'error'});
       };
       var store = transaction.objectStore('quotes');
-      var singleKeyRange = IDBKeyRange.only(id);
+      var request = store.get(id);
       var quote = [];
-      store.openCursor(singleKeyRange).onsuccess = function(event) {
-        var cursor = event.target.result;
-        if (cursor) {
-          quote.push(cursor.value);
-          cursor.continue();
-        }
-      };
+      request.onsuccess = function(event) {
+        quote.push(request.result);
+      }
       return true;
 
 // search
