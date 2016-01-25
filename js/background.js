@@ -63,7 +63,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       request.onsuccess = function(event) {
         newQuote.id = request.result;
         updateBadge();
-        // highlight selected text (call function in content.js)
+        // highlight selected text: call function in content.js
         chrome.tabs.sendMessage(sender.tab.id, {
           'subject': 'highlightText',
           'data': [newQuote]
@@ -225,17 +225,15 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     case 'deleteQuote':
       var id = message.id;
       var transaction = db.transaction(['quotes'], 'readwrite');
-      // successful transaction
       transaction.oncomplete = function(event) {
         // response to sender (gohyper.js)
         sendResponse({status: 'success', data: quotes});
-        // remove highlight
+        // remove highlight: send message to content script
         chrome.tabs.sendMessage(sender.tab.id, {
           'subject': 'deserializeQuote',
           'quoteId': id
         });
       };
-      // error in transaction
       transaction.onerror = function(event) {
         // response to sender (gohyper.js)
         sendResponse({status: 'error'});
