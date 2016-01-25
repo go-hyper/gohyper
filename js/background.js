@@ -247,45 +247,26 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     case 'deleteQuote':
       var id = message.id;
       var transaction = db.transaction(['quotes'], 'readwrite');
-      var store = transaction.objectStore('quotes');
-
-      var request = store.delete(id);
-      updateBadge();
-
-      // TODO better solution
-      // code to get all quotes (after deletion)
-      var currentUrl = sender.tab.url;
-      // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
       // successful transaction
       transaction.oncomplete = function(event) {
         // response to sender (gohyper.js)
         sendResponse({status: 'success', data: quotes});
-
+        // remove highlight
         chrome.tabs.sendMessage(sender.tab.id, {
           'subject': 'deserializeQuote',
           'quoteId': id
         });
-
       };
       // error in transaction
       transaction.onerror = function(event) {
         // response to sender (gohyper.js)
         sendResponse({status: 'error'});
       };
-      // create an object store on the transaction
       var store = transaction.objectStore('quotes');
-      var quotes = [];
-      store.index('by_update_timestamp').openCursor(null, 'prev').onsuccess = function(event) {
-        var cursor = event.target.result;
-        // filter by currentUrl
-        if (cursor) {
-          if (cursor.value.currentUrl === currentUrl) {
-            quotes.push(cursor.value);
-          }
-          cursor.continue();
-        }
+      var request = store.delete(id);
+      request.onsuccess = function(event) {
+        updateBadge();
       };
-
       return true;
   }
 });
