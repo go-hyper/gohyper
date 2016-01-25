@@ -161,6 +161,7 @@ gohyper
     });
 
     $scope.pushTag = function(tag) {
+      // add only a tag to the tags array that is neither already there nor an empty string
       if ($scope.quote.tags.indexOf(tag) === -1 && tag.length) {
         $scope.quote.tags.push(tag);
       }
