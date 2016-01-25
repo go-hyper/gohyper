@@ -21,6 +21,7 @@ request.onupgradeneeded = function() {
   objStore.createIndex('by_update_timestamp', 'updateTimestamp', {unique: true});
 };
 
+// database exists already
 request.onsuccess = function() {
   db = request.result;
 }
@@ -42,31 +43,25 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         createTimestamp: message.createTimestamp,
         updateTimestamp: message.updateTimestamp
       };
-
       // open a read and write database transaction
       var transaction = db.transaction(['quotes'], 'readwrite');
-
       // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
       // successful transaction
       transaction.oncomplete = function(event) {
         // response to sender (gohyper.js)
         sendResponse({status: 'success'});
       };
-
       // error in transaction
       transaction.onerror = function(event) {
         // response to sender (gohyper.js)
         sendResponse({status: 'error'});
       };
-
       // create an object store on the transaction
       var store = transaction.objectStore('quotes');
-
       // add new quote to the object store
-      var addRequest = store.add(newQuote);
-
-      addRequest.onsuccess = function(event) {
-        newQuote.id = addRequest.result;
+      var request = store.add(newQuote);
+      request.onsuccess = function(event) {
+        newQuote.id = request.result;
         updateBadge();
         // highlight selected text (call function in content.js)
         chrome.tabs.sendMessage(sender.tab.id, {
@@ -74,7 +69,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
           'data': [newQuote]
         });
       }
-
       /*
       The callback "function becomes invalid when the event listener returns, unless you return true from the event listener to indicate
       you wish to send a response asynchronously (this will keep the message channel open to the other end until sendResponse is called)."
