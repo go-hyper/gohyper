@@ -30,7 +30,7 @@ request.onsuccess = function() {
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   switch(message.subject) {
 
-// create a new quote
+// create a new quote: add
     case 'addQuote':
       var newQuote = {
         title: message.title,
@@ -81,25 +81,20 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       var currentUrl = sender.tab.url;
       // open a read database transaction
       var transaction = db.transaction(['quotes'], 'readonly');
-
       // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
       // successful transaction
       transaction.oncomplete = function(event) {
         // response to sender (gohyper.js)
         sendResponse({status: 'success', data: quotes});
       };
-
       // error in transaction
       transaction.onerror = function(event) {
         // response to sender (gohyper.js)
         sendResponse({status: 'error'});
       };
-
       // create an object store on the transaction
       var store = transaction.objectStore('quotes');
-
       var quotes = [];
-
       // filter by currentUrl
       store.index('by_current_url').openCursor(IDBKeyRange.only(currentUrl)).onsuccess = function(event) {
         var cursor = event.target.result;
@@ -110,13 +105,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       };
       return true;
 
-// getAll: get all quotes (needed to update links in typeahead input field)
+// read: get all quotes sorted
     case 'getAll':
-
       var quotes = [];
-      // open a read database transaction
       var transaction = db.transaction(['quotes'], 'readonly');
-      // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
       // successful transaction
       transaction.oncomplete = function(event) {
         // response to sender (gohyper.js)
@@ -127,9 +119,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         // response to sender (gohyper.js)
         sendResponse({status: 'error'});
       };
-      // create an object store on the transaction
       var store = transaction.objectStore('quotes');
-
       switch (message.sortBy) {
 
         case 'timestampOF':
@@ -171,7 +161,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       return true;
 
 
-// findOneById
+// read: find a quote by ID
     case 'findOneById':
       var id = message.id;
       var transaction = db.transaction(['quotes'], 'readonly');
@@ -191,7 +181,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       }
       return true;
 
-// search
+// read: search in quotes for tag
     case 'search':
       var transaction = db.transaction(['quotes'], 'readonly');
       transaction.oncomplete = function(event) {
@@ -216,13 +206,10 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       };
       return true;
 
-
 // update
     case 'updateQuote':
       var quote = message.quote;
       var transaction = db.transaction(['quotes'], 'readwrite');
-      var store = transaction.objectStore('quotes');
-      var request = store.put(quote);
       // response to sender (gohyper.js)
       transaction.oncomplete = function(event) {
         sendResponse({status: 'success'});
@@ -230,6 +217,8 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       transaction.onerror = function(event) {
         sendResponse({status: 'error'});
       };
+      var store = transaction.objectStore('quotes');
+      var request = store.put(quote);
       return true;
 
 // delete
