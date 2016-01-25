@@ -44,7 +44,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       };
 
       // open a read and write database transaction
-      var transaction = db.transaction('quotes', 'readwrite');
+      var transaction = db.transaction(['quotes'], 'readwrite');
 
       // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
       // successful transaction
@@ -89,7 +89,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     case 'getQuotes':
       var currentUrl = sender.tab.url;
       // open a read database transaction
-      var transaction = db.transaction('quotes', 'readonly');
+      var transaction = db.transaction(['quotes'], 'readonly');
 
       // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
       // successful transaction
@@ -124,7 +124,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
       switch (message.sortBy) {
         case 'timestampOF':
-          var transaction = db.transaction('quotes', 'readonly');
+          var transaction = db.transaction(['quotes'], 'readonly');
 
           // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
           // successful transaction
@@ -154,7 +154,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
           return true;
 
         case 'quoteAZ':
-          var transaction = db.transaction('quotes', 'readonly');
+          var transaction = db.transaction(['quotes'], 'readonly');
           // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
           // successful transaction
           transaction.oncomplete = function(event) {
@@ -184,7 +184,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
           return true;
 
         case 'quoteZA':
-          var transaction = db.transaction('quotes', 'readonly');
+          var transaction = db.transaction(['quotes'], 'readonly');
           // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
           // successful transaction
           transaction.oncomplete = function(event) {
@@ -214,7 +214,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
         default:
         // open a read database transaction
-        var transaction = db.transaction('quotes', 'readonly');
+        var transaction = db.transaction(['quotes'], 'readonly');
 
         // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
         // successful transaction
@@ -247,7 +247,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 // findOneById TODO (improve code: better solution?)
     case 'findOneById':
       var id = message.id;
-      var transaction = db.transaction('quotes', 'readonly');
+      var transaction = db.transaction(['quotes'], 'readonly');
       // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
       transaction.oncomplete = function(event) {
         // response to sender (gohyper.js)
@@ -272,7 +272,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
 // search
     case 'search':
-      var transaction = db.transaction('quotes', 'readonly');
+      var transaction = db.transaction(['quotes'], 'readonly');
       transaction.oncomplete = function(event) {
         // response to sender (gohyper.js)
         sendResponse({status: 'success', data: quote});
@@ -300,7 +300,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 // update
     case 'updateQuote':
       var quote = message.quote;
-      var transaction = db.transaction('quotes', 'readwrite');
+      var transaction = db.transaction(['quotes'], 'readwrite');
       var store = transaction.objectStore('quotes');
       var request = store.put(quote);
       // response to sender (gohyper.js)
@@ -315,7 +315,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 // delete
     case 'deleteQuote':
       var id = message.id;
-      var transaction = db.transaction('quotes', 'readwrite');
+      var transaction = db.transaction(['quotes'], 'readwrite');
       var store = transaction.objectStore('quotes');
 
       var request = store.delete(id);
@@ -393,7 +393,7 @@ function updateBadge() {
       var request  = indexedDB.open('GoHyper');
       request.onsuccess = function() {
         var db = request.result;
-        var store = db.transaction('quotes', 'readonly').objectStore('quotes');
+        var store = db.transaction(['quotes'], 'readonly').objectStore('quotes');
 
         var index = store.index('by_current_url');
         var singleKeyRange = IDBKeyRange.only(currentUrl);
