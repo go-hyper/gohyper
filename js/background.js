@@ -198,7 +198,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         if (cursor) {
           quote.push(cursor.value);
           cursor.continue();
-        } else {
         }
       };
       return true;
@@ -224,7 +223,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         if (cursor) {
           quote.push(cursor.value);
           cursor.continue();
-        } else {
         }
       };
       return true;
