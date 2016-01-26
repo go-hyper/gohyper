@@ -213,20 +213,23 @@ chrome.runtime.onInstalled.addListener(function(sender) {
 // detect click on context menu item
 chrome.contextMenus.onClicked.addListener(function(info, tab) {
   if (info.menuItemId === 'GoHyper1') {
-    // send message to content script
+    // send message to content script for showing data in iframe (before saving)
     chrome.tabs.sendMessage(tab.id, {
       'subject': 'initialQuoteData',
       'currentUrl': info.pageUrl,
       'quote': info.selectionText,
       'title': tab.title
     }, function(response) {
-      chrome.tabs.sendMessage(tab.id, {
-        'subject': response.subject, // 'quoteData'
-        'currentUrl': response.currentUrl,
-        'quote': response.quote,
-        'title': response.title,
-        'quoteLocation': response.quoteLocation
-      });
+      // if response is not undefined send all data to content.js (for adding)
+      if (response) {
+        chrome.tabs.sendMessage(tab.id, {
+          'subject': response.subject, // 'quoteData'
+          'currentUrl': response.currentUrl,
+          'quote': response.quote,
+          'title': response.title,
+          'quoteLocation': response.quoteLocation
+        });
+      }
     });
   }
 });
