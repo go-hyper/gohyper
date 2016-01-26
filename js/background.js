@@ -1,36 +1,12 @@
 'use strict';
 
 /*
-    Database initialization and CRUD operations
+    Listener for requests from gohyper.js regarding database operations.
+    Database functions are located in the storage.js file.
 */
 
-// init for first use
-var request = window.indexedDB.open('GoHyper');
-var db;
-
-// database didn't exist before: create object store and indices
-request.onupgradeneeded = function() {
-  db = request.result;
-  // create an objectStore for this database
-  var objStore = db.createObjectStore('quotes', {keyPath: 'id', autoIncrement: true});
-  objStore.createIndex('by_quote', 'quote', {unique: false});
-  objStore.createIndex('by_current_url', 'currentUrl', {unique: false});
-  objStore.createIndex('by_hyperlink', 'hyperlinks', {unique: false, multiEntry: true});
-  objStore.createIndex('by_tag', 'tags', {unique: false, multiEntry: true});
-  objStore.createIndex('by_create_timestamp', 'createTimestamp', {unique: true});
-  objStore.createIndex('by_update_timestamp', 'updateTimestamp', {unique: true});
-};
-
-// database exists already
-request.onsuccess = function() {
-  db = request.result;
-}
-
-// CRUD operations
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   switch(message.subject) {
-
-// create a new quote: add
     case 'addQuote':
       var newQuote = {
         title: message.title,
@@ -43,32 +19,22 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
         createTimestamp: message.createTimestamp,
         updateTimestamp: message.updateTimestamp
       };
-      // open a read and write database transaction
-      var transaction = db.transaction(['quotes'], 'readwrite');
-      // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
-      // successful transaction
-      transaction.oncomplete = function(event) {
-        // response to sender (gohyper.js)
-        sendResponse({status: 'success'});
-      };
-      // error in transaction
-      transaction.onerror = function(event) {
-        // response to sender (gohyper.js)
-        sendResponse({status: 'error'});
-      };
-      // create an object store on the transaction
-      var store = transaction.objectStore('quotes');
-      // add new quote to the object store
-      var request = store.add(newQuote);
-      request.onsuccess = function(event) {
-        newQuote.id = request.result;
+      addQuote(newQuote, function(error, newId) {
+        if (error) {
+          console.error(error);
+          // response to sender (gohyper.js)
+          return sendResponse({status: 'error'});
+        }
         updateBadge();
         // highlight selected text: call function in content.js
+        newQuote.id = newId;
         chrome.tabs.sendMessage(sender.tab.id, {
           'subject': 'highlightText',
           'data': [newQuote]
         });
-      }
+        // response to sender (gohyper.js)
+        sendResponse({status: 'success'});
+      });
       /*
       The callback "function becomes invalid when the event listener returns, unless you return true from the event listener to indicate
       you wish to send a response asynchronously (this will keep the message channel open to the other end until sendResponse is called)."
@@ -76,173 +42,73 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       */
       return true;
 
-// read: get quotes filtered by current url
+    // get quotes filtered by current url
     case 'getQuotes':
-      var currentUrl = sender.tab.url;
-      // open a read database transaction
-      var transaction = db.transaction(['quotes'], 'readonly');
-      // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore
-      // successful transaction
-      transaction.oncomplete = function(event) {
-        // response to sender (gohyper.js)
-        sendResponse({status: 'success', data: quotes});
-      };
-      // error in transaction
-      transaction.onerror = function(event) {
-        // response to sender (gohyper.js)
-        sendResponse({status: 'error'});
-      };
-      // create an object store on the transaction
-      var store = transaction.objectStore('quotes');
-      var quotes = [];
-      // filter by currentUrl
-      store.index('by_current_url').openCursor(IDBKeyRange.only(currentUrl)).onsuccess = function(event) {
-        var cursor = event.target.result;
-        if (cursor) {
-          quotes.push(cursor.value);
-          cursor.continue();
+      getQuotes(sender, function(error, response) {
+        if (error) {
+          console.error(error);
+          return sendResponse({status: 'error'});
         }
-      };
+        sendResponse({status: 'success', data: response.data});
+      });
       return true;
 
-// read: get all quotes sorted
+    // get all quotes sorted
     case 'getAll':
-      var quotes = [];
-      var transaction = db.transaction(['quotes'], 'readonly');
-      // successful transaction
-      transaction.oncomplete = function(event) {
-        // response to sender (gohyper.js)
-        sendResponse({status: 'success', data: quotes});
-      };
-      // error in transaction
-      transaction.onerror = function(event) {
-        // response to sender (gohyper.js)
-        sendResponse({status: 'error'});
-      };
-      var store = transaction.objectStore('quotes');
-      switch (message.sortBy) {
-
-        case 'timestampOF':
-          store.index('by_update_timestamp').openCursor(null, 'next').onsuccess = function(event) {
-            var cursor = event.target.result;
-            if (cursor) {
-              quotes.push(cursor.value);
-              cursor.continue();
-            }
-          };
-
-        case 'quoteAZ':
-          store.index('by_quote').openCursor(null, 'next').onsuccess = function(event) {
-            var cursor = event.target.result;
-            if (cursor) {
-              quotes.push(cursor.value);
-              cursor.continue();
-            }
-          };
-
-        case 'quoteZA':
-          store.index('by_quote').openCursor(null, 'prev').onsuccess = function(event) {
-            var cursor = event.target.result;
-            if (cursor) {
-              quotes.push(cursor.value);
-              cursor.continue();
-            }
-          };
-
-        default:
-          store.index('by_update_timestamp').openCursor(null, 'prev').onsuccess = function(event) {
-            var cursor = event.target.result;
-            if (cursor) {
-              quotes.push(cursor.value);
-              cursor.continue();
-            }
-          };
-      }
-      return true;
-
-
-// read: find a quote by ID
-    case 'findOneById':
-      var id = message.id;
-      var transaction = db.transaction(['quotes'], 'readonly');
-      transaction.oncomplete = function(event) {
-        // response to sender (gohyper.js)
-        sendResponse({status: 'success', data: quote});
-      };
-      transaction.onerror = function(event) {
-        // response to sender (gohyper.js)
-        sendResponse({status: 'error'});
-      };
-      var store = transaction.objectStore('quotes');
-      var request = store.get(id);
-      var quote = [];
-      request.onsuccess = function(event) {
-        quote.push(request.result);
-      }
-      return true;
-
-// read: search in quotes for tag
-    case 'search':
-      var transaction = db.transaction(['quotes'], 'readonly');
-      transaction.oncomplete = function(event) {
-        // response to sender (gohyper.js)
-        sendResponse({status: 'success', data: quote});
-      };
-      transaction.onerror = function(event) {
-        // response to sender (gohyper.js)
-        sendResponse({status: 'error'});
-      };
-      var store = transaction.objectStore('quotes');
-      var index = store.index('by_tag');
-
-      var singleKeyRange = IDBKeyRange.only(message.input);
-      var quote = [];
-      index.openCursor(singleKeyRange).onsuccess = function(event) {
-        var cursor = event.target.result;
-        if (cursor) {
-          quote.push(cursor.value);
-          cursor.continue();
+      getAll(message, function(error, response) {
+        if (error) {
+          console.error(error);
+          return sendResponse({status: 'error'});
         }
-      };
+        sendResponse({status: 'success', data: response.data});
+      });
       return true;
 
-// update
+    case 'findOneById':
+      findOneById(message, function(error, response) {
+        if (error) {
+          console.error(error);
+          return sendResponse({status: 'error'});
+        }
+        sendResponse({status: 'success', data: response.data});
+      });
+      return true;
+
+    // search in quotes for tag
+    case 'search':
+      searchForTag(message, function(error, response) {
+        if (error) {
+          console.error(error);
+          return sendResponse({status: 'error'});
+        }
+        sendResponse({status: 'success', data: response.data});
+      });
+      return true;
+
     case 'updateQuote':
-      var quote = message.quote;
-      var transaction = db.transaction(['quotes'], 'readwrite');
-      // response to sender (gohyper.js)
-      transaction.oncomplete = function(event) {
+      updateQuote(message, function(error, response) {
+        if (error) {
+          console.error(error);
+          return sendResponse({status: 'error'});
+        }
         sendResponse({status: 'success'});
-      };
-      transaction.onerror = function(event) {
-        sendResponse({status: 'error'});
-      };
-      var store = transaction.objectStore('quotes');
-      var request = store.put(quote);
+      });
       return true;
 
-// delete
     case 'deleteQuote':
-      var id = message.id;
-      var transaction = db.transaction(['quotes'], 'readwrite');
-      transaction.oncomplete = function(event) {
-        // response to sender (gohyper.js)
-        sendResponse({status: 'success', data: quotes});
+      deleteQuote(message, function(error, response) {
+        if (error) {
+          console.error(error);
+          return sendResponse({status: 'error'});
+        }
+        updateBadge();
         // remove highlight: send message to content script
         chrome.tabs.sendMessage(sender.tab.id, {
           'subject': 'deserializeQuote',
-          'quoteId': id
+          'quoteId': message.id
         });
-      };
-      transaction.onerror = function(event) {
-        // response to sender (gohyper.js)
-        sendResponse({status: 'error'});
-      };
-      var store = transaction.objectStore('quotes');
-      var request = store.delete(id);
-      request.onsuccess = function(event) {
-        updateBadge();
-      };
+        sendResponse({status: 'success'});
+      });
       return true;
   }
 });
