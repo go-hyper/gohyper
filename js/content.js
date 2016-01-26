@@ -41,9 +41,6 @@ setActive(false);
 // detect click on current document (if clicked, close GoHyper interface)
 document.onclick =  function() {
   setActive(false);
-  chrome.runtime.sendMessage({
-    'subject': 'documentOnclick'
-  });
 };
 
 // manage added and deleted quote data and their highlight
