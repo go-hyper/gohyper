@@ -52,8 +52,7 @@ function addQuote(newQuote, callback) {
 }
 
 // read: get quotes filtered by current url
-function getQuotes(sender, callback) {
-  var currentUrl = sender.tab.url;
+function getQuotes(currentUrl, callback) {
   // open a read database transaction
   var transaction = db.transaction(['quotes'], 'readonly');
   // see note in add section of http://www.w3.org/TR/IndexedDB/#idl-def-IDBObjectStore

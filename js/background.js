@@ -44,7 +44,7 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 
     // get quotes filtered by current url
     case 'getQuotes':
-      getQuotes(sender, function(error, response) {
+      getQuotes(sender.tab.url, function(error, response) {
         if (error) {
           console.error(error);
           return sendResponse({status: 'error'});
@@ -134,41 +134,22 @@ function updateBadge() {
   chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
     var tab = arrayOfTabs[0];
     if (tab !== undefined && tab.url !== undefined) {
-      // get url of active tab
-      var currentUrl = tab.url;
-
-      // search and show how many quotes exist on active tab and update badge
-      // get database connection
-      var request  = indexedDB.open('GoHyper');
-      request.onsuccess = function() {
-        var db = request.result;
-        var store = db.transaction(['quotes'], 'readonly').objectStore('quotes');
-
-        var index = store.index('by_current_url');
-        var singleKeyRange = IDBKeyRange.only(currentUrl);
-
-        // count all quotes on active tab
-        var quotes = [];
-        index.openCursor(singleKeyRange).onsuccess = function(event) {
-          var cursor = event.target.result;
-          if (cursor) {
-            quotes.push(cursor.value);
-            cursor.continue();
-          } else {
-            // update badge text
-            if (quotes.length) {
-              chrome.browserAction.setBadgeText({
-                text: quotes.length.toString()
-              });
-            } else {
-              chrome.browserAction.setBadgeText({
-                text: ''
-              });
-            }
-          }
-        };
-
-      };
+      // get all quotes for current tab's url
+      getQuotes(tab.url, function(error, response) {
+        if (error) {
+          console.error(error);
+        }
+        // count how many quotes exist for active tab's url and update badge text accordingly
+        if (response.data.length) {
+          chrome.browserAction.setBadgeText({
+            text: response.data.length.toString()
+          });
+        } else {
+          chrome.browserAction.setBadgeText({
+            text: ''
+          });
+        }
+      });
     }
   });
 }
