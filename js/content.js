@@ -67,8 +67,12 @@ function highlight(quote) {
     var end = deserializePosition(quote.quoteLocation.end, document.body, 'goHyper');
   } catch(e) {
     // node is null resp. stored path of quote doesn't exist (anymore)
-    // TODO show special sign for quotes not found
-    return true;
+    // send message to gohyper.js
+    chrome.runtime.sendMessage({
+      'subject': 'quoteNotFound',
+      'data': quote
+    });
+    return;
   }
 
   var range = rangy.createRange();
