@@ -62,8 +62,14 @@ chrome.runtime.sendMessage({
 
 // highlight selected text and make it clickable
 function highlight(quote) {
-  var start = deserializePosition(quote.quoteLocation.start, document.body, 'goHyper');
-  var end = deserializePosition(quote.quoteLocation.end, document.body, 'goHyper');
+  try {
+    var start = deserializePosition(quote.quoteLocation.start, document.body, 'goHyper');
+    var end = deserializePosition(quote.quoteLocation.end, document.body, 'goHyper');
+  } catch(e) {
+    // node is null resp. stored path of quote doesn't exist (anymore)
+    // TODO show special sign for quotes not found
+    return true;
+  }
 
   var range = rangy.createRange();
   range.setStart(start.node, start.offset);
