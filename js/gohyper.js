@@ -27,7 +27,8 @@ gohyper
 
 gohyper.factory('quoteService', function($rootScope, $location) {
   var data = {
-    quote: {}
+    quote: {},
+    quotesNotFound : []
   };
   chrome.runtime.onMessage.addListener(function(message) {
     switch(message.subject) {
@@ -42,6 +43,7 @@ gohyper.factory('quoteService', function($rootScope, $location) {
         $rootScope.$apply();
         break;
       case 'iconOnclick':
+        angular.copy(message.data, data.quotesNotFound);
         $location.path('/notepad');
         $rootScope.$apply();
         break;
@@ -264,7 +266,9 @@ gohyper
 
 
 gohyper
-  .controller('NotepadController', function($scope, $location) {
+  .controller('NotepadController', function($scope, $location, quoteService) {
+
+    $scope.quotesNotFound = quoteService.quotesNotFound;
 
     $scope.getQuotes = function() {
       chrome.runtime.sendMessage({

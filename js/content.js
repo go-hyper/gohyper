@@ -46,6 +46,9 @@ document.onclick =  function() {
 // manage added and deleted quote data and their highlight
 var quoteCollection = {};
 
+// manage IDs of quotes that could not be found
+var quotesNotFound = [];
+
 // get and highlight all quotes for current url
 chrome.runtime.sendMessage({
   'subject': 'getQuotes'
@@ -54,9 +57,17 @@ chrome.runtime.sendMessage({
     response.data.forEach(function(quote) {
       // store all quotes in an object (needed for removing quote and highlight)
       quoteCollection[quote.id] = quote;
-      highlight(quote);
+      try {
+        highlight(quote);
+      } catch(e) {
+        quotesNotFound.push(quote.id);
+      }
     });
   }
+  chrome.runtime.sendMessage({
+    'subject': 'quotesNotFound',
+    'data': quotesNotFound
+  });
 });
 
 
@@ -66,13 +77,7 @@ function highlight(quote) {
     var start = deserializePosition(quote.quoteLocation.start, document.body, 'goHyper');
     var end = deserializePosition(quote.quoteLocation.end, document.body, 'goHyper');
   } catch(e) {
-    // node is null resp. stored path of quote doesn't exist (anymore)
-    // send message to gohyper.js
-    chrome.runtime.sendMessage({
-      'subject': 'quoteNotFound',
-      'data': quote
-    });
-    return;
+    throw new Error(e);
   }
 
   var range = rangy.createRange();

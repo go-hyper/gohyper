@@ -118,6 +118,8 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     Functions that run in background belonging to click events, badge and context menu
 */
 
+var quotesNotFound = [];
+
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
   // receice message from content script
   if (message.subject === 'quoteOnClick') {
@@ -126,6 +128,9 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       'subject': 'quoteOnClick',
       'data': message.data
     });
+  }
+  if (message.subject === 'quotesNotFound') {
+    quotesNotFound = message.data;
   }
 });
 
@@ -237,6 +242,7 @@ chrome.contextMenus.onClicked.addListener(function(info, tab) {
 // detect click on GoHyper icon in toolbar
 chrome.browserAction.onClicked.addListener(function(activeTab) {
   chrome.tabs.sendMessage(activeTab.id, {
-    'subject': 'iconOnclick'
+    'subject': 'iconOnclick',
+    'data': quotesNotFound
   });
 });
