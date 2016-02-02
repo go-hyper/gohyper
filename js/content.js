@@ -23,7 +23,9 @@ iframe.src = chrome.runtime.getURL('iframe.html');
 innerContainer.appendChild(iframe);
 outerContainer.appendChild(style);
 outerContainer.appendChild(innerContainer);
-document.body.appendChild(outerContainer);
+try {
+  document.body.appendChild(outerContainer);
+} catch (e) {}
 
 // function to open GoHyper interface
 var active = false;
