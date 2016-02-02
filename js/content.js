@@ -46,39 +46,29 @@ document.onclick =  function() {
 // manage added and deleted quote data and their highlight
 var quoteCollection = {};
 
-// manage IDs of quotes that could not be found
-var quotesNotFound = [];
-
-// get and highlight all quotes for current url
-chrome.runtime.sendMessage({
-  'subject': 'getQuotes'
-}, function(response) {
-  if (response.status === 'success' && response.data.length) {
-    response.data.forEach(function(quote) {
-      // store all quotes in an object (needed for removing quote and highlight)
-      quoteCollection[quote.id] = quote;
-      try {
-        highlight(quote);
-      } catch(e) {
-        quotesNotFound.push(quote.id);
-      }
-    });
-  }
+setTimeout(function() {
+  // get and highlight all quotes for current url
+  // wait 1 sec. for pages that need more time for loading (e.g., some Wikipedia pages and Spiegel online)
   chrome.runtime.sendMessage({
-    'subject': 'quotesNotFound',
-    'data': quotesNotFound
+    'subject': 'getQuotes'
+  }, function(response) {
+    if (response.status === 'success' && response.data.length) {
+      response.data.forEach(function(quote) {
+        // store all quotes in an object (needed for removing quote and highlight)
+        quoteCollection[quote.id] = quote;
+        try {
+          highlight(quote);
+        } catch (e) {}
+      });
+    }
   });
-});
+}, 1000);
 
 
 // highlight selected text and make it clickable
 function highlight(quote) {
-  try {
-    var start = deserializePosition(quote.quoteLocation.start, document.body, 'goHyper');
-    var end = deserializePosition(quote.quoteLocation.end, document.body, 'goHyper');
-  } catch(e) {
-    throw new Error(e);
-  }
+  var start = deserializePosition(quote.quoteLocation.start, document.body, 'goHyper');
+  var end = deserializePosition(quote.quoteLocation.end, document.body, 'goHyper');
 
   var range = rangy.createRange();
   range.setStart(start.node, start.offset);
@@ -174,6 +164,23 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       range.setEnd(end.node, end.offset);
       // remove ClassApplier's 'goHyper' class (highlight) from text within range
       rangy.createClassApplier('goHyper').undoToRange(range);
+      break;
+
+    case 'tryDeserialization':
+      // manage IDs of quotes that could not be found
+      var quotesNotFound = [];
+      var quotes = message.quotes;
+      for (var i = 0; i < quotes.length; i++) {
+        try {
+          highlight(quotes[i]);
+        } catch(e) {
+          quotesNotFound.push(quotes[i].id);
+        }
+      }
+      console.log(quotesNotFound);
+      sendResponse({
+        'data': quotesNotFound
+      });
       break;
   }
 });

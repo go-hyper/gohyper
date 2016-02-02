@@ -27,8 +27,7 @@ gohyper
 
 gohyper.factory('quoteService', function($rootScope, $location) {
   var data = {
-    quote: {},
-    quotesNotFound : []
+    quote: {}
   };
   chrome.runtime.onMessage.addListener(function(message) {
     switch(message.subject) {
@@ -43,7 +42,6 @@ gohyper.factory('quoteService', function($rootScope, $location) {
         $rootScope.$apply();
         break;
       case 'iconOnclick':
-        angular.copy(message.data, data.quotesNotFound);
         $location.path('/notepad');
         $rootScope.$apply();
         break;
@@ -266,9 +264,7 @@ gohyper
 
 
 gohyper
-  .controller('NotepadController', function($scope, $location, quoteService) {
-
-    $scope.quotesNotFound = quoteService.quotesNotFound;
+  .controller('NotepadController', function($scope, $location) {
 
     $scope.getQuotes = function() {
       chrome.runtime.sendMessage({
@@ -285,6 +281,34 @@ gohyper
     };
 
     $scope.getQuotes();
+
+    $scope.getQuotesNotFound = function() {
+      chrome.runtime.sendMessage({
+        'subject': 'getQuotesNotFound'
+      }, function(response) {
+        console.log(response);
+        if (response.status === 'success') {
+          console.log("test");
+          $scope.$apply(function() {
+            $scope.quotesNotFound = response.data;
+          });
+        } else {
+          // TODO handle error
+        }
+      });
+    };
+
+    $scope.getQuotesNotFound();
+
+    $scope.quotesNotFound = [];
+
+    chrome.runtime.onMessage.addListener(function(message) {
+      if (message.subject === 'quotesNotFound') {
+        $scope.$apply(function() {
+          $scope.quotesNotFound = message.data;
+        });
+      }
+    });
 
     // delete a quote
     $scope.deleteQuote = function(id) {
