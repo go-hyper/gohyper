@@ -127,7 +127,32 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       'data': message.data
     });
   }
+  if (message.subject === 'getQuotesNotFound') {
+    chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+      var tab = arrayOfTabs[0];
+      if (tab !== undefined && tab.url !== undefined) {
+        // get all quotes for current tab's url
+        getQuotes(tab.url, function(error, response) {
+          if (response.data) {
+            // send message to content.js
+            chrome.tabs.sendMessage(sender.tab.id, {
+              'subject': 'tryDeserialization',
+              'quotes': response.data
+            }, function(response) {
+              // send message to gohyper.js
+              chrome.tabs.sendMessage(sender.tab.id, {
+                'subject': 'quotesNotFound',
+                'data': response.data
+              });
+            });
+          }
+        });
+      }
+    });
+  }
+
 });
+
 
 function updateBadge() {
   // get active tab on current window

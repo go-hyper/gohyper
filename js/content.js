@@ -23,7 +23,9 @@ iframe.src = chrome.runtime.getURL('iframe.html');
 innerContainer.appendChild(iframe);
 outerContainer.appendChild(style);
 outerContainer.appendChild(innerContainer);
-document.body.appendChild(outerContainer);
+try {
+  document.body.appendChild(outerContainer);
+} catch (e) {}
 
 // function to open GoHyper interface
 var active = false;
@@ -46,18 +48,23 @@ document.onclick =  function() {
 // manage added and deleted quote data and their highlight
 var quoteCollection = {};
 
-// get and highlight all quotes for current url
-chrome.runtime.sendMessage({
-  'subject': 'getQuotes'
-}, function(response) {
-  if (response.status === 'success' && response.data.length) {
-    response.data.forEach(function(quote) {
-      // store all quotes in an object (needed for removing quote and highlight)
-      quoteCollection[quote.id] = quote;
-      highlight(quote);
-    });
-  }
-});
+setTimeout(function() {
+  // get and highlight all quotes for current url
+  // wait 1 sec. for pages that need more time for loading (e.g., some Wikipedia pages and Spiegel online)
+  chrome.runtime.sendMessage({
+    'subject': 'getQuotes'
+  }, function(response) {
+    if (response.status === 'success' && response.data.length) {
+      response.data.forEach(function(quote) {
+        // store all quotes in an object (needed for removing quote and highlight)
+        quoteCollection[quote.id] = quote;
+        try {
+          highlight(quote);
+        } catch (e) {}
+      });
+    }
+  });
+}, 1000);
 
 
 // highlight selected text and make it clickable
@@ -159,6 +166,22 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       range.setEnd(end.node, end.offset);
       // remove ClassApplier's 'goHyper' class (highlight) from text within range
       rangy.createClassApplier('goHyper').undoToRange(range);
+      break;
+
+    case 'tryDeserialization':
+      // manage IDs of quotes that could not be found
+      var quotesNotFound = [];
+      var quotes = message.quotes;
+      for (var i = 0; i < quotes.length; i++) {
+        try {
+          highlight(quotes[i]);
+        } catch(e) {
+          quotesNotFound.push(quotes[i].id);
+        }
+      }
+      sendResponse({
+        'data': quotesNotFound
+      });
       break;
   }
 });

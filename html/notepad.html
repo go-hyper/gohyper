@@ -19,8 +19,9 @@
     <tbody>
       <tr ng-repeat="quote in quotes | orderBy: '-updateTimestamp'">
         <td>
+          <span ng-if="quotesNotFound.indexOf(quote.id) != -1" title="Quote not found"><i class="fa fa-exclamation-triangle"></i></span>
           <!-- http://stackoverflow.com/a/25892456/4419582 -->
-          <p>"{{quote.quote | limitTo: 60}}{{quote.quote.length > 60 ? '...' : ''}}"</p>
+          <span>"{{quote.quote | limitTo: 60}}{{quote.quote.length > 60 ? '...' : ''}}"</span>
 
           <p>
             <span ng-repeat="tag in quote.tags">

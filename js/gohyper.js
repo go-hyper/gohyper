@@ -282,6 +282,24 @@ gohyper
 
     $scope.getQuotes();
 
+    $scope.getQuotesNotFound = function() {
+      chrome.runtime.sendMessage({
+        'subject': 'getQuotesNotFound'
+      });
+    };
+
+    $scope.getQuotesNotFound();
+
+    $scope.quotesNotFound = [];
+
+    chrome.runtime.onMessage.addListener(function(message) {
+      if (message.subject === 'quotesNotFound') {
+        $scope.$apply(function() {
+          $scope.quotesNotFound = message.data;
+        });
+      }
+    });
+
     // delete a quote
     $scope.deleteQuote = function(id) {
       var del = confirm('Are you sure you want to delete this quote?');
