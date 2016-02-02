@@ -177,7 +177,6 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
           quotesNotFound.push(quotes[i].id);
         }
       }
-      console.log(quotesNotFound);
       sendResponse({
         'data': quotesNotFound
       });

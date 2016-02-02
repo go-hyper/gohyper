@@ -285,16 +285,6 @@ gohyper
     $scope.getQuotesNotFound = function() {
       chrome.runtime.sendMessage({
         'subject': 'getQuotesNotFound'
-      }, function(response) {
-        console.log(response);
-        if (response.status === 'success') {
-          console.log("test");
-          $scope.$apply(function() {
-            $scope.quotesNotFound = response.data;
-          });
-        } else {
-          // TODO handle error
-        }
       });
     };
 
