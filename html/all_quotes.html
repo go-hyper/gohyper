@@ -5,16 +5,14 @@
   <div class="row gh-search">
     <div class="col-md-offset-7 col-md-5">
 
-      <div class="input-group">
+      <div class="input-group gh-input-field-margin">
         <div class="input-group-addon">
-          <i class="fa fa-search"></i> Search for tag
+          <i class="fa fa-search"></i> Search all data
         </div>
-        <input type="text" class="form-control" placeholder="tag name" ng-model="searchInput" ng-keyup="$event.keyCode == 13 && searchFor(searchInput)">
+        <input type="text" class="form-control" placeholder="" ng-model="searchInput" ng-keyup="$event.keyCode == 13 && searchFor(searchInput)">
       </div>
 
-      <span>or</span>
-
-      <div class="input-group">
+      <div class="input-group gh-input-field-margin">
         <div class="input-group-addon">
           <i class="fa fa-sort"></i>
           Sort by
@@ -41,9 +39,7 @@
     </thead>
 
     <tbody>
-      <!--tr ng-repeat="quote in quotes | orderBy: '-quote'"-->
-      <!-- TODO check what's more efficient (sorting here or in background) + check support for pagination -->
-      <tr ng-repeat="quote in quotes">
+      <tr ng-repeat="quote in quotes | filter:searchInput">
         <td>
           <p>
             <!-- http://www.aheil.de/2012/10/19/how-to-get-the-favicon-ico-from-any-page/ -->
