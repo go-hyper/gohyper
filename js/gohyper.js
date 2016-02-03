@@ -341,38 +341,6 @@ gohyper
 
     $scope.getAll();
 
-    // search for tag
-    $scope.searchFor = function(input) {
-      // if input not empty search all quotes for input tag
-      if (input) {
-        chrome.runtime.sendMessage({
-          'subject': 'search',
-          'input': input
-        }, function(response) {
-          if (response.status === 'success') {
-            $scope.$apply(function() {
-              $scope.quotes = response.data;
-            });
-          } else {
-            // TODO handle error
-          }
-        });
-        // if input tag is empty return all quotes
-      } else {
-        chrome.runtime.sendMessage({
-          'subject': 'getAll'
-        }, function(response) {
-          if (response.status === 'success') {
-            $scope.$apply(function() {
-              $scope.quotes = response.data;
-            });
-          } else {
-            // TODO handle error
-          }
-        });
-      }
-    };
-
     // $scope.$watchGroup(['sortBy'], $scope.getAll);
 
     $scope.deleteQuote = function(id) {
@@ -391,10 +359,6 @@ gohyper
           }
         });
       }
-    };
-
-    $scope.sorted = {
-      asc: true
     };
 
   });
