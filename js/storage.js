@@ -86,40 +86,13 @@ function getAll(message, callback) {
     callback(new Error('Could not get all quotes sorted by: ' + message.sortBy));
   };
   var store = transaction.objectStore('quotes');
-  switch(message.sortBy) {
-    case 'timestampOF':
-      store.index('by_update_timestamp').openCursor(null, 'next').onsuccess = function(event) {
-        var cursor = event.target.result;
-        if (cursor) {
-          quotes.push(cursor.value);
-          cursor.continue();
-        }
-      };
-    case 'quoteAZ':
-      store.index('by_quote').openCursor(null, 'next').onsuccess = function(event) {
-        var cursor = event.target.result;
-        if (cursor) {
-          quotes.push(cursor.value);
-          cursor.continue();
-        }
-      };
-    case 'quoteZA':
-      store.index('by_quote').openCursor(null, 'prev').onsuccess = function(event) {
-        var cursor = event.target.result;
-        if (cursor) {
-          quotes.push(cursor.value);
-          cursor.continue();
-        }
-      };
-    default:
-      store.index('by_update_timestamp').openCursor(null, 'prev').onsuccess = function(event) {
-        var cursor = event.target.result;
-        if (cursor) {
-          quotes.push(cursor.value);
-          cursor.continue();
-        }
-      };
-  }
+  store.index('by_update_timestamp').openCursor(null, 'prev').onsuccess = function(event) {
+    var cursor = event.target.result;
+    if (cursor) {
+      quotes.push(cursor.value);
+      cursor.continue();
+    }
+  };
 }
 
 // read: find a quote by ID

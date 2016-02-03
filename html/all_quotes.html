@@ -3,27 +3,26 @@
   <h3>All quotes</h3>
 
   <div class="row gh-search">
-    <div class="col-md-offset-8 col-md-4">
+    <div class="col-md-offset-7 col-md-5">
 
-      <div class="input-group">
+      <div class="input-group gh-input-field-margin">
         <div class="input-group-addon">
-          <i class="fa fa-search"></i> Search for tag
+          <i class="fa fa-search"></i> Search all data
         </div>
-        <input type="text" class="form-control" placeholder="tag name" ng-model="searchInput" ng-keyup="$event.keyCode == 13 && searchFor(searchInput)">
+        <input type="text" class="form-control" placeholder="e.g., tag name or quote snippet" ng-model="searchInput">
       </div>
 
-      <span>or</span>
-
-      <div class="input-group">
+      <div class="input-group gh-input-field-margin">
         <div class="input-group-addon">
           <i class="fa fa-sort"></i>
           Sort by
         </div>
-        <select class="form-control" ng-model="sortBy" ng-init="sortBy='default'">
-          <option value="default">Time (newest first)</option>
-          <option value="timestampOF">Time (oldest first)</option>
-          <option value="quoteAZ">Quote (A-Z, a-z)</option>
-          <option value="quoteZA">Quote (z-a, Z-A)</option>
+
+        <select class="form-control" ng-model="sortBy">
+          <option value="-updateTimestamp">Time (newest first)</option>
+          <option value="updateTimestamp">Time (oldest first)</option>
+          <option value="quote">Quote (A-Z)</option>
+          <option value="-quote">Quote (Z-A)</option>
         </select>
       </div>
 
@@ -41,9 +40,7 @@
     </thead>
 
     <tbody>
-      <!--tr ng-repeat="quote in quotes | orderBy: '-quote'"-->
-      <!-- TODO check what's more efficient (sorting here or in background) + check support for pagination -->
-      <tr ng-repeat="quote in quotes">
+      <tr ng-repeat="quote in quotes | filter:searchInput | orderBy:sortBy">
         <td>
           <p>
             <!-- http://www.aheil.de/2012/10/19/how-to-get-the-favicon-ico-from-any-page/ -->
