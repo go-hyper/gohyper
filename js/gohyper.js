@@ -341,7 +341,7 @@ gohyper
 
     $scope.getAll();
 
-    // $scope.$watchGroup(['sortBy'], $scope.getAll);
+    $scope.sortBy = '-updateTimestamp';
 
     $scope.deleteQuote = function(id) {
       var del = confirm('Are you sure you want to delete this quote?');
