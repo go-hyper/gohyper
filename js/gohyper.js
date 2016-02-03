@@ -390,7 +390,6 @@ gohyper
         'input': input
       }, function(response) {
         if (response.status === 'success') {
-          $scope.searchInput = '';
           $scope.$apply(function() {
             $scope.quotes = response.data;
           });
