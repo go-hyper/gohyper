@@ -39,7 +39,7 @@
     </thead>
 
     <tbody>
-      <tr ng-repeat="quote in quotes | filter:searchInput">
+      <tr ng-repeat="quote in quotes | filter:searchInput | orderBy:'-updateTimestamp'">
         <td>
           <p>
             <!-- http://www.aheil.de/2012/10/19/how-to-get-the-favicon-ico-from-any-page/ -->

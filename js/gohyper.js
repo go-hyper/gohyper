@@ -326,59 +326,17 @@ gohyper
   .controller('OverviewController', function($scope, $location) {
 
     $scope.getAll = function() {
-      var sortBy = $scope.sortBy;
-      if (sortBy === 'timestampOF') {
-        chrome.runtime.sendMessage({
-          'subject': 'getAll',
-          'sortBy': 'timestampOF'
-        }, function(response) {
-          if (response.status === 'success') {
-            $scope.$apply(function() {
-              $scope.quotes = response.data;
-            });
-          } else {
-            // TODO handle error
-          }
-        });
-      } else if (sortBy === 'quoteAZ') {
-        chrome.runtime.sendMessage({
-          'subject': 'getAll',
-          'sortBy': 'quoteAZ'
-        }, function(response) {
-          if (response.status === 'success') {
-            $scope.$apply(function() {
-              $scope.quotes = response.data;
-            });
-          } else {
-            // TODO handle error
-          }
-        });
-      } else if (sortBy === 'quoteZA') {
-        chrome.runtime.sendMessage({
-          'subject': 'getAll',
-          'sortBy': 'quoteZA'
-        }, function(response) {
-          if (response.status === 'success') {
-            $scope.$apply(function() {
-              $scope.quotes = response.data;
-            });
-          } else {
-            // TODO handle error
-          }
-        });
-      } else {
-        chrome.runtime.sendMessage({
-          'subject': 'getAll'
-        }, function(response) {
-          if (response.status === 'success') {
-            $scope.$apply(function() {
-              $scope.quotes = response.data;
-            });
-          } else {
-            // TODO handle error
-          }
-        });
-      }
+      chrome.runtime.sendMessage({
+        'subject': 'getAll'
+      }, function(response) {
+        if (response.status === 'success') {
+          $scope.$apply(function() {
+            $scope.quotes = response.data;
+          });
+        } else {
+          // TODO handle error
+        }
+      });
     };
 
     $scope.getAll();
@@ -415,7 +373,7 @@ gohyper
       }
     };
 
-    $scope.$watchGroup(['sortBy'], $scope.getAll);
+    // $scope.$watchGroup(['sortBy'], $scope.getAll);
 
     $scope.deleteQuote = function(id) {
       var del = confirm('Are you sure you want to delete this quote?');
