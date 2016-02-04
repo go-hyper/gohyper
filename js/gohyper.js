@@ -141,10 +141,6 @@ gohyper
       $location.path('/notepad');
     };
 
-    $scope.discard = function() {
-      $location.path('/notepad');
-    };
-
   });
 
 
