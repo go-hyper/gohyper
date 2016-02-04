@@ -78,6 +78,10 @@
     </div>
 
     <div class="text-right">
+      <button type="button" class="btn btn-danger gh-button" ng-click="discard()">
+        <i class="fa fa-times"></i> Discard
+      </button>
+
       <button type="button" class="btn btn-primary gh-button" ng-click="clicked = true; addQuote();" ng-disabled="clicked || form.tag.length > 0 || form.hyperlink.length > 0">
         <i class="fa fa-check-circle"></i> Save
       </button>
