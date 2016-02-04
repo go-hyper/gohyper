@@ -52,6 +52,20 @@ gohyper.factory('quoteService', function($rootScope, $location) {
 
 
 gohyper
+  .controller('IframeController', function($scope, $location, quoteService) {
+
+    $scope.locationPath = $location.$$path;
+
+    $scope.closeIframe = function() {
+      chrome.runtime.sendMessage({
+        'subject': 'iconOnclick'
+      });
+    };
+
+  });
+
+
+gohyper
   .controller('QuoteController', function($scope, $location, quoteService) {
 
     $scope.form = {

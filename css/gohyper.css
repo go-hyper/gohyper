@@ -96,3 +96,10 @@ blockquote {
 .gh-input-field-margin {
   margin-bottom: 0.8em;
 }
+
+.gh-close-sign {
+  position: absolute;
+  right: 0.8em;
+  top: 0.8em;
+  color: #757575;
+}

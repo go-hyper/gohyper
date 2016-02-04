@@ -150,6 +150,11 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
       }
     });
   }
+  if (message.subject === 'iconOnclick') {
+    chrome.tabs.sendMessage(sender.tab.id, {
+      'subject': 'iconOnclick'
+    });
+  }
 
 });
 
