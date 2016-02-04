@@ -41,9 +41,9 @@ setActive(false);
 
 
 // detect click on current document (if clicked, close GoHyper interface)
-document.onclick =  function() {
+/*document.onclick =  function() {
   setActive(false);
-};
+};*/
 
 // manage added and deleted quote data and their highlight
 var quoteCollection = {};

@@ -42,8 +42,8 @@ gohyper.factory('quoteService', function($rootScope, $location) {
         $rootScope.$apply();
         break;
       case 'iconOnclick':
-        $location.path('/notepad');
-        $rootScope.$apply();
+        //$location.path('/notepad');
+        //$rootScope.$apply();
         break;
       case 'quoteOnClick':
         $location.path('/quote/edit/' + message.data.id);
