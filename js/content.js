@@ -17,7 +17,7 @@ style.innerHTML =
   '@import "' + chrome.runtime.getURL('css/content.css') + '";';
 var innerContainer = document.createElement('div');
 var iframe = document.createElement('iframe');
-iframe.src = chrome.runtime.getURL('iframe.html');
+iframe.src = chrome.runtime.getURL('iframe.html#/notepad');
 
 // inject GoHyper interface in current document
 innerContainer.appendChild(iframe);

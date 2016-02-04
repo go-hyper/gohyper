@@ -41,10 +41,6 @@ gohyper.factory('quoteService', function($rootScope, $location) {
         $location.path('/');
         $rootScope.$apply();
         break;
-      case 'iconOnclick':
-        $location.path('/notepad');
-        $rootScope.$apply();
-        break;
       case 'quoteOnClick':
         $location.path('/quote/edit/' + message.data.id);
         $rootScope.$apply();
@@ -145,7 +141,7 @@ gohyper
 
 
 gohyper
-  .controller('EditQuoteController', function($scope, $routeParams, $location) {
+  .controller('EditQuoteController', function($scope, $routeParams, $location, quoteService) {
 
     $scope.page = $routeParams.page ? $routeParams.page : undefined;
 
@@ -264,7 +260,7 @@ gohyper
 
 
 gohyper
-  .controller('NotepadController', function($scope, $location) {
+  .controller('NotepadController', function($scope, $location, quoteService) {
 
     $scope.getQuotes = function() {
       chrome.runtime.sendMessage({
