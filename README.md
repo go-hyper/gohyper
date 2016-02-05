@@ -16,7 +16,9 @@
 
 ## Distribution
 * Make sure you increased the version number in `manifest.json`.
+* Check that all added files are mentioned in `gulpfile.js`.
 * Build the extension using `gulp`. It will zip all files into `gohyper.zip` in `./dist` directory.
+* Test this GoHyper version-to-be before publishing.
 * Go to [GoHyper's Chrome Web Store page](https://chrome.google.com/webstore/developer/edit/bemkdkdpdcepkncpclmcphgaddaameff)
   and upload the zipped package. 
 
