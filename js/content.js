@@ -17,7 +17,7 @@ style.innerHTML =
   '@import "' + chrome.runtime.getURL('css/content.css') + '";';
 var innerContainer = document.createElement('div');
 var iframe = document.createElement('iframe');
-iframe.src = chrome.runtime.getURL('iframe.html');
+iframe.src = chrome.runtime.getURL('iframe.html#/notepad');
 
 // inject GoHyper interface in current document
 innerContainer.appendChild(iframe);
@@ -41,9 +41,9 @@ setActive(false);
 
 
 // detect click on current document (if clicked, close GoHyper interface)
-document.onclick =  function() {
+/*document.onclick =  function() {
   setActive(false);
-};
+};*/
 
 // manage added and deleted quote data and their highlight
 var quoteCollection = {};

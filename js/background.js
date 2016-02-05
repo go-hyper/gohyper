@@ -119,38 +119,45 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 */
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  // receice message from content script
-  if (message.subject === 'quoteOnClick') {
-    // send message to gohyper script (iframe)
-    chrome.tabs.sendMessage(sender.tab.id, {
-      'subject': 'quoteOnClick',
-      'data': message.data
-    });
-  }
-  if (message.subject === 'getQuotesNotFound') {
-    chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
-      var tab = arrayOfTabs[0];
-      if (tab !== undefined && tab.url !== undefined) {
-        // get all quotes for current tab's url
-        getQuotes(tab.url, function(error, response) {
-          if (response.data) {
-            // send message to content.js
-            chrome.tabs.sendMessage(sender.tab.id, {
-              'subject': 'tryDeserialization',
-              'quotes': response.data
-            }, function(response) {
-              // send message to gohyper.js
-              chrome.tabs.sendMessage(sender.tab.id, {
-                'subject': 'quotesNotFound',
-                'data': response.data
-              });
-            });
-          }
-        });
-      }
-    });
-  }
+  switch(message.subject) {
+    case 'quoteOnClick':
+      // send message to gohyper script (iframe)
+      chrome.tabs.sendMessage(sender.tab.id, {
+        'subject': 'quoteOnClick',
+        'data': message.data
+      });
+      break;
 
+    case 'getQuotesNotFound':
+      chrome.tabs.query({active: true, currentWindow: true}, function(arrayOfTabs) {
+        var tab = arrayOfTabs[0];
+        if (tab !== undefined && tab.url !== undefined) {
+          // get all quotes for current tab's url
+          getQuotes(tab.url, function(error, response) {
+            if (response.data) {
+              // send message to content.js
+              chrome.tabs.sendMessage(sender.tab.id, {
+                'subject': 'tryDeserialization',
+                'quotes': response.data
+              }, function(response) {
+                // send message to gohyper.js
+                chrome.tabs.sendMessage(sender.tab.id, {
+                  'subject': 'quotesNotFound',
+                  'data': response.data
+                });
+              });
+            }
+          });
+        }
+      });
+      break;
+
+    case 'iconOnclick':
+      chrome.tabs.sendMessage(sender.tab.id, {
+        'subject': 'iconOnclick'
+      });
+      break;
+  }
 });
 
 
