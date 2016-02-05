@@ -10,7 +10,8 @@ var files = ['manifest.json', 'js/*', 'bower_components/angular/angular.min.js',
   'bower_components/rangy/rangy-classapplier.min.js', 'bower_components/rangy/rangy-highlighter.min.js',
   'bower_components/rangy/rangy-serializer.min.js', 'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
   'bower_components/angular/angular-csp.css', 'bower_components/font-awesome/fonts/fontawesome-webfont.woff2',
-  'images/*', 'html/*', 'overview.html', 'iframe.html', 'css/*'];
+  'images/*', 'html/*', 'overview.html', 'iframe.html', 'css/*', 'bower_components/angular-bootstrap/ui-bootstrap-csp.css',
+  'templates/*'];
 
 gulp.task('default', function() {
   return gulp.src(files, {base: './'})
