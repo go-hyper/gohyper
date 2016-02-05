@@ -140,11 +140,13 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
                 'subject': 'tryDeserialization',
                 'quotes': response.data
               }, function(response) {
-                // send message to gohyper.js
-                chrome.tabs.sendMessage(sender.tab.id, {
-                  'subject': 'quotesNotFound',
-                  'data': response.data
-                });
+                if (response) {
+                  // send message to gohyper.js
+                  chrome.tabs.sendMessage(sender.tab.id, {
+                    'subject': 'quotesNotFound',
+                    'data': response.data
+                  });
+                }
               });
             }
           });
