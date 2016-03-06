@@ -2,7 +2,7 @@
   "name": "project",
   "version": "1.0.0",
   "dependencies": {
-    "dom-position-serializer": "jengeb/dom-position-serializer"
+    "dom-position-serializer": "^1.0.1"
   },
   "description": "",
   "main": "js/background.js",
