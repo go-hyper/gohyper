@@ -1,4 +1,4 @@
-# GoHyper [![Build Status](https://travis-ci.org/go-hyper/gohyper.svg?branch=master)](https://travis-ci.org/jengeb/gohyper) [![Dependency Status](https://gemnasium.com/jengeb/gohyper.svg)](https://gemnasium.com/jengeb/gohyper)
+# GoHyper [![Build Status](https://travis-ci.org/go-hyper/gohyper.svg?branch=master)](https://travis-ci.org/go-hyper/gohyper) [![Dependency Status](https://gemnasium.com/jengeb/gohyper.svg)](https://gemnasium.com/jengeb/gohyper)
 
 [GoHyper](https://chrome.google.com/webstore/detail/gohyper/bemkdkdpdcepkncpclmcphgaddaameff) is a Chrome Extension to annotate, highlight and interlink text selections on web pages. 
 
