@@ -3,6 +3,11 @@
 var gohyper = angular.module('gohyper', ['ngRoute', 'ui.bootstrap']);
 
 gohyper
+  // http://stackoverflow.com/a/41213016/4419582
+  .config(['$locationProvider', function($locationProvider) {
+    $locationProvider.hashPrefix('');
+  }])
+
   .config(function($routeProvider) {
 
     $routeProvider
