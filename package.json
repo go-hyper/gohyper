@@ -1,17 +1,23 @@
 {
   "name": "project",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "dependencies": {
     "dom-position-serializer": "^1.0.1"
   },
-  "description": "",
+  "description": "gohyper web extension",
   "main": "js/background.js",
   "scripts": {
+    "dev": "NODE_ENV=development webpack-dev-server --hot --progress --host 0.0.0.0",
+    "build": "NODE_ENV=development webpack --progress --optimize-minimize",
+    "build:p": "",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jenny Gebske <jennifer@gebske.de>",
   "license": "GPL-3.0",
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.0",
     "gulp": "^3.9.0",
     "gulp-zip": "^4.0.0",
     "webpack": "^3.7.1",
